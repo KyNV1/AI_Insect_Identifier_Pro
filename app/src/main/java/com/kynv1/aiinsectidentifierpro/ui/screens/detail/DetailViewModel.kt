@@ -1,13 +1,14 @@
 package com.kynv1.aiinsectidentifierpro.ui.screens.detail
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.kynv1.aiinsectidentifierpro.data.local.entity.InsectEntity
 import com.kynv1.aiinsectidentifierpro.data.repository.InsectRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 sealed interface DetailUiState {
     object Loading : DetailUiState
@@ -15,7 +16,11 @@ sealed interface DetailUiState {
     data class Error(val message: String) : DetailUiState
 }
 
-class DetailViewModel(private val repository: InsectRepository) : ViewModel() {
+@HiltViewModel
+class DetailViewModel @Inject constructor(
+    private val repository: InsectRepository
+) : ViewModel() {
+
     private val _uiState = MutableStateFlow<DetailUiState>(DetailUiState.Loading)
     val uiState: StateFlow<DetailUiState> = _uiState
 
@@ -33,15 +38,5 @@ class DetailViewModel(private val repository: InsectRepository) : ViewModel() {
                 _uiState.value = DetailUiState.Error("Lỗi tải dữ liệu: ${e.localizedMessage}")
             }
         }
-    }
-}
-
-class DetailViewModelFactory(private val repository: InsectRepository) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(DetailViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return DetailViewModel(repository) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

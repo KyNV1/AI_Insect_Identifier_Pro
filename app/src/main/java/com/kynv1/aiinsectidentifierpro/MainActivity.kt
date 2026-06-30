@@ -14,8 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -26,15 +25,14 @@ import androidx.navigation.navArgument
 import com.kynv1.aiinsectidentifierpro.ui.navigation.Screen
 import com.kynv1.aiinsectidentifierpro.ui.screens.detail.DetailScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.detail.DetailViewModel
-import com.kynv1.aiinsectidentifierpro.ui.screens.detail.DetailViewModelFactory
 import com.kynv1.aiinsectidentifierpro.ui.screens.history.HistoryScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.history.HistoryViewModel
-import com.kynv1.aiinsectidentifierpro.ui.screens.history.HistoryViewModelFactory
 import com.kynv1.aiinsectidentifierpro.ui.screens.scan.ScanScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.scan.ScanViewModel
-import com.kynv1.aiinsectidentifierpro.ui.screens.scan.ScanViewModelFactory
 import com.kynv1.aiinsectidentifierpro.ui.theme.AIInsectIdentifierProTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,21 +51,10 @@ fun MainAppScreen() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    // Lấy context và repository
-    val context = LocalContext.current
-    val app = context.applicationContext as AIInsectIdentifierApp
-    val repository = app.repository
-
-    // Khởi tạo ViewModels thông qua Factories
-    val scanViewModel: ScanViewModel = viewModel(
-        factory = ScanViewModelFactory(repository)
-    )
-    val historyViewModel: HistoryViewModel = viewModel(
-        factory = HistoryViewModelFactory(repository)
-    )
-    val detailViewModel: DetailViewModel = viewModel(
-        factory = DetailViewModelFactory(repository)
-    )
+    // Khởi tạo ViewModels thông qua Hilt DI
+    val scanViewModel: ScanViewModel = hiltViewModel()
+    val historyViewModel: HistoryViewModel = hiltViewModel()
+    val detailViewModel: DetailViewModel = hiltViewModel()
 
     Scaffold(
         bottomBar = {

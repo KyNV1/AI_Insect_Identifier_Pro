@@ -8,14 +8,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.kynv1.aiinsectidentifierpro.data.local.entity.InsectEntity
 import com.kynv1.aiinsectidentifierpro.data.repository.InsectRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.io.InputStream
+import javax.inject.Inject
 
 sealed interface ScanUiState {
     object Idle : ScanUiState
@@ -24,7 +25,10 @@ sealed interface ScanUiState {
     data class Error(val message: String) : ScanUiState
 }
 
-class ScanViewModel(private val repository: InsectRepository) : ViewModel() {
+@HiltViewModel
+class ScanViewModel @Inject constructor(
+    private val repository: InsectRepository
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow<ScanUiState>(ScanUiState.Idle)
     val uiState: StateFlow<ScanUiState> = _uiState
@@ -59,7 +63,6 @@ class ScanViewModel(private val repository: InsectRepository) : ViewModel() {
 
                 val insectInfo = repository.identifyInsect(bitmap)
                 if (insectInfo != null) {
-                    // Lưu vào Room database
                     val entity = InsectEntity.fromInsectInfo(insectInfo, uri.toString())
                     val id = repository.insertInsect(entity)
                     _uiState.value = ScanUiState.Success(id)
@@ -100,15 +103,5 @@ class ScanViewModel(private val repository: InsectRepository) : ViewModel() {
             e.printStackTrace()
             null
         }
-    }
-}
-
-class ScanViewModelFactory(private val repository: InsectRepository) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(ScanViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
-            return ScanViewModel(repository) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }
