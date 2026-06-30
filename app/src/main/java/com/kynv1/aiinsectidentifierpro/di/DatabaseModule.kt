@@ -3,6 +3,7 @@ package com.kynv1.aiinsectidentifierpro.di
 import android.content.Context
 import com.kynv1.aiinsectidentifierpro.data.local.InsectDao
 import com.kynv1.aiinsectidentifierpro.data.local.InsectDatabase
+import com.kynv1.aiinsectidentifierpro.data.local.OnboardingStore
 import com.kynv1.aiinsectidentifierpro.data.remote.GeminiServiceClient
 import com.kynv1.aiinsectidentifierpro.data.repository.InsectRepository
 import dagger.Module
@@ -41,5 +42,11 @@ object DatabaseModule {
         geminiServiceClient: GeminiServiceClient
     ): InsectRepository {
         return InsectRepository(insectDao, geminiServiceClient)
+    }
+
+    @Provides
+    @Singleton
+    fun provideOnboardingStore(@ApplicationContext context: Context): OnboardingStore {
+        return OnboardingStore(context)
     }
 }

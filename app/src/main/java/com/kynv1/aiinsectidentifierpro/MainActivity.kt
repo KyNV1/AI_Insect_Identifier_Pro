@@ -22,31 +22,39 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.kynv1.aiinsectidentifierpro.data.local.OnboardingStore
 import com.kynv1.aiinsectidentifierpro.ui.navigation.Screen
 import com.kynv1.aiinsectidentifierpro.ui.screens.detail.DetailScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.detail.DetailViewModel
 import com.kynv1.aiinsectidentifierpro.ui.screens.history.HistoryScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.history.HistoryViewModel
+import com.kynv1.aiinsectidentifierpro.ui.screens.onboarding.OnboardingScreen
+import com.kynv1.aiinsectidentifierpro.ui.screens.onboarding.OnboardingViewModel
 import com.kynv1.aiinsectidentifierpro.ui.screens.scan.ScanScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.scan.ScanViewModel
 import com.kynv1.aiinsectidentifierpro.ui.theme.AIInsectIdentifierProTheme
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var onboardingStore: OnboardingStore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             AIInsectIdentifierProTheme {
-                MainAppScreen()
+                MainAppScreen(onboardingStore)
             }
         }
     }
 }
 
 @Composable
-fun MainAppScreen() {
+fun MainAppScreen(onboardingStore: OnboardingStore) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -55,6 +63,13 @@ fun MainAppScreen() {
     val scanViewModel: ScanViewModel = hiltViewModel()
     val historyViewModel: HistoryViewModel = hiltViewModel()
     val detailViewModel: DetailViewModel = hiltViewModel()
+    val onboardingViewModel: OnboardingViewModel = hiltViewModel()
+
+    val startDestination = if (onboardingStore.isOnboardingCompleted()) {
+        Screen.Scan.route
+    } else {
+        Screen.Onboarding.route
+    }
 
     Scaffold(
         bottomBar = {
@@ -123,9 +138,19 @@ fun MainAppScreen() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Scan.route,
+            startDestination = startDestination,
             modifier = Modifier.padding(innerPadding)
         ) {
+            composable(Screen.Onboarding.route) {
+                OnboardingScreen(
+                    viewModel = onboardingViewModel,
+                    onNavigateToScan = {
+                        navController.navigate(Screen.Scan.route) {
+                            popUpTo(Screen.Onboarding.route) { inclusive = true }
+                        }
+                    }
+                )
+            }
             composable(Screen.Scan.route) {
                 ScanScreen(
                     viewModel = scanViewModel,
