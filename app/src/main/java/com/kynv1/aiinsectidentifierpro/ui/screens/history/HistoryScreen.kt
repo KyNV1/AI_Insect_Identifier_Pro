@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -21,17 +20,24 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.data.local.entity.InsectEntity
+import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.CardBackground
+import com.kynv1.aiinsectidentifierpro.ui.theme.CardBorder
+import com.kynv1.aiinsectidentifierpro.ui.theme.DarkBackground
+import com.kynv1.aiinsectidentifierpro.ui.theme.DarkForestGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
 import java.text.SimpleDateFormat
 import java.util.*
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HistoryScreen(
     viewModel: HistoryViewModel,
@@ -50,37 +56,33 @@ fun HistoryScreen(
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFF0F1E16),
-                        Color(0xFF0A0F0D)
-                    )
+                    colors = listOf(DarkForestGreen, DarkBackground)
                 )
             )
-            .padding(16.dp)
+            .padding(Dimens.PaddingLarge)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .statusBarsPadding()
         ) {
-            // Header
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 16.dp),
+                    .padding(vertical = Dimens.PaddingLarge),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     imageVector = Icons.Default.History,
                     contentDescription = null,
-                    tint = Color(0xFF4CAF50),
-                    modifier = Modifier.size(28.dp)
+                    tint = ActiveGreen,
+                    modifier = Modifier.size(Dimens.StarSize)
                 )
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.width(Dimens.PaddingNormal))
                 Text(
-                    text = "LỊCH SỬ QUÉT",
+                    text = stringResource(id = R.string.history_title),
                     color = Color.White,
-                    fontSize = 22.sp,
+                    fontSize = Dimens.TextSizeTitleMedium,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 1.sp
                 )
@@ -95,26 +97,26 @@ fun HistoryScreen(
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(32.dp)
+                        modifier = Modifier.padding(Dimens.PaddingDoubleExtraLarge)
                     ) {
                         Icon(
                             imageVector = Icons.Default.History,
                             contentDescription = null,
-                            tint = Color(0xFF2E4C3E),
-                            modifier = Modifier.size(80.dp)
+                            tint = CardBorder,
+                            modifier = Modifier.size(Dimens.MapHeight)
                         )
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(Dimens.PaddingLarge))
                         Text(
-                            text = "Lịch sử trống",
+                            text = stringResource(id = R.string.history_empty_title),
                             color = Color.LightGray,
-                            fontSize = 18.sp,
+                            fontSize = Dimens.TextSizeLarge,
                             fontWeight = FontWeight.Bold
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(Dimens.PaddingMedium))
                         Text(
-                            text = "Các loài côn trùng bạn đã quét sẽ xuất hiện ở đây để tiện xem lại sau.",
+                            text = stringResource(id = R.string.history_empty_desc),
                             color = Color.Gray,
-                            fontSize = 13.sp,
+                            fontSize = Dimens.TextSizeSubNormal,
                             textAlign = TextAlign.Center
                         )
                     }
@@ -124,8 +126,8 @@ fun HistoryScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    contentPadding = PaddingValues(bottom = 24.dp)
+                    verticalArrangement = Arrangement.spacedBy(Dimens.PaddingNormal),
+                    contentPadding = PaddingValues(bottom = Dimens.PaddingExtraLarge)
                 ) {
                     items(historyList, key = { it.id }) { insect ->
                         HistoryItem(
@@ -152,29 +154,27 @@ fun HistoryItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = Color(0xFF14241C)),
-        border = BorderStroke(1.dp, Color(0xFF2E4C3E))
+        shape = RoundedCornerShape(Dimens.CardCornerRadius),
+        colors = CardDefaults.cardColors(containerColor = CardBackground),
+        border = BorderStroke(1.dp, CardBorder)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
+                .padding(Dimens.PaddingNormal),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Thumbnail ảnh
             AsyncImage(
                 model = insect.imageUri,
-                contentDescription = "Insect Thumbnail",
+                contentDescription = null,
                 modifier = Modifier
-                    .size(72.dp)
-                    .clip(RoundedCornerShape(12.dp)),
+                    .size(Dimens.ThumbnailSize)
+                    .clip(RoundedCornerShape(Dimens.PaddingNormal)),
                 contentScale = ContentScale.Crop
             )
 
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(Dimens.PaddingLarge))
 
-            // Thông tin text
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -184,29 +184,32 @@ fun HistoryItem(
                 Text(
                     text = insect.commonName,
                     color = Color.White,
-                    fontSize = 16.sp,
+                    fontSize = Dimens.TextSizeMedium,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = insect.scientificName,
-                    color = Color(0xFF81C784),
-                    fontSize = 13.sp,
+                    color = ActiveGreen,
+                    fontSize = Dimens.TextSizeSubNormal,
                     fontStyle = FontStyle.Italic,
-                    modifier = Modifier.padding(top = 2.dp)
+                    modifier = Modifier.padding(top = Dimens.PaddingMicro)
                 )
                 Text(
-                    text = "$formattedTime  •  Độ tin cậy: ${insect.confidence}%",
+                    text = stringResource(
+                        id = R.string.history_item_confidence_format,
+                        formattedTime,
+                        insect.confidence
+                    ),
                     color = Color.Gray,
-                    fontSize = 11.sp,
-                    modifier = Modifier.padding(top = 6.dp)
+                    fontSize = Dimens.TextSizeMicro,
+                    modifier = Modifier.padding(top = Dimens.PaddingMediumSmall)
                 )
             }
 
-            // Nút xóa lịch sử
             IconButton(onClick = onDelete) {
                 Icon(
                     imageVector = Icons.Default.Delete,
-                    contentDescription = "Delete item",
+                    contentDescription = stringResource(id = R.string.history_btn_delete_desc),
                     tint = Color(0xFFC62828)
                 )
             }

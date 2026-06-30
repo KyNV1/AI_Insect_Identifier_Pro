@@ -1,19 +1,44 @@
 package com.kynv1.aiinsectidentifierpro.ui.screens.onboarding
 
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.StarBorder
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -22,11 +47,16 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kynv1.aiinsectidentifierpro.R
+import com.kynv1.aiinsectidentifierpro.ui.theme.AccentLime
+import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
+import com.kynv1.aiinsectidentifierpro.ui.theme.NatureGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.StarGold
 import kotlinx.coroutines.launch
 
 @Composable
@@ -41,7 +71,6 @@ fun OnboardingScreen(
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-        // Ảnh nền rừng tối làm nền phủ rộng cả screen
         Image(
             painter = painterResource(id = R.drawable.bg_onboarding_forest),
             contentDescription = null,
@@ -49,7 +78,6 @@ fun OnboardingScreen(
             contentScale = ContentScale.Crop
         )
 
-        // Lớp phủ màu mờ tối để tăng độ tương phản
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -70,7 +98,6 @@ fun OnboardingScreen(
                 .navigationBarsPadding(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Phần hiển thị nội dung trượt (Onboarding Pages)
             HorizontalPager(
                 state = pagerState,
                 modifier = Modifier
@@ -85,24 +112,22 @@ fun OnboardingScreen(
                 }
             }
 
-            // Dots Indicator (Chỉ báo trang dạng dấu chấm)
             Row(
-                modifier = Modifier.padding(vertical = 16.dp),
+                modifier = Modifier.padding(vertical = Dimens.PaddingLarge),
                 horizontalArrangement = Arrangement.Center
             ) {
                 repeat(4) { index ->
                     val active = pagerState.currentPage == index
                     Box(
                         modifier = Modifier
-                            .padding(horizontal = 4.dp)
-                            .size(if (active) 10.dp else 8.dp)
+                            .padding(horizontal = Dimens.PaddingSmall)
+                            .size(if (active) Dimens.IndicatorActiveSize else Dimens.IndicatorInactiveSize)
                             .clip(CircleShape)
-                            .background(if (active) Color(0xFF7CB342) else Color.Gray.copy(alpha = 0.5f))
+                            .background(if (active) NatureGreen else Color.Gray.copy(alpha = 0.5f))
                     )
                 }
             }
 
-            // Nút bấm điều chuyển / Hoàn thành
             Button(
                 onClick = {
                     if (pagerState.currentPage < 3) {
@@ -115,18 +140,21 @@ fun OnboardingScreen(
                     }
                 },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF7CB342),
+                    containerColor = NatureGreen,
                     contentColor = Color.White
                 ),
                 shape = RoundedCornerShape(28.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 32.dp, vertical = 24.dp)
-                    .height(56.dp)
+                    .padding(
+                        horizontal = Dimens.PaddingDoubleExtraLarge,
+                        vertical = Dimens.PaddingExtraLarge
+                    )
+                    .height(Dimens.ButtonHeight)
             ) {
                 Text(
-                    text = "CONTINUE",
-                    fontSize = 16.sp,
+                    text = stringResource(id = R.string.onboarding_btn_continue),
+                    fontSize = Dimens.TextSizeMedium,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 1.sp
                 )
@@ -140,16 +168,15 @@ fun OnboardingPage1() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 24.dp),
+            .padding(horizontal = Dimens.PaddingExtraLarge),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // Cụm hình ảnh bọ cánh cứng có hiệu ứng quét
         Box(
             modifier = Modifier
-                .size(260.dp)
-                .clip(RoundedCornerShape(24.dp))
-                .border(2.dp, Color(0xFF7CB342).copy(alpha = 0.6f), RoundedCornerShape(24.dp))
+                .size(Dimens.ImageSizeExtraLarge)
+                .clip(RoundedCornerShape(Dimens.PaddingExtraLarge))
+                .border(Dimens.PaddingMicro, NatureGreen.copy(alpha = 0.6f), RoundedCornerShape(Dimens.PaddingExtraLarge))
         ) {
             Image(
                 painter = painterResource(id = R.drawable.img_onboarding_green_beetle),
@@ -158,14 +185,12 @@ fun OnboardingPage1() {
                 contentScale = ContentScale.Crop
             )
 
-            // Khung quét giả lập (Scanning Grid overlay)
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .border(1.dp, Color.White.copy(alpha = 0.2f))
             )
 
-            // Đường quét chạy lên xuống (Simulated scanning light line)
             val infiniteTransition = rememberInfiniteTransition(label = "scan")
             val scanPosition by infiniteTransition.animateFloat(
                 initialValue = 0f,
@@ -186,9 +211,9 @@ fun OnboardingPage1() {
                         Brush.horizontalGradient(
                             colors = listOf(
                                 Color.Transparent,
-                                Color(0xFFD4E157),
-                                Color(0xFF7CB342),
-                                Color(0xFFD4E157),
+                                AccentLime,
+                                NatureGreen,
+                                AccentLime,
                                 Color.Transparent
                             )
                         )
@@ -196,13 +221,12 @@ fun OnboardingPage1() {
             )
         }
 
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(Dimens.PaddingDoubleExtraLarge))
 
-        // Bản đồ thế giới soft teal tượng trưng cho toàn cầu
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(80.dp),
+                .height(Dimens.MapHeight),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -212,19 +236,19 @@ fun OnboardingPage1() {
             )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(Dimens.PaddingLarge))
 
         Text(
-            text = "Identify insects",
+            text = stringResource(id = R.string.onboarding_p1_subtitle),
             color = Color.White.copy(alpha = 0.7f),
-            fontSize = 18.sp,
+            fontSize = Dimens.TextSizeLarge,
             textAlign = TextAlign.Center
         )
 
         Text(
-            text = "Worldwide",
+            text = stringResource(id = R.string.onboarding_p1_title),
             color = Color.White,
-            fontSize = 32.sp,
+            fontSize = Dimens.TextSizeTitleHuge,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             letterSpacing = 1.sp
@@ -237,51 +261,52 @@ fun OnboardingPage2() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 24.dp),
+            .padding(horizontal = Dimens.PaddingExtraLarge),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // Hình kính lúp phóng to ong mật
         Box(
             modifier = Modifier
-                .size(240.dp),
+                .size(Dimens.CircleRingSize),
             contentAlignment = Alignment.Center
         ) {
             Image(
                 painter = painterResource(id = R.drawable.img_onboarding_honey_bee),
                 contentDescription = null,
                 modifier = Modifier
-                    .size(200.dp)
+                    .size(Dimens.CircleImageSize)
                     .clip(CircleShape)
-                    .border(4.dp, Color(0xFF7CB342), CircleShape),
+                    .border(Dimens.PaddingSmall, NatureGreen, CircleShape),
                 contentScale = ContentScale.Crop
             )
 
-            // Biểu tượng kính lúp viền kính
             Box(
                 modifier = Modifier
-                    .size(220.dp)
-                    .border(8.dp, Color.White.copy(alpha = 0.15f), CircleShape)
+                    .size(Dimens.CircleRingSize)
+                    .border(Dimens.PaddingMedium, Color.White.copy(alpha = 0.15f), CircleShape)
             )
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(Dimens.PaddingExtraLarge))
 
-        // Thẻ thông tin kính mờ (Frosted-glass card)
         Card(
             colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.08f)),
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(Dimens.CardCornerRadius),
             modifier = Modifier
                 .fillMaxWidth()
-                .border(1.dp, Color.White.copy(alpha = 0.12f), RoundedCornerShape(16.dp))
+                .border(
+                    1.dp,
+                    Color.White.copy(alpha = 0.12f),
+                    RoundedCornerShape(Dimens.CardCornerRadius)
+                )
         ) {
             Row(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier.padding(Dimens.PaddingLarge),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
                     modifier = Modifier
-                        .size(48.dp)
+                        .size(Dimens.CardThumbSize)
                         .clip(RoundedCornerShape(8.dp))
                 ) {
                     Image(
@@ -291,37 +316,37 @@ fun OnboardingPage2() {
                         modifier = Modifier.fillMaxSize()
                     )
                 }
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.width(Dimens.PaddingNormal))
                 Column {
                     Text(
-                        text = "Honey Bee",
+                        text = stringResource(id = R.string.onboarding_p2_card_title),
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp
+                        fontSize = Dimens.TextSizeMedium
                     )
                     Text(
-                        text = "Western honey bee (Apis mellifera) is the most common...",
+                        text = stringResource(id = R.string.onboarding_p2_card_desc),
                         color = Color.White.copy(alpha = 0.6f),
-                        fontSize = 12.sp,
+                        fontSize = Dimens.TextSizeSmall,
                         maxLines = 2
                     )
                 }
             }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(Dimens.PaddingExtraLarge))
 
         Text(
-            text = "Explore",
+            text = stringResource(id = R.string.onboarding_p2_subtitle),
             color = Color.White.copy(alpha = 0.7f),
-            fontSize = 18.sp,
+            fontSize = Dimens.TextSizeLarge,
             textAlign = TextAlign.Center
         )
 
         Text(
-            text = "insects around you",
+            text = stringResource(id = R.string.onboarding_p2_title),
             color = Color.White,
-            fontSize = 28.sp,
+            fontSize = Dimens.TextSizeTitleLarge,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
         )
@@ -333,15 +358,19 @@ fun OnboardingPage3() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 24.dp),
+            .padding(horizontal = Dimens.PaddingExtraLarge),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Box(
             modifier = Modifier
-                .size(240.dp)
-                .clip(RoundedCornerShape(24.dp))
-                .border(2.dp, Color.White.copy(alpha = 0.15f), RoundedCornerShape(24.dp))
+                .size(Dimens.ImageSizeLarge)
+                .clip(RoundedCornerShape(Dimens.PaddingExtraLarge))
+                .border(
+                    Dimens.PaddingMicro,
+                    Color.White.copy(alpha = 0.15f),
+                    RoundedCornerShape(Dimens.PaddingExtraLarge)
+                )
         ) {
             Image(
                 painter = painterResource(id = R.drawable.img_onboarding_red_beetle),
@@ -351,19 +380,17 @@ fun OnboardingPage3() {
             )
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(Dimens.PaddingExtraLarge))
 
-        // Cụm sóng âm thanh (Sound wave audio simulator)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp),
+                .height(Dimens.WaveHeight),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
             val infiniteTransition = rememberInfiniteTransition(label = "sound")
-            
-            // Tạo 15 cột sóng động
+
             repeat(15) { index ->
                 val duration = 600 + (index * 70) % 500
                 val heightPercent by infiniteTransition.animateFloat(
@@ -379,27 +406,27 @@ fun OnboardingPage3() {
                 Box(
                     modifier = Modifier
                         .padding(horizontal = 3.dp)
-                        .width(4.dp)
+                        .width(Dimens.WaveBarWidth)
                         .fillMaxHeight(heightPercent)
                         .clip(CircleShape)
-                        .background(Color(0xFFD4E157))
+                        .background(AccentLime)
                 )
             }
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(Dimens.PaddingExtraLarge))
 
         Text(
-            text = "Identify Bugs",
+            text = stringResource(id = R.string.onboarding_p3_subtitle),
             color = Color.White.copy(alpha = 0.7f),
-            fontSize = 18.sp,
+            fontSize = Dimens.TextSizeLarge,
             textAlign = TextAlign.Center
         )
 
         Text(
-            text = "by Sound",
+            text = stringResource(id = R.string.onboarding_p3_title),
             color = Color.White,
-            fontSize = 32.sp,
+            fontSize = Dimens.TextSizeTitleHuge,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
         )
@@ -411,15 +438,19 @@ fun OnboardingPage4() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 24.dp),
+            .padding(horizontal = Dimens.PaddingExtraLarge),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Box(
             modifier = Modifier
-                .size(240.dp)
-                .clip(RoundedCornerShape(24.dp))
-                .border(2.dp, Color.White.copy(alpha = 0.15f), RoundedCornerShape(24.dp))
+                .size(Dimens.ImageSizeLarge)
+                .clip(RoundedCornerShape(Dimens.PaddingExtraLarge))
+                .border(
+                    Dimens.PaddingMicro,
+                    Color.White.copy(alpha = 0.15f),
+                    RoundedCornerShape(Dimens.PaddingExtraLarge)
+                )
         ) {
             Image(
                 painter = painterResource(id = R.drawable.img_onboarding_atlas_moth),
@@ -429,34 +460,37 @@ fun OnboardingPage4() {
             )
         }
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(Dimens.PaddingExtraLarge))
 
-        // Khung kính mờ đánh giá ứng dụng
         Card(
             colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.6f)),
-            shape = RoundedCornerShape(20.dp),
+            shape = RoundedCornerShape(Dimens.PaddingMedium + Dimens.PaddingNormal),
             modifier = Modifier
                 .fillMaxWidth()
-                .border(1.dp, Color.White.copy(alpha = 0.15f), RoundedCornerShape(20.dp))
+                .border(
+                    1.dp,
+                    Color.White.copy(alpha = 0.15f),
+                    RoundedCornerShape(Dimens.PaddingMedium + Dimens.PaddingNormal)
+                )
         ) {
             Column(
-                modifier = Modifier.padding(20.dp),
+                modifier = Modifier.padding(Dimens.PaddingMedium + Dimens.PaddingNormal),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Help us grow",
+                    text = stringResource(id = R.string.onboarding_p4_card_title),
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
+                    fontSize = Dimens.TextSizeExtraLarge
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(Dimens.PaddingMedium))
                 Text(
-                    text = "Please show us your love by rating us 5 stars on GooglePlay",
+                    text = stringResource(id = R.string.onboarding_p4_card_desc),
                     color = Color.White.copy(alpha = 0.8f),
-                    fontSize = 14.sp,
+                    fontSize = Dimens.TextSizeNormal,
                     textAlign = TextAlign.Center
                 )
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(Dimens.PaddingLarge))
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
@@ -465,23 +499,22 @@ fun OnboardingPage4() {
                         Icon(
                             imageVector = Icons.Default.Star,
                             contentDescription = null,
-                            tint = Color(0xFFFFC107),
-                            modifier = Modifier.size(28.dp)
+                            tint = StarGold,
+                            modifier = Modifier.size(Dimens.StarSize)
                         )
                     }
-                    // Ngôi sao thứ 5 có ngón tay nhấp
                     Box(
                         contentAlignment = Alignment.BottomEnd
                     ) {
                         Icon(
                             imageVector = Icons.Default.Star,
                             contentDescription = null,
-                            tint = Color(0xFFFFC107),
-                            modifier = Modifier.size(28.dp)
+                            tint = StarGold,
+                            modifier = Modifier.size(Dimens.StarSize)
                         )
                         Text(
                             text = "👆",
-                            fontSize = 20.sp,
+                            fontSize = Dimens.TextSizeExtraLarge,
                             modifier = Modifier.offset(x = 10.dp, y = 10.dp)
                         )
                     }
