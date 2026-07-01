@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+    compileOnly("com.google.errorprone:error_prone_annotations:2.28.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

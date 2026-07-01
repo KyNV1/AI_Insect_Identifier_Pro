@@ -28,14 +28,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
-import coil.compose.rememberAsyncImagePainter
 import com.kynv1.aiinsectidentifierpro.R
+import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.ButtonGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.CardBackground
+import com.kynv1.aiinsectidentifierpro.ui.theme.CardBorder
+import com.kynv1.aiinsectidentifierpro.ui.theme.DarkBackground
+import com.kynv1.aiinsectidentifierpro.ui.theme.DarkButtonGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.DarkForestGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
+import com.kynv1.aiinsectidentifierpro.ui.theme.DisabledButtonGreen
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,7 +60,6 @@ fun ScanScreen(
 
     var tempPhotoUri by remember { mutableStateOf<Uri?>(null) }
 
-    // Xử lý camera
     val takePictureLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture(),
         onResult = { success ->
@@ -61,7 +69,6 @@ fun ScanScreen(
         }
     )
 
-    // Xử lý gallery
     val pickImageLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri ->
@@ -69,7 +76,6 @@ fun ScanScreen(
         }
     )
 
-    // Hàm tạo Uri tạm cho ảnh chụp từ camera
     fun createTempImageUri(): Uri {
         val tempFile = File.createTempFile(
             "insect_scan_",
@@ -83,7 +89,6 @@ fun ScanScreen(
         return FileProvider.getUriForFile(context, authority, tempFile)
     }
 
-    // Lắng nghe sự kiện quét thành công để chuyển sang trang chi tiết
     LaunchedEffect(uiState) {
         if (uiState is ScanUiState.Success) {
             val insectId = (uiState as ScanUiState.Success).insectId
@@ -92,19 +97,15 @@ fun ScanScreen(
         }
     }
 
-    // Giao diện chính sử dụng tone màu xanh lá thiên nhiên (Nature Green) phối hợp Dark theme
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(
                 brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFF0F1E16), // Dark Forest Green
-                        Color(0xFF0A0F0D)  // Deep Charcoal Black
-                    )
+                    colors = listOf(DarkForestGreen, DarkBackground)
                 )
             )
-            .padding(16.dp)
+            .padding(Dimens.PaddingLarge)
     ) {
         Column(
             modifier = Modifier
@@ -113,36 +114,38 @@ fun ScanScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // Header
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(top = 16.dp)
+                modifier = Modifier.padding(top = Dimens.PaddingLarge)
             ) {
                 Text(
-                    text = "INSECT IDENTIFIER",
-                    color = Color(0xFF4CAF50), // Nature Green
-                    fontSize = 24.sp,
+                    text = stringResource(id = R.string.scan_title),
+                    color = ActiveGreen,
+                    fontSize = Dimens.TextSizeTitleScan,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 2.sp
                 )
                 Text(
-                    text = "Chụp hoặc chọn ảnh côn trùng để nhận diện bằng AI",
+                    text = stringResource(id = R.string.scan_subtitle),
                     color = Color.Gray,
-                    fontSize = 13.sp,
+                    fontSize = Dimens.TextSizeSubNormal,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(top = 4.dp, start = 16.dp, end = 16.dp)
+                    modifier = Modifier.padding(
+                        top = Dimens.PaddingSmall,
+                        start = Dimens.PaddingLarge,
+                        end = Dimens.PaddingLarge
+                    )
                 )
             }
 
-            // Image Preview Card hoặc Box placeholder
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(350.dp)
-                    .padding(vertical = 24.dp),
-                shape = RoundedCornerShape(24.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFF14241C)),
-                border = BorderStroke(1.dp, Color(0xFF2E4C3E))
+                    .height(Dimens.ImagePreviewHeight)
+                    .padding(vertical = Dimens.PaddingExtraLarge),
+                shape = RoundedCornerShape(Dimens.PaddingExtraLarge),
+                colors = CardDefaults.cardColors(containerColor = CardBackground),
+                border = BorderStroke(1.dp, CardBorder)
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -151,36 +154,36 @@ fun ScanScreen(
                     if (selectedImageUri != null) {
                         AsyncImage(
                             model = selectedImageUri,
-                            contentDescription = "Selected Insect Image",
+                            contentDescription = null,
                             modifier = Modifier
                                 .fillMaxSize()
-                                .clip(RoundedCornerShape(24.dp)),
+                                .clip(RoundedCornerShape(Dimens.PaddingExtraLarge)),
                             contentScale = ContentScale.Crop
                         )
                     } else {
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center,
-                            modifier = Modifier.padding(24.dp)
+                            modifier = Modifier.padding(Dimens.PaddingExtraLarge)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.CameraAlt,
-                                contentDescription = "Camera Icon",
-                                tint = Color(0xFF81C784),
-                                modifier = Modifier.size(64.dp)
+                                contentDescription = null,
+                                tint = ActiveGreen,
+                                modifier = Modifier.size(Dimens.LargeIconSize)
                             )
-                            Spacer(modifier = Modifier.height(16.dp))
+                            Spacer(modifier = Modifier.height(Dimens.PaddingLarge))
                             Text(
-                                text = "Chưa chọn hình ảnh nào",
+                                text = stringResource(id = R.string.scan_empty_title),
                                 color = Color.LightGray,
-                                fontSize = 16.sp,
+                                fontSize = Dimens.TextSizeMedium,
                                 fontWeight = FontWeight.Medium
                             )
-                            Spacer(modifier = Modifier.height(8.dp))
+                            Spacer(modifier = Modifier.height(Dimens.PaddingMedium))
                             Text(
-                                text = "Bấm chụp ảnh hoặc chọn ảnh từ máy để bắt đầu.",
+                                text = stringResource(id = R.string.scan_empty_desc),
                                 color = Color.Gray,
-                                fontSize = 12.sp,
+                                fontSize = Dimens.TextSizeSmall,
                                 textAlign = TextAlign.Center
                             )
                         }
@@ -188,19 +191,16 @@ fun ScanScreen(
                 }
             }
 
-            // Action Buttons
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 24.dp),
+                    .padding(bottom = Dimens.PaddingExtraLarge),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Hàng nút chọn ảnh
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
-                    // Nút chụp ảnh
                     Button(
                         onClick = {
                             val uri = createTempImageUri()
@@ -208,69 +208,72 @@ fun ScanScreen(
                             takePictureLauncher.launch(uri)
                         },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF2E7D32),
+                            containerColor = ButtonGreen,
                             contentColor = Color.White
                         ),
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(Dimens.PaddingLarge),
                         modifier = Modifier
                             .weight(1f)
-                            .height(56.dp)
-                            .padding(end = 8.dp)
+                            .height(Dimens.ButtonHeight)
+                            .padding(end = Dimens.PaddingMedium)
                     ) {
                         Icon(imageVector = Icons.Default.CameraAlt, contentDescription = null)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Chụp Ảnh", fontWeight = FontWeight.SemiBold)
+                        Spacer(modifier = Modifier.width(Dimens.PaddingMedium))
+                        Text(
+                            text = stringResource(id = R.string.scan_btn_take_photo),
+                            fontWeight = FontWeight.SemiBold
+                        )
                     }
 
-                    // Nút chọn từ thư viện
                     Button(
                         onClick = { pickImageLauncher.launch("image/*") },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF1B5E20),
+                            containerColor = DarkButtonGreen,
                             contentColor = Color.White
                         ),
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(Dimens.PaddingLarge),
                         modifier = Modifier
                             .weight(1f)
-                            .height(56.dp)
-                            .padding(start = 8.dp),
-                        border = BorderStroke(1.dp, Color(0xFF4CAF50))
+                            .height(Dimens.ButtonHeight)
+                            .padding(start = Dimens.PaddingMedium),
+                        border = BorderStroke(1.dp, ActiveGreen)
                     ) {
                         Icon(imageVector = Icons.Default.Image, contentDescription = null)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Thư Viện", fontWeight = FontWeight.SemiBold)
+                        Spacer(modifier = Modifier.width(Dimens.PaddingMedium))
+                        Text(
+                            text = stringResource(id = R.string.scan_btn_gallery),
+                            fontWeight = FontWeight.SemiBold
+                        )
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(Dimens.PaddingLarge))
 
-                // Nút kích hoạt nhận diện AI
                 Button(
                     onClick = { viewModel.identifyInsect(context) },
                     enabled = selectedImageUri != null && uiState !is ScanUiState.Loading,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF4CAF50),
+                        containerColor = ActiveGreen,
                         contentColor = Color.Black,
-                        disabledContainerColor = Color(0xFF1E3528),
+                        disabledContainerColor = DisabledButtonGreen,
                         disabledContentColor = Color.DarkGray
                     ),
-                    shape = RoundedCornerShape(16.dp),
+                    shape = RoundedCornerShape(Dimens.PaddingLarge),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(56.dp)
+                        .height(Dimens.ButtonHeight)
                 ) {
                     Icon(imageVector = Icons.Default.PlayArrow, contentDescription = null)
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(Dimens.PaddingMedium))
                     Text(
-                        text = "NHẬN DIỆN NGAY",
+                        text = stringResource(id = R.string.scan_btn_identify),
                         fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp
+                        fontSize = Dimens.TextSizeMedium
                     )
                 }
             }
         }
 
-        // Overlay Loading hoặc Error
         AnimatedVisibility(
             visible = uiState is ScanUiState.Loading,
             enter = fadeIn(),
@@ -283,32 +286,32 @@ fun ScanScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Card(
-                    colors = CardDefaults.cardColors(containerColor = Color(0xFF14241C)),
-                    shape = RoundedCornerShape(24.dp),
-                    border = BorderStroke(1.dp, Color(0xFF4CAF50)),
-                    modifier = Modifier.padding(32.dp)
+                    colors = CardDefaults.cardColors(containerColor = CardBackground),
+                    shape = RoundedCornerShape(Dimens.PaddingExtraLarge),
+                    border = BorderStroke(1.dp, ActiveGreen),
+                    modifier = Modifier.padding(Dimens.PaddingDoubleExtraLarge)
                 ) {
                     Column(
-                        modifier = Modifier.padding(32.dp),
+                        modifier = Modifier.padding(Dimens.PaddingDoubleExtraLarge),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         CircularProgressIndicator(
-                            color = Color(0xFF4CAF50),
-                            modifier = Modifier.size(48.dp)
+                            color = ActiveGreen,
+                            modifier = Modifier.size(Dimens.LoadingIndicatorSize)
                         )
-                        Spacer(modifier = Modifier.height(24.dp))
+                        Spacer(modifier = Modifier.height(Dimens.PaddingExtraLarge))
                         Text(
-                            text = "AI đang phân tích ảnh...",
+                            text = stringResource(id = R.string.scan_loading_title),
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp,
+                            fontSize = Dimens.TextSizeMedium,
                             textAlign = TextAlign.Center
                         )
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(Dimens.PaddingMedium))
                         Text(
-                            text = "Mô hình Gemini 1.5 Flash đang nhận dạng côn trùng, vui lòng đợi trong giây lát.",
+                            text = stringResource(id = R.string.scan_loading_desc),
                             color = Color.Gray,
-                            fontSize = 12.sp,
+                            fontSize = Dimens.TextSizeSmall,
                             textAlign = TextAlign.Center
                         )
                     }
@@ -316,7 +319,6 @@ fun ScanScreen(
             }
         }
 
-        // Dialog báo lỗi
         if (uiState is ScanUiState.Error) {
             AlertDialog(
                 onDismissRequest = { viewModel.resetState() },
@@ -327,14 +329,25 @@ fun ScanScreen(
                         tint = Color.Red
                     )
                 },
-                title = { Text("Lỗi nhận diện") },
-                text = { Text((uiState as ScanUiState.Error).message) },
+                title = { Text(text = stringResource(id = R.string.scan_error_title)) },
+                text = {
+                    val errorState = uiState as ScanUiState.Error
+                    val errorMessage = if (errorState.dynamicArg != null) {
+                        stringResource(id = errorState.resId, errorState.dynamicArg)
+                    } else {
+                        stringResource(id = errorState.resId)
+                    }
+                    Text(text = errorMessage)
+                },
                 confirmButton = {
                     TextButton(onClick = { viewModel.resetState() }) {
-                        Text("Đóng", color = Color(0xFF4CAF50))
+                        Text(
+                            text = stringResource(id = R.string.scan_btn_close),
+                            color = ActiveGreen
+                        )
                     }
                 },
-                containerColor = Color(0xFF14241C),
+                containerColor = CardBackground,
                 titleContentColor = Color.White,
                 textContentColor = Color.LightGray
             )

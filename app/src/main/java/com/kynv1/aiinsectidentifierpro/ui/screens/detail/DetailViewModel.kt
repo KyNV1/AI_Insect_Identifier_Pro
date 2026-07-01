@@ -2,6 +2,7 @@ package com.kynv1.aiinsectidentifierpro.ui.screens.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.data.local.entity.InsectEntity
 import com.kynv1.aiinsectidentifierpro.data.repository.InsectRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +14,7 @@ import javax.inject.Inject
 sealed interface DetailUiState {
     object Loading : DetailUiState
     data class Success(val insect: InsectEntity) : DetailUiState
-    data class Error(val message: String) : DetailUiState
+    data class Error(val resId: Int, val dynamicArg: String? = null) : DetailUiState
 }
 
 @HiltViewModel
@@ -32,10 +33,10 @@ class DetailViewModel @Inject constructor(
                 if (insect != null) {
                     _uiState.value = DetailUiState.Success(insect)
                 } else {
-                    _uiState.value = DetailUiState.Error("Không tìm thấy thông tin côn trùng.")
+                    _uiState.value = DetailUiState.Error(R.string.error_insect_not_found)
                 }
             } catch (e: Exception) {
-                _uiState.value = DetailUiState.Error("Lỗi tải dữ liệu: ${e.localizedMessage}")
+                _uiState.value = DetailUiState.Error(R.string.error_load_failed_format, e.localizedMessage)
             }
         }
     }

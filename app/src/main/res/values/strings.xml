@@ -1,3 +1,61 @@
 <resources>
     <string name="app_name">AI Insect Identifier Pro</string>
+
+    <!-- Onboarding Flow Strings -->
+    <string name="onboarding_btn_continue">CONTINUE</string>
+    <string name="onboarding_p1_subtitle">Identify insects</string>
+    <string name="onboarding_p1_title">Worldwide</string>
+    <string name="onboarding_p2_card_title">Honey Bee</string>
+    <string name="onboarding_p2_card_desc">Western honey bee (Apis mellifera) is the most common species of honeybee in the world...</string>
+    <string name="onboarding_p2_subtitle">Explore</string>
+    <string name="onboarding_p2_title">insects around you</string>
+    <string name="onboarding_p3_subtitle">Identify Bugs</string>
+    <string name="onboarding_p3_title">by Sound</string>
+    <string name="onboarding_p3_desc">Discover the hidden acoustic world of nature, right from your pocket.</string>
+    <string name="onboarding_p4_card_title">Help us grow</string>
+    <string name="onboarding_p4_card_desc">Please show us your love by rating us 5 stars on GooglePlay</string>
+
+    <!-- Detail Screen Strings -->
+    <string name="detail_title">Chi Tiết Nhận Diện</string>
+    <string name="detail_btn_back">Back</string>
+    <string name="detail_confidence">Độ tin cậy</string>
+    <string name="detail_danger_level">Mức độ nguy hại</string>
+    <string name="detail_danger_high">Nguy hiểm</string>
+    <string name="detail_danger_medium">Cảnh báo</string>
+    <string name="detail_danger_low">An toàn</string>
+    <string name="detail_description_header">Mô tả loài</string>
+    <string name="detail_characteristics_header">Đặc điểm nhận dạng</string>
+    <string name="detail_habitat_header">Môi trường sống</string>
+    <string name="detail_safety_warning_header">Lưu ý an toàn</string>
+
+    <!-- History Screen Strings -->
+    <string name="history_title">LỊCH SỬ QUÉT</string>
+    <string name="history_empty_title">Lịch sử trống</string>
+    <string name="history_empty_desc">Các loài côn trùng bạn đã quét sẽ xuất hiện ở đây để tiện xem lại sau.</string>
+    <string name="history_btn_delete_desc">Delete item</string>
+    <string name="history_item_confidence_format">%1$s  •  Độ tin cậy: %2$d%%</string>
+
+    <!-- Scan Screen Strings -->
+    <string name="scan_title">INSECT IDENTIFIER</string>
+    <string name="scan_subtitle">Chụp hoặc chọn ảnh côn trùng để nhận diện bằng AI</string>
+    <string name="scan_empty_title">Chưa chọn hình ảnh nào</string>
+    <string name="scan_empty_desc">Bấm chụp ảnh hoặc chọn ảnh từ máy để bắt đầu.</string>
+    <string name="scan_btn_take_photo">Chụp Ảnh</string>
+    <string name="scan_btn_gallery">Thư Viện</string>
+    <string name="scan_btn_identify">NHẬN DIỆN NGAY</string>
+    <string name="scan_loading_title">AI đang phân tích ảnh...</string>
+    <string name="scan_loading_desc">Mô hình Gemini 1.5 Flash đang nhận dạng côn trùng, vui lòng đợi trong giây lát.</string>
+    <string name="scan_error_title">Lỗi nhận diện</string>
+    <string name="scan_btn_close">Đóng</string>
+
+    <!-- General Errors -->
+    <string name="error_insect_not_found">Không tìm thấy thông tin côn trùng.</string>
+    <string name="error_load_failed_format">Lỗi tải dữ liệu: %1$s</string>
+    <string name="error_no_image_selected">Vui lòng chụp hoặc chọn một bức ảnh trước.</string>
+    <string name="error_cannot_read_image">Không thể đọc được file ảnh.</string>
+    <string name="error_gemini_no_response">Gemini không phản hồi hoặc trả về dữ liệu sai định dạng.</string>
+    <string name="error_occurred_format">Có lỗi xảy ra: %1$s</string>
+
+    <!-- Splash Screen Strings -->
+    <string name="splash_loading_text">Preparing for loading…</string>
 </resources>

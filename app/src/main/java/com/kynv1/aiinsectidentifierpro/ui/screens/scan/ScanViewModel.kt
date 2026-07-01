@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.data.local.entity.InsectEntity
 import com.kynv1.aiinsectidentifierpro.data.repository.InsectRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +23,7 @@ sealed interface ScanUiState {
     object Idle : ScanUiState
     object Loading : ScanUiState
     data class Success(val insectId: Long) : ScanUiState
-    data class Error(val message: String) : ScanUiState
+    data class Error(val resId: Int, val dynamicArg: String? = null) : ScanUiState
 }
 
 @HiltViewModel
@@ -47,7 +48,7 @@ class ScanViewModel @Inject constructor(
 
     fun identifyInsect(context: Context) {
         val uri = selectedImageUri ?: run {
-            _uiState.value = ScanUiState.Error("Vui lòng chụp hoặc chọn một bức ảnh trước.")
+            _uiState.value = ScanUiState.Error(R.string.error_no_image_selected)
             return
         }
 
@@ -57,7 +58,7 @@ class ScanViewModel @Inject constructor(
             try {
                 val bitmap = uriToBitmap(context, uri)
                 if (bitmap == null) {
-                    _uiState.value = ScanUiState.Error("Không thể đọc được file ảnh.")
+                    _uiState.value = ScanUiState.Error(R.string.error_cannot_read_image)
                     return@launch
                 }
 
@@ -67,10 +68,10 @@ class ScanViewModel @Inject constructor(
                     val id = repository.insertInsect(entity)
                     _uiState.value = ScanUiState.Success(id)
                 } else {
-                    _uiState.value = ScanUiState.Error("Gemini không phản hồi hoặc trả về dữ liệu sai định dạng.")
+                    _uiState.value = ScanUiState.Error(R.string.error_gemini_no_response)
                 }
             } catch (e: Exception) {
-                _uiState.value = ScanUiState.Error("Có lỗi xảy ra: ${e.localizedMessage}")
+                _uiState.value = ScanUiState.Error(R.string.error_occurred_format, e.localizedMessage)
             }
         }
     }
