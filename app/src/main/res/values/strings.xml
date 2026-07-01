@@ -54,4 +54,7 @@
     <string name="error_cannot_read_image">Không thể đọc được file ảnh.</string>
     <string name="error_gemini_no_response">Gemini không phản hồi hoặc trả về dữ liệu sai định dạng.</string>
     <string name="error_occurred_format">Có lỗi xảy ra: %1$s</string>
+
+    <!-- Splash Screen Strings -->
+    <string name="splash_loading_text">Preparing for loading…</string>
 </resources>

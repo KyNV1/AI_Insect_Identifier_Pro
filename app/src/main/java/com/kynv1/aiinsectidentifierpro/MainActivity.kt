@@ -32,6 +32,7 @@ import com.kynv1.aiinsectidentifierpro.ui.screens.onboarding.OnboardingScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.onboarding.OnboardingViewModel
 import com.kynv1.aiinsectidentifierpro.ui.screens.scan.ScanScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.scan.ScanViewModel
+import com.kynv1.aiinsectidentifierpro.ui.screens.splash.SplashScreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.AIInsectIdentifierProTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -65,11 +66,7 @@ fun MainAppScreen(onboardingStore: OnboardingStore) {
     val detailViewModel: DetailViewModel = hiltViewModel()
     val onboardingViewModel: OnboardingViewModel = hiltViewModel()
 
-    val startDestination = if (onboardingStore.isOnboardingCompleted()) {
-        Screen.Scan.route
-    } else {
-        Screen.Onboarding.route
-    }
+    val startDestination = Screen.Splash.route
 
     Scaffold(
         bottomBar = {
@@ -141,6 +138,21 @@ fun MainAppScreen(onboardingStore: OnboardingStore) {
             startDestination = startDestination,
             modifier = Modifier.padding(innerPadding)
         ) {
+            composable(Screen.Splash.route) {
+                SplashScreen(
+                    onboardingStore = onboardingStore,
+                    onNavigateToOnboarding = {
+                        navController.navigate(Screen.Onboarding.route) {
+                            popUpTo(Screen.Splash.route) { inclusive = true }
+                        }
+                    },
+                    onNavigateToScan = {
+                        navController.navigate(Screen.Scan.route) {
+                            popUpTo(Screen.Splash.route) { inclusive = true }
+                        }
+                    }
+                )
+            }
             composable(Screen.Onboarding.route) {
                 OnboardingScreen(
                     viewModel = onboardingViewModel,
