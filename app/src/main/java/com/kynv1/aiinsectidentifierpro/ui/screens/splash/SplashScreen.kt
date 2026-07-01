@@ -72,38 +72,16 @@ fun SplashScreen(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Row(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "🌿",
-                            fontSize = 28.sp,
-                            modifier = Modifier.padding(start = 12.dp)
-                        )
-                        Text(
-                            text = "🍃",
-                            fontSize = 28.sp,
-                            modifier = Modifier.padding(end = 12.dp)
-                        )
-                    }
-
-                    Box(
-                        modifier = Modifier
-                            .size(100.dp)
-                            .border(1.5.dp, Color.LightGray.copy(alpha = 0.5f), RoundedCornerShape(12.dp)),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.img_onboarding_red_beetle),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(64.dp)
-                                .clip(CircleShape),
-                            contentScale = ContentScale.Crop
-                        )
-                    }
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_launcher_background),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize()
+                    )
                 }
             }
 

@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -54,7 +53,6 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -75,15 +73,13 @@ fun OnboardingScreen(
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { 4 })
 
-    // Tính toán tiến trình trượt hiện tại (từ 0.0 đến 3.0)
     val progress by remember {
         derivedStateOf {
             pagerState.currentPage + pagerState.currentPageOffsetFraction
         }
     }
 
-                                                                                                                // Nền mặc định (Rừng cây tối)
-                                                                                                                val forestAlpha by remember {
+    val forestAlpha by remember {
         derivedStateOf {
             if (progress <= 1f) {
                 1f - progress
@@ -93,7 +89,6 @@ fun OnboardingScreen(
         }
     }
 
-    // Nền ong mật cho trang 2 (index 1)
     val honeyBeeAlpha by remember {
         derivedStateOf {
             if (progress in 0f..1f) {
@@ -106,7 +101,6 @@ fun OnboardingScreen(
         }
     }
 
-    // Nền bọ cánh cứng cho trang 3 (index 2)
     val redBeetleAlpha by remember {
         derivedStateOf {
             if (progress in 1f..2f) {
@@ -119,7 +113,6 @@ fun OnboardingScreen(
         }
     }
 
-    // Nền bướm Atlas cho trang 4 (index 3)
     val atlasMothAlpha by remember {
         derivedStateOf {
             if (progress >= 2.0f) {
@@ -133,7 +126,6 @@ fun OnboardingScreen(
     Box(
         modifier = modifier.fillMaxSize()
     ) {
-        // Nền rừng tối
         Image(
             painter = painterResource(id = R.drawable.bg_onboarding_forest),
             contentDescription = null,
@@ -142,7 +134,6 @@ fun OnboardingScreen(
             alpha = if (progress in 2f..3f) 0f else maxOf(forestAlpha, 0f)
         )
 
-        // Nền ong mật cho trang 2
         Image(
             painter = painterResource(id = R.drawable.img_onboarding_honey_bee),
             contentDescription = null,
@@ -151,7 +142,6 @@ fun OnboardingScreen(
             alpha = honeyBeeAlpha
         )
 
-        // Nền bọ cánh cứng cho trang 3
         Image(
             painter = painterResource(id = R.drawable.img_onboarding_red_beetle),
             contentDescription = null,
@@ -160,7 +150,6 @@ fun OnboardingScreen(
             alpha = redBeetleAlpha
         )
 
-        // Nền bướm Atlas cho trang 4
         Image(
             painter = painterResource(id = R.drawable.img_onboarding_atlas_moth),
             contentDescription = null,
@@ -169,7 +158,6 @@ fun OnboardingScreen(
             alpha = atlasMothAlpha
         )
 
-        // Lớp phủ tối tăng tương phản cho văn bản
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -437,7 +425,6 @@ fun OnboardingPage3() {
     ) {
         Spacer(modifier = Modifier.height(Dimens.PaddingDoubleExtraLarge))
 
-        // Vòng tròn mờ tối chứa sóng âm hoạt họa phát sáng (Acoustic circle)
         Box(
             modifier = Modifier
                 .size(190.dp)
@@ -453,7 +440,6 @@ fun OnboardingPage3() {
             )
         }
 
-        // Cụm văn bản tiêu đề & mô tả âm thanh
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(bottom = Dimens.PaddingDoubleExtraLarge)
@@ -577,7 +563,7 @@ fun SmoothSineWave(modifier: Modifier = Modifier) {
         val height = size.height
         val midY = height / 2f
         val amplitude = 12.dp.toPx()
-        val frequency = (2f * Math.PI.toFloat()) / width * 1.5f // 1.5 chu kỳ sóng
+        val frequency = (2f * Math.PI.toFloat()) / width * 1.5f
 
         val path = Path()
         for (x in 0..width.toInt()) {
@@ -595,10 +581,10 @@ fun SmoothSineWave(modifier: Modifier = Modifier) {
             style = Stroke(width = 3.dp.toPx(), cap = StrokeCap.Round)
         )
 
-        // Sóng thứ 2 mờ hơn lệch pha tạo chiều sâu
         val path2 = Path()
         for (x in 0..width.toInt()) {
-            val y = midY + (amplitude * 0.6f) * kotlin.math.sin(x * frequency - phaseOffset + (Math.PI / 2).toFloat())
+            val y =
+                midY + (amplitude * 0.6f) * kotlin.math.sin(x * frequency - phaseOffset + (Math.PI / 2).toFloat())
             if (x == 0) {
                 path2.moveTo(x.toFloat(), y)
             } else {
