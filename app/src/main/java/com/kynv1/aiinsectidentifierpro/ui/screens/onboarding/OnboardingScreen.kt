@@ -6,6 +6,7 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -37,7 +38,9 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,9 +48,13 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -68,16 +75,101 @@ fun OnboardingScreen(
     val coroutineScope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { 4 })
 
+    // Tính toán tiến trình trượt hiện tại (từ 0.0 đến 3.0)
+    val progress by remember {
+        derivedStateOf {
+            pagerState.currentPage + pagerState.currentPageOffsetFraction
+        }
+    }
+
+                                                                                                                // Nền mặc định (Rừng cây tối)
+                                                                                                                val forestAlpha by remember {
+        derivedStateOf {
+            if (progress <= 1f) {
+                1f - progress
+            } else {
+                0f
+            }
+        }
+    }
+
+    // Nền ong mật cho trang 2 (index 1)
+    val honeyBeeAlpha by remember {
+        derivedStateOf {
+            if (progress in 0f..1f) {
+                progress
+            } else if (progress in 1f..2f) {
+                2f - progress
+            } else {
+                0f
+            }
+        }
+    }
+
+    // Nền bọ cánh cứng cho trang 3 (index 2)
+    val redBeetleAlpha by remember {
+        derivedStateOf {
+            if (progress in 1f..2f) {
+                progress - 1f
+            } else if (progress in 2f..3f) {
+                3f - progress
+            } else {
+                0f
+            }
+        }
+    }
+
+    // Nền bướm Atlas cho trang 4 (index 3)
+    val atlasMothAlpha by remember {
+        derivedStateOf {
+            if (progress >= 2.0f) {
+                (progress - 2.0f).coerceIn(0f, 1f)
+            } else {
+                0f
+            }
+        }
+    }
+
     Box(
         modifier = modifier.fillMaxSize()
     ) {
+        // Nền rừng tối
         Image(
             painter = painterResource(id = R.drawable.bg_onboarding_forest),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
+            alpha = if (progress in 2f..3f) 0f else maxOf(forestAlpha, 0f)
         )
 
+        // Nền ong mật cho trang 2
+        Image(
+            painter = painterResource(id = R.drawable.img_onboarding_honey_bee),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop,
+            alpha = honeyBeeAlpha
+        )
+
+        // Nền bọ cánh cứng cho trang 3
+        Image(
+            painter = painterResource(id = R.drawable.img_onboarding_red_beetle),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop,
+            alpha = redBeetleAlpha
+        )
+
+        // Nền bướm Atlas cho trang 4
+        Image(
+            painter = painterResource(id = R.drawable.img_onboarding_atlas_moth),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop,
+            alpha = atlasMothAlpha
+        )
+
+        // Lớp phủ tối tăng tương phản cho văn bản
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -263,40 +355,18 @@ fun OnboardingPage2() {
             .fillMaxSize()
             .padding(horizontal = Dimens.PaddingExtraLarge),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Box(
-            modifier = Modifier
-                .size(Dimens.CircleRingSize),
-            contentAlignment = Alignment.Center
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.img_onboarding_honey_bee),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(Dimens.CircleImageSize)
-                    .clip(CircleShape)
-                    .border(Dimens.PaddingSmall, NatureGreen, CircleShape),
-                contentScale = ContentScale.Crop
-            )
-
-            Box(
-                modifier = Modifier
-                    .size(Dimens.CircleRingSize)
-                    .border(Dimens.PaddingMedium, Color.White.copy(alpha = 0.15f), CircleShape)
-            )
-        }
-
-        Spacer(modifier = Modifier.height(Dimens.PaddingExtraLarge))
+        Spacer(modifier = Modifier.height(Dimens.PaddingDoubleExtraLarge))
 
         Card(
-            colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.08f)),
+            colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.6f)),
             shape = RoundedCornerShape(Dimens.CardCornerRadius),
             modifier = Modifier
                 .fillMaxWidth()
                 .border(
-                    1.dp,
-                    Color.White.copy(alpha = 0.12f),
+                    Dimens.PaddingMicro,
+                    Color.White.copy(alpha = 0.15f),
                     RoundedCornerShape(Dimens.CardCornerRadius)
                 )
         ) {
@@ -307,7 +377,7 @@ fun OnboardingPage2() {
                 Box(
                     modifier = Modifier
                         .size(Dimens.CardThumbSize)
-                        .clip(RoundedCornerShape(8.dp))
+                        .clip(CircleShape)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.img_onboarding_honey_bee),
@@ -326,7 +396,7 @@ fun OnboardingPage2() {
                     )
                     Text(
                         text = stringResource(id = R.string.onboarding_p2_card_desc),
-                        color = Color.White.copy(alpha = 0.6f),
+                        color = Color.White.copy(alpha = 0.8f),
                         fontSize = Dimens.TextSizeSmall,
                         maxLines = 2
                     )
@@ -334,22 +404,25 @@ fun OnboardingPage2() {
             }
         }
 
-        Spacer(modifier = Modifier.height(Dimens.PaddingExtraLarge))
-
-        Text(
-            text = stringResource(id = R.string.onboarding_p2_subtitle),
-            color = Color.White.copy(alpha = 0.7f),
-            fontSize = Dimens.TextSizeLarge,
-            textAlign = TextAlign.Center
-        )
-
-        Text(
-            text = stringResource(id = R.string.onboarding_p2_title),
-            color = Color.White,
-            fontSize = Dimens.TextSizeTitleLarge,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(bottom = Dimens.PaddingDoubleExtraLarge)
+        ) {
+            Text(
+                text = stringResource(id = R.string.onboarding_p2_subtitle),
+                color = Color.White.copy(alpha = 0.7f),
+                fontSize = Dimens.TextSizeLarge,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(Dimens.PaddingSmall))
+            Text(
+                text = stringResource(id = R.string.onboarding_p2_title),
+                color = Color.White,
+                fontSize = Dimens.TextSizeTitleLarge,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
 
@@ -360,76 +433,53 @@ fun OnboardingPage3() {
             .fillMaxSize()
             .padding(horizontal = Dimens.PaddingExtraLarge),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
+        Spacer(modifier = Modifier.height(Dimens.PaddingDoubleExtraLarge))
+
+        // Vòng tròn mờ tối chứa sóng âm hoạt họa phát sáng (Acoustic circle)
         Box(
             modifier = Modifier
-                .size(Dimens.ImageSizeLarge)
-                .clip(RoundedCornerShape(Dimens.PaddingExtraLarge))
-                .border(
-                    Dimens.PaddingMicro,
-                    Color.White.copy(alpha = 0.15f),
-                    RoundedCornerShape(Dimens.PaddingExtraLarge)
-                )
+                .size(190.dp)
+                .clip(CircleShape)
+                .background(Color.Black.copy(alpha = 0.5f))
+                .border(1.dp, Color.White.copy(alpha = 0.15f), CircleShape),
+            contentAlignment = Alignment.Center
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.img_onboarding_red_beetle),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
+            SmoothSineWave(
+                modifier = Modifier
+                    .width(130.dp)
+                    .height(60.dp)
             )
         }
 
-        Spacer(modifier = Modifier.height(Dimens.PaddingExtraLarge))
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(Dimens.WaveHeight),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+        // Cụm văn bản tiêu đề & mô tả âm thanh
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(bottom = Dimens.PaddingDoubleExtraLarge)
         ) {
-            val infiniteTransition = rememberInfiniteTransition(label = "sound")
-
-            repeat(15) { index ->
-                val duration = 600 + (index * 70) % 500
-                val heightPercent by infiniteTransition.animateFloat(
-                    initialValue = 0.15f,
-                    targetValue = 0.85f,
-                    animationSpec = infiniteRepeatable(
-                        animation = tween(durationMillis = duration, easing = LinearEasing),
-                        repeatMode = RepeatMode.Reverse
-                    ),
-                    label = "waveHeight_$index"
-                )
-
-                Box(
-                    modifier = Modifier
-                        .padding(horizontal = 3.dp)
-                        .width(Dimens.WaveBarWidth)
-                        .fillMaxHeight(heightPercent)
-                        .clip(CircleShape)
-                        .background(AccentLime)
-                )
-            }
+            Text(
+                text = stringResource(id = R.string.onboarding_p3_subtitle),
+                color = Color.White.copy(alpha = 0.7f),
+                fontSize = Dimens.TextSizeLarge,
+                textAlign = TextAlign.Center
+            )
+            Text(
+                text = stringResource(id = R.string.onboarding_p3_title),
+                color = Color.White,
+                fontSize = Dimens.TextSizeTitleHuge,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(Dimens.PaddingNormal))
+            Text(
+                text = stringResource(id = R.string.onboarding_p3_desc),
+                color = Color.White.copy(alpha = 0.7f),
+                fontSize = Dimens.TextSizeNormal,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(horizontal = Dimens.PaddingLarge)
+            )
         }
-
-        Spacer(modifier = Modifier.height(Dimens.PaddingExtraLarge))
-
-        Text(
-            text = stringResource(id = R.string.onboarding_p3_subtitle),
-            color = Color.White.copy(alpha = 0.7f),
-            fontSize = Dimens.TextSizeLarge,
-            textAlign = TextAlign.Center
-        )
-
-        Text(
-            text = stringResource(id = R.string.onboarding_p3_title),
-            color = Color.White,
-            fontSize = Dimens.TextSizeTitleHuge,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center
-        )
     }
 }
 
@@ -442,26 +492,6 @@ fun OnboardingPage4() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Box(
-            modifier = Modifier
-                .size(Dimens.ImageSizeLarge)
-                .clip(RoundedCornerShape(Dimens.PaddingExtraLarge))
-                .border(
-                    Dimens.PaddingMicro,
-                    Color.White.copy(alpha = 0.15f),
-                    RoundedCornerShape(Dimens.PaddingExtraLarge)
-                )
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.img_onboarding_atlas_moth),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop
-            )
-        }
-
-        Spacer(modifier = Modifier.height(Dimens.PaddingExtraLarge))
-
         Card(
             colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.6f)),
             shape = RoundedCornerShape(Dimens.PaddingMedium + Dimens.PaddingNormal),
@@ -473,53 +503,113 @@ fun OnboardingPage4() {
                     RoundedCornerShape(Dimens.PaddingMedium + Dimens.PaddingNormal)
                 )
         ) {
-            Column(
-                modifier = Modifier.padding(Dimens.PaddingMedium + Dimens.PaddingNormal),
-                horizontalAlignment = Alignment.CenterHorizontally
+            RatingCardContent()
+        }
+    }
+}
+
+@Composable
+private fun RatingCardContent() {
+    Column(
+        modifier = Modifier.padding(Dimens.PaddingMedium + Dimens.PaddingNormal),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = stringResource(id = R.string.onboarding_p4_card_title),
+            color = Color.White,
+            fontWeight = FontWeight.Bold,
+            fontSize = Dimens.TextSizeExtraLarge
+        )
+        Spacer(modifier = Modifier.height(Dimens.PaddingMedium))
+        Text(
+            text = stringResource(id = R.string.onboarding_p4_card_desc),
+            color = Color.White.copy(alpha = 0.8f),
+            fontSize = Dimens.TextSizeNormal,
+            textAlign = TextAlign.Center
+        )
+        Spacer(modifier = Modifier.height(Dimens.PaddingLarge))
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            repeat(4) {
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = null,
+                    tint = StarGold,
+                    modifier = Modifier.size(Dimens.StarSize)
+                )
+            }
+            Box(
+                contentAlignment = Alignment.BottomEnd
             ) {
-                Text(
-                    text = stringResource(id = R.string.onboarding_p4_card_title),
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = Dimens.TextSizeExtraLarge
+                Icon(
+                    imageVector = Icons.Default.Star,
+                    contentDescription = null,
+                    tint = StarGold,
+                    modifier = Modifier.size(Dimens.StarSize)
                 )
-                Spacer(modifier = Modifier.height(Dimens.PaddingMedium))
                 Text(
-                    text = stringResource(id = R.string.onboarding_p4_card_desc),
-                    color = Color.White.copy(alpha = 0.8f),
-                    fontSize = Dimens.TextSizeNormal,
-                    textAlign = TextAlign.Center
+                    text = "👆",
+                    fontSize = Dimens.TextSizeExtraLarge,
+                    modifier = Modifier.offset(x = 10.dp, y = 10.dp)
                 )
-                Spacer(modifier = Modifier.height(Dimens.PaddingLarge))
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    repeat(4) {
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = null,
-                            tint = StarGold,
-                            modifier = Modifier.size(Dimens.StarSize)
-                        )
-                    }
-                    Box(
-                        contentAlignment = Alignment.BottomEnd
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = null,
-                            tint = StarGold,
-                            modifier = Modifier.size(Dimens.StarSize)
-                        )
-                        Text(
-                            text = "👆",
-                            fontSize = Dimens.TextSizeExtraLarge,
-                            modifier = Modifier.offset(x = 10.dp, y = 10.dp)
-                        )
-                    }
-                }
             }
         }
+    }
+}
+
+@Composable
+fun SmoothSineWave(modifier: Modifier = Modifier) {
+    val infiniteTransition = rememberInfiniteTransition(label = "sineWave")
+    val phaseOffset by infiniteTransition.animateFloat(
+        initialValue = 0f,
+        targetValue = (2 * Math.PI).toFloat(),
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 2000, easing = LinearEasing),
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "phase"
+    )
+
+    Canvas(modifier = modifier) {
+        val width = size.width
+        val height = size.height
+        val midY = height / 2f
+        val amplitude = 12.dp.toPx()
+        val frequency = (2f * Math.PI.toFloat()) / width * 1.5f // 1.5 chu kỳ sóng
+
+        val path = Path()
+        for (x in 0..width.toInt()) {
+            val y = midY + amplitude * kotlin.math.sin(x * frequency + phaseOffset)
+            if (x == 0) {
+                path.moveTo(x.toFloat(), y)
+            } else {
+                path.lineTo(x.toFloat(), y)
+            }
+        }
+
+        drawPath(
+            path = path,
+            color = AccentLime,
+            style = Stroke(width = 3.dp.toPx(), cap = StrokeCap.Round)
+        )
+
+        // Sóng thứ 2 mờ hơn lệch pha tạo chiều sâu
+        val path2 = Path()
+        for (x in 0..width.toInt()) {
+            val y = midY + (amplitude * 0.6f) * kotlin.math.sin(x * frequency - phaseOffset + (Math.PI / 2).toFloat())
+            if (x == 0) {
+                path2.moveTo(x.toFloat(), y)
+            } else {
+                path2.lineTo(x.toFloat(), y)
+            }
+        }
+
+        drawPath(
+            path = path2,
+            color = AccentLime.copy(alpha = 0.4f),
+            style = Stroke(width = 2.dp.toPx(), cap = StrokeCap.Round)
+        )
     }
 }
