@@ -35,6 +35,7 @@ import com.kynv1.aiinsectidentifierpro.ui.theme.CardBorder
 import com.kynv1.aiinsectidentifierpro.ui.theme.DarkBackground
 import com.kynv1.aiinsectidentifierpro.ui.theme.DarkForestGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
+import com.kynv1.aiinsectidentifierpro.ui.theme.DeleteRed
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -59,7 +60,7 @@ fun HistoryScreen(
                     colors = listOf(DarkForestGreen, DarkBackground)
                 )
             )
-            .padding(Dimens.PaddingLarge)
+            .padding(Dimens.dp_16)
     ) {
         Column(
             modifier = Modifier
@@ -69,20 +70,20 @@ fun HistoryScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = Dimens.PaddingLarge),
+                    .padding(vertical = Dimens.dp_16),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     imageVector = Icons.Default.History,
                     contentDescription = null,
                     tint = ActiveGreen,
-                    modifier = Modifier.size(Dimens.StarSize)
+                    modifier = Modifier.size(Dimens.dp_28)
                 )
-                Spacer(modifier = Modifier.width(Dimens.PaddingNormal))
+                Spacer(modifier = Modifier.width(Dimens.dp_12))
                 Text(
                     text = stringResource(id = R.string.history_title),
                     color = Color.White,
-                    fontSize = Dimens.TextSizeTitleMedium,
+                    fontSize = Dimens.sp_22,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 1.sp
                 )
@@ -97,26 +98,26 @@ fun HistoryScreen(
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.padding(Dimens.PaddingDoubleExtraLarge)
+                        modifier = Modifier.padding(Dimens.dp_32)
                     ) {
                         Icon(
                             imageVector = Icons.Default.History,
                             contentDescription = null,
                             tint = CardBorder,
-                            modifier = Modifier.size(Dimens.MapHeight)
+                            modifier = Modifier.size(Dimens.dp_80)
                         )
-                        Spacer(modifier = Modifier.height(Dimens.PaddingLarge))
+                        Spacer(modifier = Modifier.height(Dimens.dp_16))
                         Text(
                             text = stringResource(id = R.string.history_empty_title),
                             color = Color.LightGray,
-                            fontSize = Dimens.TextSizeLarge,
+                            fontSize = Dimens.sp_18,
                             fontWeight = FontWeight.Bold
                         )
-                        Spacer(modifier = Modifier.height(Dimens.PaddingMedium))
+                        Spacer(modifier = Modifier.height(Dimens.dp_8))
                         Text(
                             text = stringResource(id = R.string.history_empty_desc),
                             color = Color.Gray,
-                            fontSize = Dimens.TextSizeSubNormal,
+                            fontSize = Dimens.sp_13,
                             textAlign = TextAlign.Center
                         )
                     }
@@ -126,8 +127,8 @@ fun HistoryScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(Dimens.PaddingNormal),
-                    contentPadding = PaddingValues(bottom = Dimens.PaddingExtraLarge)
+                    verticalArrangement = Arrangement.spacedBy(Dimens.dp_12),
+                    contentPadding = PaddingValues(bottom = Dimens.dp_24)
                 ) {
                     items(historyList, key = { it.id }) { insect ->
                         HistoryItem(
@@ -154,26 +155,26 @@ fun HistoryItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(Dimens.CardCornerRadius),
+        shape = RoundedCornerShape(Dimens.dp_16),
         colors = CardDefaults.cardColors(containerColor = CardBackground),
-        border = BorderStroke(1.dp, CardBorder)
+        border = BorderStroke(Dimens.dp_1, CardBorder)
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(Dimens.PaddingNormal),
+                .padding(Dimens.dp_12),
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
                 model = insect.imageUri,
                 contentDescription = null,
                 modifier = Modifier
-                    .size(Dimens.ThumbnailSize)
-                    .clip(RoundedCornerShape(Dimens.PaddingNormal)),
+                    .size(Dimens.dp_72)
+                    .clip(RoundedCornerShape(Dimens.dp_12)),
                 contentScale = ContentScale.Crop
             )
 
-            Spacer(modifier = Modifier.width(Dimens.PaddingLarge))
+            Spacer(modifier = Modifier.width(Dimens.dp_16))
 
             Column(
                 modifier = Modifier
@@ -184,15 +185,15 @@ fun HistoryItem(
                 Text(
                     text = insect.commonName,
                     color = Color.White,
-                    fontSize = Dimens.TextSizeMedium,
+                    fontSize = Dimens.sp_16,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = insect.scientificName,
                     color = ActiveGreen,
-                    fontSize = Dimens.TextSizeSubNormal,
+                    fontSize = Dimens.sp_13,
                     fontStyle = FontStyle.Italic,
-                    modifier = Modifier.padding(top = Dimens.PaddingMicro)
+                    modifier = Modifier.padding(top = Dimens.dp_2)
                 )
                 Text(
                     text = stringResource(
@@ -201,8 +202,8 @@ fun HistoryItem(
                         insect.confidence
                     ),
                     color = Color.Gray,
-                    fontSize = Dimens.TextSizeMicro,
-                    modifier = Modifier.padding(top = Dimens.PaddingMediumSmall)
+                    fontSize = Dimens.sp_11,
+                    modifier = Modifier.padding(top = Dimens.dp_6)
                 )
             }
 
@@ -210,7 +211,7 @@ fun HistoryItem(
                 Icon(
                     imageVector = Icons.Default.Delete,
                     contentDescription = stringResource(id = R.string.history_btn_delete_desc),
-                    tint = Color(0xFFC62828)
+                    tint = DeleteRed
                 )
             }
         }

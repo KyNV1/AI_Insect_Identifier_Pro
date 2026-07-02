@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.kynv1.aiinsectidentifierpro.R
+import com.kynv1.aiinsectidentifierpro.utils.Constants
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.CardBackground
 import com.kynv1.aiinsectidentifierpro.ui.theme.CardBorder
@@ -56,6 +57,9 @@ import com.kynv1.aiinsectidentifierpro.ui.theme.DarkBackground
 import com.kynv1.aiinsectidentifierpro.ui.theme.DarkForestGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
 import com.kynv1.aiinsectidentifierpro.ui.theme.MediumForestGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.WarningOrange
+import com.kynv1.aiinsectidentifierpro.ui.theme.DangerRedBackground
+import com.kynv1.aiinsectidentifierpro.ui.theme.DangerRedBorder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -78,7 +82,7 @@ fun DetailScreen(
                     Text(
                         text = stringResource(id = R.string.detail_title),
                         fontWeight = FontWeight.Bold,
-                        fontSize = Dimens.TextSizeExtraLarge
+                        fontSize = Dimens.sp_20
                     )
                 },
                 navigationIcon = {
@@ -119,7 +123,7 @@ fun DetailScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(Dimens.PaddingExtraLarge),
+                            .padding(Dimens.dp_24),
                         contentAlignment = Alignment.Center
                     ) {
                         val errorMessage = if (state.dynamicArg != null) {
@@ -130,7 +134,7 @@ fun DetailScreen(
                         Text(
                             text = errorMessage,
                             color = Color.Red,
-                            fontSize = Dimens.TextSizeMedium,
+                            fontSize = Dimens.sp_16,
                             textAlign = TextAlign.Center
                         )
                     }
@@ -177,117 +181,117 @@ fun DetailScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(
-                                    horizontal = Dimens.PaddingLarge,
-                                    vertical = Dimens.PaddingMedium
+                                    horizontal = Dimens.dp_16,
+                                    vertical = Dimens.dp_8
                                 )
                         ) {
                             Text(
                                 text = info.commonName,
                                 color = Color.White,
-                                fontSize = Dimens.TextSizeTitleLarge,
+                                fontSize = Dimens.sp_28,
                                 fontWeight = FontWeight.ExtraBold
                             )
                             Text(
                                 text = info.scientificName,
                                 color = ActiveGreen,
-                                fontSize = Dimens.TextSizeLarge,
+                                fontSize = Dimens.sp_18,
                                 fontStyle = FontStyle.Italic,
-                                modifier = Modifier.padding(top = Dimens.PaddingSmall)
+                                modifier = Modifier.padding(top = Dimens.dp_4)
                             )
 
-                            Spacer(modifier = Modifier.height(Dimens.PaddingLarge))
+                            Spacer(modifier = Modifier.height(Dimens.dp_16))
 
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.spacedBy(Dimens.PaddingNormal)
+                                horizontalArrangement = Arrangement.spacedBy(Dimens.dp_12)
                             ) {
                                 Card(
                                     modifier = Modifier.weight(1f),
                                     colors = CardDefaults.cardColors(containerColor = CardBackground),
-                                    shape = RoundedCornerShape(Dimens.CardCornerRadius),
-                                    border = BorderStroke(1.dp, CardBorder)
+                                    shape = RoundedCornerShape(Dimens.dp_16),
+                                    border = BorderStroke(Dimens.dp_1, CardBorder)
                                 ) {
                                     Column(
-                                        modifier = Modifier.padding(Dimens.PaddingLarge),
+                                        modifier = Modifier.padding(Dimens.dp_16),
                                         horizontalAlignment = Alignment.CenterHorizontally
                                     ) {
                                         Text(
                                             text = stringResource(id = R.string.detail_confidence),
                                             color = Color.Gray,
-                                            fontSize = Dimens.TextSizeSmall
+                                            fontSize = Dimens.sp_12
                                         )
-                                        Spacer(modifier = Modifier.height(Dimens.PaddingSmall))
+                                        Spacer(modifier = Modifier.height(Dimens.dp_4))
                                         Text(
                                             text = "${info.confidence}%",
                                             color = ActiveGreen,
-                                            fontSize = Dimens.TextSizeExtraLarge,
+                                            fontSize = Dimens.sp_20,
                                             fontWeight = FontWeight.Bold
                                         )
                                     }
                                 }
 
                                 val (dangerColor, dangerText) = when (info.dangerLevel.lowercase()) {
-                                    "high" -> Color.Red to stringResource(id = R.string.detail_danger_high)
-                                    "medium" -> Color(0xFFFF9800) to stringResource(id = R.string.detail_danger_medium)
+                                    Constants.DANGER_LEVEL_HIGH -> Color.Red to stringResource(id = R.string.detail_danger_high)
+                                    Constants.DANGER_LEVEL_MEDIUM -> WarningOrange to stringResource(id = R.string.detail_danger_medium)
                                     else -> ActiveGreen to stringResource(id = R.string.detail_danger_low)
                                 }
 
                                 Card(
                                     modifier = Modifier.weight(1f),
                                     colors = CardDefaults.cardColors(containerColor = CardBackground),
-                                    shape = RoundedCornerShape(Dimens.CardCornerRadius),
-                                    border = BorderStroke(1.dp, CardBorder)
+                                    shape = RoundedCornerShape(Dimens.dp_16),
+                                    border = BorderStroke(Dimens.dp_1, CardBorder)
                                 ) {
                                     Column(
-                                        modifier = Modifier.padding(Dimens.PaddingLarge),
+                                        modifier = Modifier.padding(Dimens.dp_16),
                                         horizontalAlignment = Alignment.CenterHorizontally
                                     ) {
                                         Text(
                                             text = stringResource(id = R.string.detail_danger_level),
                                             color = Color.Gray,
-                                            fontSize = Dimens.TextSizeSmall
+                                            fontSize = Dimens.sp_12
                                         )
-                                        Spacer(modifier = Modifier.height(Dimens.PaddingSmall))
+                                        Spacer(modifier = Modifier.height(Dimens.dp_4))
                                         Text(
                                             text = dangerText,
                                             color = dangerColor,
-                                            fontSize = Dimens.TextSizeExtraLarge,
+                                            fontSize = Dimens.sp_20,
                                             fontWeight = FontWeight.Bold
                                         )
                                     }
                                 }
                             }
 
-                            Spacer(modifier = Modifier.height(Dimens.PaddingExtraLarge))
+                            Spacer(modifier = Modifier.height(Dimens.dp_24))
 
                             Text(
                                 text = stringResource(id = R.string.detail_description_header),
                                 color = Color.White,
-                                fontSize = Dimens.TextSizeLarge,
+                                fontSize = Dimens.sp_18,
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
                                 text = info.description,
                                 color = Color.LightGray,
-                                fontSize = Dimens.TextSizeNormal,
-                                lineHeight = 20.sp,
-                                modifier = Modifier.padding(top = Dimens.PaddingMedium)
+                                fontSize = Dimens.sp_14,
+                                lineHeight = Dimens.sp_20,
+                                modifier = Modifier.padding(top = Dimens.dp_8)
                             )
 
-                            Spacer(modifier = Modifier.height(Dimens.PaddingExtraLarge))
+                            Spacer(modifier = Modifier.height(Dimens.dp_24))
 
                             if (info.characteristics.isNotEmpty()) {
                                 Text(
                                     text = stringResource(id = R.string.detail_characteristics_header),
                                     color = Color.White,
-                                    fontSize = Dimens.TextSizeLarge,
+                                    fontSize = Dimens.sp_18,
                                     fontWeight = FontWeight.Bold
                                 )
-                                Spacer(modifier = Modifier.height(Dimens.PaddingMedium))
+                                Spacer(modifier = Modifier.height(Dimens.dp_8))
                                 FlowRow(
                                     modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.spacedBy(Dimens.PaddingMedium),
-                                    verticalArrangement = Arrangement.spacedBy(Dimens.PaddingMedium)
+                                    horizontalArrangement = Arrangement.spacedBy(Dimens.dp_8),
+                                    verticalArrangement = Arrangement.spacedBy(Dimens.dp_8)
                                 ) {
                                     info.characteristics.forEach { char ->
                                         SuggestionChip(
@@ -295,71 +299,69 @@ fun DetailScreen(
                                             label = {
                                                 Text(
                                                     text = char,
-                                                    fontSize = Dimens.TextSizeSmall,
+                                                    fontSize = Dimens.sp_12,
                                                     color = Color.LightGray
                                                 )
                                             },
                                             colors = SuggestionChipDefaults.suggestionChipColors(
                                                 containerColor = MediumForestGreen
                                             ),
-                                            border = BorderStroke(1.dp, CardBorder)
+                                            border = BorderStroke(Dimens.dp_1, CardBorder)
                                         )
                                     }
                                 }
-                                Spacer(modifier = Modifier.height(Dimens.PaddingExtraLarge))
+                                Spacer(modifier = Modifier.height(Dimens.dp_24))
                             }
 
                             Text(
                                 text = stringResource(id = R.string.detail_habitat_header),
                                 color = Color.White,
-                                fontSize = Dimens.TextSizeLarge,
+                                fontSize = Dimens.sp_18,
                                 fontWeight = FontWeight.Bold
                             )
                             Text(
                                 text = info.habitat,
                                 color = Color.LightGray,
-                                fontSize = Dimens.TextSizeNormal,
-                                modifier = Modifier.padding(top = Dimens.PaddingMedium)
+                                fontSize = Dimens.sp_14,
+                                modifier = Modifier.padding(top = Dimens.dp_8)
                             )
 
-                            Spacer(modifier = Modifier.height(Dimens.PaddingExtraLarge))
+                            Spacer(modifier = Modifier.height(Dimens.dp_24))
 
                             if (info.dangerDescription.isNotBlank()) {
                                 Card(
                                     colors = CardDefaults.cardColors(
-                                        containerColor = Color(
-                                            0xFF241414
-                                        )
+                                        containerColor = DangerRedBackground
                                     ),
-                                    shape = RoundedCornerShape(Dimens.PaddingNormal),
-                                    border = BorderStroke(1.dp, Color(0xFF5E2020)),
+                                    shape = RoundedCornerShape(Dimens.dp_12),
+                                    border = BorderStroke(Dimens.dp_1, DangerRedBorder),
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(bottom = Dimens.PaddingExtraLarge)
+                                        .padding(bottom = Dimens.dp_24)
                                 ) {
                                     Row(
-                                        modifier = Modifier.padding(Dimens.PaddingLarge),
+                                        modifier = Modifier.padding(Dimens.dp_16),
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Icon(
                                             imageVector = Icons.Default.Warning,
                                             contentDescription = null,
                                             tint = Color.Red,
-                                            modifier = Modifier.size(Dimens.PaddingExtraLarge)
+                                            modifier = Modifier.size(Dimens.dp_24)
                                         )
-                                        Spacer(modifier = Modifier.width(Dimens.PaddingLarge))
+                                        Spacer(modifier = Modifier.width(Dimens.dp_16))
                                         Column {
                                             Text(
                                                 text = stringResource(id = R.string.detail_safety_warning_header),
                                                 color = Color.White,
-                                                fontSize = Dimens.TextSizeNormal,
+                                                fontSize = Dimens.sp_14,
                                                 fontWeight = FontWeight.Bold
                                             )
                                             Text(
                                                 text = info.dangerDescription,
                                                 color = Color.LightGray,
-                                                fontSize = Dimens.TextSizeSmall,
-                                                modifier = Modifier.padding(top = Dimens.PaddingSmall)
+                                                fontSize = Dimens.sp_12,
+                                                modifier = Modifier.padding(top = Dimens.dp_4)
                                             )
                                         }
                                     }
