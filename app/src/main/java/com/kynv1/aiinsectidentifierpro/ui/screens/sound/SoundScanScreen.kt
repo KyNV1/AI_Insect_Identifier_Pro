@@ -49,15 +49,12 @@ fun SoundScanScreen(
     var secondsLeft by remember { mutableIntStateOf(5) }
 
     LaunchedEffect(Unit) {
-        // Countdown for listening phase
         while (secondsLeft > 0) {
             delay(1000)
             secondsLeft--
         }
-        // Switch to analyzing phase
         scanState = SoundScanState.Analyzing
         delay(2500)
-        // Switch to success result (Honey Bee)
         scanState = SoundScanState.Success(
             insectName = "Honey Bee (Apis mellifera)",
             confidence = 94,
@@ -126,7 +123,6 @@ fun SoundScanScreen(
                         )
                         Spacer(modifier = Modifier.height(Dimens.dp_48))
 
-                        // Pulsing Icon
                         Box(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier
@@ -146,7 +142,6 @@ fun SoundScanScreen(
 
                         Spacer(modifier = Modifier.height(Dimens.dp_48))
 
-                        // Dynamic Wave Animation
                         SoundWaveAnimation()
 
                         Spacer(modifier = Modifier.height(Dimens.dp_48))
@@ -281,7 +276,6 @@ fun SoundScanScreen(
 fun SoundWaveAnimation() {
     val infiniteTransition = rememberInfiniteTransition(label = "wave")
 
-    // Wave heights animations
     val count = 12
     val waveScales = List(count) { index ->
         infiniteTransition.animateFloat(

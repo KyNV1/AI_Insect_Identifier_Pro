@@ -13,7 +13,6 @@ class GeminiServiceClient {
     suspend fun identifyInsect(bitmap: Bitmap): InsectInfo? = withContext(Dispatchers.IO) {
         val apiKey = GeminiConfig.API_KEY
         if (apiKey.isBlank()) {
-            // Trả về đối tượng mock thông báo lỗi thiếu API Key để người dùng cấu hình
             return@withContext InsectInfo(
                 commonName = "Thiếu Gemini API Key",
                 scientificName = "API_KEY_MISSING",
@@ -66,7 +65,6 @@ class GeminiServiceClient {
                 systemInstruction = content { text(systemInstructionText) }
             )
 
-            // Gửi request kèm hình ảnh
             val response = model.generateContent(
                 content {
                     image(bitmap)
@@ -82,7 +80,6 @@ class GeminiServiceClient {
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            // Trả về lỗi dưới dạng InsectInfo để hiển thị lên UI thay vì crash
             InsectInfo(
                 commonName = "Lỗi nhận diện",
                 scientificName = "API_ERROR",
