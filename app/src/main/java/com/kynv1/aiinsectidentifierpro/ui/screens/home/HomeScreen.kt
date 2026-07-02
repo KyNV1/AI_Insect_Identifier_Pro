@@ -50,8 +50,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.data.model.InsectShort
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
@@ -73,6 +75,25 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    HomeScreenContent(
+        uiState = uiState,
+        onNavigateToScan = onNavigateToScan,
+        onNavigateToSoundScan = onNavigateToSoundScan,
+        onNavigateToDetail = onNavigateToDetail,
+        onGetPremiumClick = { viewModel.purchasePremium() },
+        modifier = modifier
+    )
+}
+
+@Composable
+fun HomeScreenContent(
+    uiState: HomeUiState,
+    onNavigateToScan: () -> Unit,
+    onNavigateToSoundScan: () -> Unit,
+    onNavigateToDetail: (Long) -> Unit,
+    onGetPremiumClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
@@ -92,7 +113,7 @@ fun HomeScreen(
         if (!uiState.isPremium) {
             PremiumBanner(
                 onGetPremiumClick = {
-                    viewModel.purchasePremium()
+                    onGetPremiumClick()
                     Toast.makeText(context, "Premium Actived! Thank you!", Toast.LENGTH_LONG).show()
                 }
             )
@@ -302,8 +323,14 @@ fun PremiumBanner(
                 Button(
                     onClick = onGetPremiumClick,
                     shape = RoundedCornerShape(Dimens.dp_50),
-                    colors = ButtonDefaults.buttonColors(containerColor = StarGold, contentColor = Color.Black),
-                    contentPadding = PaddingValues(horizontal = Dimens.dp_16, vertical = Dimens.dp_6)
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = StarGold,
+                        contentColor = Color.Black
+                    ),
+                    contentPadding = PaddingValues(
+                        horizontal = Dimens.dp_16,
+                        vertical = Dimens.dp_6
+                    )
                 ) {
                     Text(
                         text = stringResource(id = R.string.home_premium_btn),
@@ -410,7 +437,12 @@ fun InsectListItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(110.dp)
-                    .clip(RoundedCornerShape(topStart = Dimens.dp_16.value.dp, topEnd = Dimens.dp_16.value.dp)),
+                    .clip(
+                        RoundedCornerShape(
+                            topStart = Dimens.dp_16.value.dp,
+                            topEnd = Dimens.dp_16.value.dp
+                        )
+                    ),
                 contentScale = ContentScale.Crop
             )
 
@@ -500,7 +532,12 @@ fun ArticleListItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(110.dp)
-                    .clip(RoundedCornerShape(topStart = Dimens.dp_16.value.dp, topEnd = Dimens.dp_16.value.dp)),
+                    .clip(
+                        RoundedCornerShape(
+                            topStart = Dimens.dp_16.value.dp,
+                            topEnd = Dimens.dp_16.value.dp
+                        )
+                    ),
                 contentScale = ContentScale.Crop
             )
 
@@ -520,4 +557,16 @@ fun ArticleListItem(
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HomeScreenPreview() {
+    HomeScreenContent(
+        uiState = HomeUiState(),
+        onNavigateToScan = {},
+        onNavigateToSoundScan = {},
+        onNavigateToDetail = {},
+        onGetPremiumClick = {}
+    )
 }

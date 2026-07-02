@@ -3,7 +3,10 @@ package com.kynv1.aiinsectidentifierpro
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.SystemBarStyle
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -28,7 +31,13 @@ import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -79,7 +88,10 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
+            navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
+        )
         setContent {
             AIInsectIdentifierProTheme {
                 MainAppScreen(onboardingStore)
@@ -94,6 +106,20 @@ fun MainAppScreen(onboardingStore: OnboardingStore) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
+    val tabRoutes = setOf(Screen.Home.route, Screen.History.route)
+    var stableRoute by remember { mutableStateOf<String?>(null) }
+    DisposableEffect(navBackStackEntry) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                stableRoute = navBackStackEntry?.destination?.route
+            }
+        }
+        navBackStackEntry?.lifecycle?.addObserver(observer)
+        onDispose {
+            navBackStackEntry?.lifecycle?.removeObserver(observer)
+        }
+    }
+
     val homeViewModel: HomeViewModel = hiltViewModel()
     val scanViewModel: ScanViewModel = hiltViewModel()
     val historyViewModel: HistoryViewModel = hiltViewModel()
@@ -105,7 +131,8 @@ fun MainAppScreen(onboardingStore: OnboardingStore) {
     Scaffold(
         containerColor = DarkBackground,
         bottomBar = {
-            if (currentRoute == Screen.Home.route || currentRoute == Screen.History.route) {
+            val showBottomBar = currentRoute in tabRoutes && stableRoute in tabRoutes
+            if (showBottomBar) {
                 MainBottomBar(currentRoute = currentRoute, navController = navController)
             }
         },
@@ -135,8 +162,9 @@ fun MainBottomBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .background(DarkBackground)
             .navigationBarsPadding()
-            .height(84.dp),
+            .height(Dimens.dp_84),
         contentAlignment = Alignment.BottomCenter
     ) {
         Row(
@@ -192,7 +220,7 @@ fun MainBottomBar(
                 )
             }
 
-            Spacer(modifier = Modifier.width(64.dp))
+            Spacer(modifier = Modifier.width(Dimens.dp_64))
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -228,14 +256,14 @@ fun MainBottomBar(
         Box(
             modifier = Modifier
                 .offset(y = (-16).dp)
-                .size(64.dp)
+                .size(Dimens.dp_64)
                 .background(
                     brush = Brush.radialGradient(
                         colors = listOf(ActiveGreen, ButtonGreen)
                     ),
                     shape = CircleShape
                 )
-                .border(width = 4.dp, color = DarkBackground, shape = CircleShape)
+                .border(width = Dimens.dp_4, color = DarkBackground, shape = CircleShape)
                 .clickable {
                     navController.navigate(Screen.Scan.route)
                 },
@@ -268,7 +296,13 @@ fun AppNavHost(
         startDestination = startDestination,
         modifier = modifier
     ) {
-        composable(Screen.Splash.route) {
+        composable(
+            route = Screen.Splash.route,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
+        ) {
             SplashScreen(
                 onboardingStore = onboardingStore,
                 onNavigateToOnboarding = {
@@ -283,7 +317,13 @@ fun AppNavHost(
                 }
             )
         }
-        composable(Screen.Onboarding.route) {
+        composable(
+            route = Screen.Onboarding.route,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
+        ) {
             OnboardingScreen(
                 viewModel = onboardingViewModel,
                 onNavigateToScan = {
@@ -293,7 +333,13 @@ fun AppNavHost(
                 }
             )
         }
-        composable(Screen.Home.route) {
+        composable(
+            route = Screen.Home.route,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
+        ) {
             HomeScreen(
                 viewModel = homeViewModel,
                 onNavigateToScan = {
@@ -342,5 +388,17 @@ fun AppNavHost(
                 onBack = { navController.popBackStack() }
             )
         }
+    }
+}
+
+@Composable
+fun TestScreen(
+    modifier: Modifier = Modifier
+) {
+    Box(modifier = modifier.fillMaxSize()) {
+        Text(
+            text = "nguyen anh ky hoc vien cong nghe buu chinh vien thong",
+            modifier = Modifier.align(Alignment.Center)
+        )
     }
 }

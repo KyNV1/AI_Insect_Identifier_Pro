@@ -19,6 +19,7 @@ object Dimens {
     val dp_24 = 24.dp
     val dp_28 = 28.dp
     val dp_32 = 32.dp
+    val dp_36 = 36.dp
     val dp_40 = 40.dp
     val dp_48 = 48.dp
     val dp_50 = 50.dp
@@ -26,6 +27,10 @@ object Dimens {
     val dp_56 =  56.dp
     val dp_64 = 64.dp
     val dp_80 = 80.dp
+    val dp_84 = 84.dp
+    val dp_160 = 160.dp
+    val dp_180 = 180.dp
+    val dp_200 = 200.dp
     // Sizes
 
     val ImageSizeExtraLarge = 260.dp
