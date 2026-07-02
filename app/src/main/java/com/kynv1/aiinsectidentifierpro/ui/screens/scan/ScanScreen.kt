@@ -1,6 +1,5 @@
 package com.kynv1.aiinsectidentifierpro.ui.screens.scan
 
-import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -8,10 +7,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
@@ -27,7 +24,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -105,7 +101,7 @@ fun ScanScreen(
                     colors = listOf(DarkForestGreen, DarkBackground)
                 )
             )
-            .padding(Dimens.PaddingLarge)
+            .padding(Dimens.dp_16)
     ) {
         Column(
             modifier = Modifier
@@ -116,24 +112,24 @@ fun ScanScreen(
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(top = Dimens.PaddingLarge)
+                modifier = Modifier.padding(top = Dimens.dp_16)
             ) {
                 Text(
                     text = stringResource(id = R.string.scan_title),
                     color = ActiveGreen,
-                    fontSize = Dimens.TextSizeTitleScan,
+                    fontSize = Dimens.sp_24,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 2.sp
                 )
                 Text(
                     text = stringResource(id = R.string.scan_subtitle),
                     color = Color.Gray,
-                    fontSize = Dimens.TextSizeSubNormal,
+                    fontSize = Dimens.sp_13,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(
-                        top = Dimens.PaddingSmall,
-                        start = Dimens.PaddingLarge,
-                        end = Dimens.PaddingLarge
+                        top = Dimens.dp_4,
+                        start = Dimens.dp_16,
+                        end = Dimens.dp_16
                     )
                 )
             }
@@ -142,10 +138,10 @@ fun ScanScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(Dimens.ImagePreviewHeight)
-                    .padding(vertical = Dimens.PaddingExtraLarge),
-                shape = RoundedCornerShape(Dimens.PaddingExtraLarge),
+                    .padding(vertical = Dimens.dp_24),
+                shape = RoundedCornerShape(Dimens.dp_24),
                 colors = CardDefaults.cardColors(containerColor = CardBackground),
-                border = BorderStroke(1.dp, CardBorder)
+                border = BorderStroke(Dimens.dp_1, CardBorder)
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -157,33 +153,33 @@ fun ScanScreen(
                             contentDescription = null,
                             modifier = Modifier
                                 .fillMaxSize()
-                                .clip(RoundedCornerShape(Dimens.PaddingExtraLarge)),
+                                .clip(RoundedCornerShape(Dimens.dp_24)),
                             contentScale = ContentScale.Crop
                         )
                     } else {
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center,
-                            modifier = Modifier.padding(Dimens.PaddingExtraLarge)
+                            modifier = Modifier.padding(Dimens.dp_24)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.CameraAlt,
                                 contentDescription = null,
                                 tint = ActiveGreen,
-                                modifier = Modifier.size(Dimens.LargeIconSize)
+                                modifier = Modifier.size(Dimens.dp_64)
                             )
-                            Spacer(modifier = Modifier.height(Dimens.PaddingLarge))
+                            Spacer(modifier = Modifier.height(Dimens.dp_16))
                             Text(
                                 text = stringResource(id = R.string.scan_empty_title),
                                 color = Color.LightGray,
-                                fontSize = Dimens.TextSizeMedium,
+                                fontSize = Dimens.sp_16,
                                 fontWeight = FontWeight.Medium
                             )
-                            Spacer(modifier = Modifier.height(Dimens.PaddingMedium))
+                            Spacer(modifier = Modifier.height(Dimens.dp_8))
                             Text(
                                 text = stringResource(id = R.string.scan_empty_desc),
                                 color = Color.Gray,
-                                fontSize = Dimens.TextSizeSmall,
+                                fontSize = Dimens.sp_12,
                                 textAlign = TextAlign.Center
                             )
                         }
@@ -194,7 +190,7 @@ fun ScanScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = Dimens.PaddingExtraLarge),
+                    .padding(bottom = Dimens.dp_24),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Row(
@@ -211,14 +207,14 @@ fun ScanScreen(
                             containerColor = ButtonGreen,
                             contentColor = Color.White
                         ),
-                        shape = RoundedCornerShape(Dimens.PaddingLarge),
+                        shape = RoundedCornerShape(Dimens.dp_16),
                         modifier = Modifier
                             .weight(1f)
-                            .height(Dimens.ButtonHeight)
-                            .padding(end = Dimens.PaddingMedium)
+                            .height(Dimens.dp_56)
+                            .padding(end = Dimens.dp_8)
                     ) {
                         Icon(imageVector = Icons.Default.CameraAlt, contentDescription = null)
-                        Spacer(modifier = Modifier.width(Dimens.PaddingMedium))
+                        Spacer(modifier = Modifier.width(Dimens.dp_8))
                         Text(
                             text = stringResource(id = R.string.scan_btn_take_photo),
                             fontWeight = FontWeight.SemiBold
@@ -231,15 +227,15 @@ fun ScanScreen(
                             containerColor = DarkButtonGreen,
                             contentColor = Color.White
                         ),
-                        shape = RoundedCornerShape(Dimens.PaddingLarge),
+                        shape = RoundedCornerShape(Dimens.dp_16),
                         modifier = Modifier
                             .weight(1f)
-                            .height(Dimens.ButtonHeight)
-                            .padding(start = Dimens.PaddingMedium),
-                        border = BorderStroke(1.dp, ActiveGreen)
+                            .height(Dimens.dp_56)
+                            .padding(start = Dimens.dp_8),
+                        border = BorderStroke(Dimens.dp_1, ActiveGreen)
                     ) {
                         Icon(imageVector = Icons.Default.Image, contentDescription = null)
-                        Spacer(modifier = Modifier.width(Dimens.PaddingMedium))
+                        Spacer(modifier = Modifier.width(Dimens.dp_8))
                         Text(
                             text = stringResource(id = R.string.scan_btn_gallery),
                             fontWeight = FontWeight.SemiBold
@@ -247,7 +243,7 @@ fun ScanScreen(
                     }
                 }
 
-                Spacer(modifier = Modifier.height(Dimens.PaddingLarge))
+                Spacer(modifier = Modifier.height(Dimens.dp_16))
 
                 Button(
                     onClick = { viewModel.identifyInsect(context) },
@@ -258,17 +254,17 @@ fun ScanScreen(
                         disabledContainerColor = DisabledButtonGreen,
                         disabledContentColor = Color.DarkGray
                     ),
-                    shape = RoundedCornerShape(Dimens.PaddingLarge),
+                    shape = RoundedCornerShape(Dimens.dp_16),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(Dimens.ButtonHeight)
+                        .height(Dimens.dp_56)
                 ) {
                     Icon(imageVector = Icons.Default.PlayArrow, contentDescription = null)
-                    Spacer(modifier = Modifier.width(Dimens.PaddingMedium))
+                    Spacer(modifier = Modifier.width(Dimens.dp_8))
                     Text(
                         text = stringResource(id = R.string.scan_btn_identify),
                         fontWeight = FontWeight.Bold,
-                        fontSize = Dimens.TextSizeMedium
+                        fontSize = Dimens.sp_16
                     )
                 }
             }
@@ -287,31 +283,31 @@ fun ScanScreen(
             ) {
                 Card(
                     colors = CardDefaults.cardColors(containerColor = CardBackground),
-                    shape = RoundedCornerShape(Dimens.PaddingExtraLarge),
-                    border = BorderStroke(1.dp, ActiveGreen),
-                    modifier = Modifier.padding(Dimens.PaddingDoubleExtraLarge)
+                    shape = RoundedCornerShape(Dimens.dp_24),
+                    border = BorderStroke(Dimens.dp_1, ActiveGreen),
+                    modifier = Modifier.padding(Dimens.dp_32)
                 ) {
                     Column(
-                        modifier = Modifier.padding(Dimens.PaddingDoubleExtraLarge),
+                        modifier = Modifier.padding(Dimens.dp_32),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         CircularProgressIndicator(
                             color = ActiveGreen,
-                            modifier = Modifier.size(Dimens.LoadingIndicatorSize)
+                            modifier = Modifier.size(Dimens.dp_48)
                         )
-                        Spacer(modifier = Modifier.height(Dimens.PaddingExtraLarge))
+                        Spacer(modifier = Modifier.height(Dimens.dp_24))
                         Text(
                             text = stringResource(id = R.string.scan_loading_title),
                             color = Color.White,
                             fontWeight = FontWeight.Bold,
-                            fontSize = Dimens.TextSizeMedium,
+                            fontSize = Dimens.sp_16,
                             textAlign = TextAlign.Center
                         )
-                        Spacer(modifier = Modifier.height(Dimens.PaddingMedium))
+                        Spacer(modifier = Modifier.height(Dimens.dp_8))
                         Text(
                             text = stringResource(id = R.string.scan_loading_desc),
                             color = Color.Gray,
-                            fontSize = Dimens.TextSizeSmall,
+                            fontSize = Dimens.sp_12,
                             textAlign = TextAlign.Center
                         )
                     }

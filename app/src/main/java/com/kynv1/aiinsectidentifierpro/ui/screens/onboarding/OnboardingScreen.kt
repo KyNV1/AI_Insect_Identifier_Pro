@@ -193,15 +193,15 @@ fun OnboardingScreen(
             }
 
             Row(
-                modifier = Modifier.padding(vertical = Dimens.PaddingLarge),
+                modifier = Modifier.padding(vertical = Dimens.dp_16),
                 horizontalArrangement = Arrangement.Center
             ) {
                 repeat(4) { index ->
                     val active = pagerState.currentPage == index
                     Box(
                         modifier = Modifier
-                            .padding(horizontal = Dimens.PaddingSmall)
-                            .size(if (active) Dimens.IndicatorActiveSize else Dimens.IndicatorInactiveSize)
+                            .padding(horizontal = Dimens.dp_4)
+                            .size(if (active) Dimens.dp_10 else Dimens.dp_8)
                             .clip(CircleShape)
                             .background(if (active) NatureGreen else Color.Gray.copy(alpha = 0.5f))
                     )
@@ -223,18 +223,18 @@ fun OnboardingScreen(
                     containerColor = NatureGreen,
                     contentColor = Color.White
                 ),
-                shape = RoundedCornerShape(28.dp),
+                shape = RoundedCornerShape(Dimens.dp_28),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
-                        horizontal = Dimens.PaddingDoubleExtraLarge,
-                        vertical = Dimens.PaddingExtraLarge
+                        horizontal = Dimens.dp_32,
+                        vertical = Dimens.dp_24
                     )
-                    .height(Dimens.ButtonHeight)
+                    .height(Dimens.dp_56)
             ) {
                 Text(
                     text = stringResource(id = R.string.onboarding_btn_continue),
-                    fontSize = Dimens.TextSizeMedium,
+                    fontSize = Dimens.sp_16,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 1.sp
                 )
@@ -248,15 +248,19 @@ fun OnboardingPage1() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = Dimens.PaddingExtraLarge),
+            .padding(horizontal = Dimens.dp_24),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Box(
             modifier = Modifier
                 .size(Dimens.ImageSizeExtraLarge)
-                .clip(RoundedCornerShape(Dimens.PaddingExtraLarge))
-                .border(Dimens.PaddingMicro, NatureGreen.copy(alpha = 0.6f), RoundedCornerShape(Dimens.PaddingExtraLarge))
+                .clip(RoundedCornerShape(Dimens.dp_24))
+                .border(
+                    Dimens.dp_2,
+                    NatureGreen.copy(alpha = 0.6f),
+                    RoundedCornerShape(Dimens.dp_24)
+                )
         ) {
             Image(
                 painter = painterResource(id = R.drawable.img_onboarding_green_beetle),
@@ -268,7 +272,7 @@ fun OnboardingPage1() {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .border(1.dp, Color.White.copy(alpha = 0.2f))
+                    .border(Dimens.dp_1, Color.White.copy(alpha = 0.2f))
             )
 
             val infiniteTransition = rememberInfiniteTransition(label = "scan")
@@ -285,7 +289,7 @@ fun OnboardingPage1() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(3.dp)
+                    .height(Dimens.dp_3)
                     .offset(y = scanPosition.dp)
                     .background(
                         Brush.horizontalGradient(
@@ -301,34 +305,34 @@ fun OnboardingPage1() {
             )
         }
 
-        Spacer(modifier = Modifier.height(Dimens.PaddingDoubleExtraLarge))
+        Spacer(modifier = Modifier.height(Dimens.dp_32))
 
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(Dimens.MapHeight),
+                .height(Dimens.dp_80),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = "🗺️",
-                fontSize = 54.sp,
-                modifier = Modifier.blur(1.dp)
+                fontSize = Dimens.sp_54,
+                modifier = Modifier.blur(Dimens.dp_1)
             )
         }
 
-        Spacer(modifier = Modifier.height(Dimens.PaddingLarge))
+        Spacer(modifier = Modifier.height(Dimens.dp_16))
 
         Text(
             text = stringResource(id = R.string.onboarding_p1_subtitle),
             color = Color.White.copy(alpha = 0.7f),
-            fontSize = Dimens.TextSizeLarge,
+            fontSize = Dimens.sp_18,
             textAlign = TextAlign.Center
         )
 
         Text(
             text = stringResource(id = R.string.onboarding_p1_title),
             color = Color.White,
-            fontSize = Dimens.TextSizeTitleHuge,
+            fontSize = Dimens.sp_32,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             letterSpacing = 1.sp
@@ -341,30 +345,30 @@ fun OnboardingPage2() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = Dimens.PaddingExtraLarge),
+            .padding(horizontal = Dimens.dp_24),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Spacer(modifier = Modifier.height(Dimens.PaddingDoubleExtraLarge))
+        Spacer(modifier = Modifier.height(Dimens.dp_32))
 
         Card(
             colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.6f)),
-            shape = RoundedCornerShape(Dimens.CardCornerRadius),
+            shape = RoundedCornerShape(Dimens.dp_16),
             modifier = Modifier
                 .fillMaxWidth()
                 .border(
-                    Dimens.PaddingMicro,
+                    Dimens.dp_2,
                     Color.White.copy(alpha = 0.15f),
-                    RoundedCornerShape(Dimens.CardCornerRadius)
+                    RoundedCornerShape(Dimens.dp_16)
                 )
         ) {
             Row(
-                modifier = Modifier.padding(Dimens.PaddingLarge),
+                modifier = Modifier.padding(Dimens.dp_16),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Box(
                     modifier = Modifier
-                        .size(Dimens.CardThumbSize)
+                        .size(Dimens.dp_48)
                         .clip(CircleShape)
                 ) {
                     Image(
@@ -374,18 +378,18 @@ fun OnboardingPage2() {
                         modifier = Modifier.fillMaxSize()
                     )
                 }
-                Spacer(modifier = Modifier.width(Dimens.PaddingNormal))
+                Spacer(modifier = Modifier.width(Dimens.dp_12))
                 Column {
                     Text(
                         text = stringResource(id = R.string.onboarding_p2_card_title),
                         color = Color.White,
                         fontWeight = FontWeight.Bold,
-                        fontSize = Dimens.TextSizeMedium
+                        fontSize = Dimens.sp_16
                     )
                     Text(
                         text = stringResource(id = R.string.onboarding_p2_card_desc),
                         color = Color.White.copy(alpha = 0.8f),
-                        fontSize = Dimens.TextSizeSmall,
+                        fontSize = Dimens.sp_12,
                         maxLines = 2
                     )
                 }
@@ -394,19 +398,19 @@ fun OnboardingPage2() {
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(bottom = Dimens.PaddingDoubleExtraLarge)
+            modifier = Modifier.padding(bottom = Dimens.dp_32)
         ) {
             Text(
                 text = stringResource(id = R.string.onboarding_p2_subtitle),
                 color = Color.White.copy(alpha = 0.7f),
-                fontSize = Dimens.TextSizeLarge,
+                fontSize = Dimens.sp_18,
                 textAlign = TextAlign.Center
             )
-            Spacer(modifier = Modifier.height(Dimens.PaddingSmall))
+            Spacer(modifier = Modifier.height(Dimens.dp_4))
             Text(
                 text = stringResource(id = R.string.onboarding_p2_title),
                 color = Color.White,
-                fontSize = Dimens.TextSizeTitleLarge,
+                fontSize = Dimens.sp_28,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
@@ -419,18 +423,18 @@ fun OnboardingPage3() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = Dimens.PaddingExtraLarge),
+            .padding(horizontal = Dimens.dp_24),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Spacer(modifier = Modifier.height(Dimens.PaddingDoubleExtraLarge))
+        Spacer(modifier = Modifier.height(Dimens.dp_32))
 
         Box(
             modifier = Modifier
                 .size(190.dp)
                 .clip(CircleShape)
                 .background(Color.Black.copy(alpha = 0.5f))
-                .border(1.dp, Color.White.copy(alpha = 0.15f), CircleShape),
+                .border(Dimens.dp_1, Color.White.copy(alpha = 0.15f), CircleShape),
             contentAlignment = Alignment.Center
         ) {
             SmoothSineWave(
@@ -442,28 +446,28 @@ fun OnboardingPage3() {
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(bottom = Dimens.PaddingDoubleExtraLarge)
+            modifier = Modifier.padding(bottom = Dimens.dp_32)
         ) {
             Text(
                 text = stringResource(id = R.string.onboarding_p3_subtitle),
                 color = Color.White.copy(alpha = 0.7f),
-                fontSize = Dimens.TextSizeLarge,
+                fontSize = Dimens.sp_18,
                 textAlign = TextAlign.Center
             )
             Text(
                 text = stringResource(id = R.string.onboarding_p3_title),
                 color = Color.White,
-                fontSize = Dimens.TextSizeTitleHuge,
+                fontSize = Dimens.sp_32,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center
             )
-            Spacer(modifier = Modifier.height(Dimens.PaddingNormal))
+            Spacer(modifier = Modifier.height(Dimens.dp_12))
             Text(
                 text = stringResource(id = R.string.onboarding_p3_desc),
                 color = Color.White.copy(alpha = 0.7f),
-                fontSize = Dimens.TextSizeNormal,
+                fontSize = Dimens.sp_14,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(horizontal = Dimens.PaddingLarge)
+                modifier = Modifier.padding(horizontal = Dimens.dp_16)
             )
         }
     }
@@ -474,19 +478,19 @@ fun OnboardingPage4() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = Dimens.PaddingExtraLarge),
+            .padding(horizontal = Dimens.dp_24),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Card(
             colors = CardDefaults.cardColors(containerColor = Color.Black.copy(alpha = 0.6f)),
-            shape = RoundedCornerShape(Dimens.PaddingMedium + Dimens.PaddingNormal),
+            shape = RoundedCornerShape(Dimens.dp_8 + Dimens.dp_12),
             modifier = Modifier
                 .fillMaxWidth()
                 .border(
-                    1.dp,
+                    Dimens.dp_1,
                     Color.White.copy(alpha = 0.15f),
-                    RoundedCornerShape(Dimens.PaddingMedium + Dimens.PaddingNormal)
+                    RoundedCornerShape(Dimens.dp_8 + Dimens.dp_12)
                 )
         ) {
             RatingCardContent()
@@ -497,23 +501,23 @@ fun OnboardingPage4() {
 @Composable
 private fun RatingCardContent() {
     Column(
-        modifier = Modifier.padding(Dimens.PaddingMedium + Dimens.PaddingNormal),
+        modifier = Modifier.padding(Dimens.dp_8 + Dimens.dp_12),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = stringResource(id = R.string.onboarding_p4_card_title),
             color = Color.White,
             fontWeight = FontWeight.Bold,
-            fontSize = Dimens.TextSizeExtraLarge
+            fontSize = Dimens.sp_20
         )
-        Spacer(modifier = Modifier.height(Dimens.PaddingMedium))
+        Spacer(modifier = Modifier.height(Dimens.dp_8))
         Text(
             text = stringResource(id = R.string.onboarding_p4_card_desc),
             color = Color.White.copy(alpha = 0.8f),
-            fontSize = Dimens.TextSizeNormal,
+            fontSize = Dimens.sp_14,
             textAlign = TextAlign.Center
         )
-        Spacer(modifier = Modifier.height(Dimens.PaddingLarge))
+        Spacer(modifier = Modifier.height(Dimens.dp_16))
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
@@ -523,7 +527,7 @@ private fun RatingCardContent() {
                     imageVector = Icons.Default.Star,
                     contentDescription = null,
                     tint = StarGold,
-                    modifier = Modifier.size(Dimens.StarSize)
+                    modifier = Modifier.size(Dimens.dp_28)
                 )
             }
             Box(
@@ -533,11 +537,11 @@ private fun RatingCardContent() {
                     imageVector = Icons.Default.Star,
                     contentDescription = null,
                     tint = StarGold,
-                    modifier = Modifier.size(Dimens.StarSize)
+                    modifier = Modifier.size(Dimens.dp_28)
                 )
                 Text(
                     text = "👆",
-                    fontSize = Dimens.TextSizeExtraLarge,
+                    fontSize = Dimens.sp_20,
                     modifier = Modifier.offset(x = 10.dp, y = 10.dp)
                 )
             }
