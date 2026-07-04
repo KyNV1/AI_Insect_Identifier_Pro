@@ -30,7 +30,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.filled.BugReport
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
@@ -38,7 +37,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -284,20 +282,20 @@ fun PaywallScreen(
             }
         }
 
-        IconButton(
-            onClick = { onNavigateToHome() },
+        Box(
             modifier = Modifier
-                .statusBarsPadding()
                 .align(Alignment.TopEnd)
                 .padding(Dimens.dp_16)
                 .size(Dimens.dp_36)
-                .background(Color.Black.copy(alpha = 0.4f), CircleShape)
+                .clip(CircleShape)
+                .background(Color.Black.copy(alpha = 0.4f))
+                .clickable { onNavigateToHome() },
+            contentAlignment = Alignment.Center
         ) {
             Icon(
-                imageVector = Icons.Default.Close,
+                painter = painterResource(id = R.drawable.ic_close),
                 contentDescription = "Close paywall",
                 tint = Color.White,
-                modifier = Modifier.size(Dimens.dp_20)
             )
         }
     }
