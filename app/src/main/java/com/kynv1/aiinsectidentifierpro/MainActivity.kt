@@ -70,6 +70,7 @@ import com.kynv1.aiinsectidentifierpro.ui.screens.scan.ScanScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.scan.ScanViewModel
 import com.kynv1.aiinsectidentifierpro.ui.screens.sound.SoundScanScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.splash.SplashScreen
+import com.kynv1.aiinsectidentifierpro.ui.screens.premium.PaywallScreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.AIInsectIdentifierProTheme
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.ButtonGreen
@@ -311,7 +312,7 @@ fun AppNavHost(
                     }
                 },
                 onNavigateToScan = {
-                    navController.navigate(Screen.Home.route) {
+                    navController.navigate(Screen.Paywall.route) {
                         popUpTo(Screen.Splash.route) { inclusive = true }
                     }
                 }
@@ -327,7 +328,7 @@ fun AppNavHost(
             OnboardingScreen(
                 viewModel = onboardingViewModel,
                 onNavigateToScan = {
-                    navController.navigate(Screen.Home.route) {
+                    navController.navigate(Screen.Paywall.route) {
                         popUpTo(Screen.Onboarding.route) { inclusive = true }
                     }
                 }
@@ -350,6 +351,22 @@ fun AppNavHost(
                 },
                 onNavigateToDetail = { id ->
                     navController.navigate(Screen.Detail.createRoute(id))
+                }
+            )
+        }
+        composable(
+            route = Screen.Paywall.route,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
+        ) {
+            PaywallScreen(
+                homeViewModel = homeViewModel,
+                onNavigateToHome = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Paywall.route) { inclusive = true }
+                    }
                 }
             )
         }

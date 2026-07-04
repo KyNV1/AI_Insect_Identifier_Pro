@@ -9,6 +9,7 @@ sealed class Screen(val route: String) {
     object Onboarding : Screen("onboarding")
     object Splash : Screen("splash")
     object SoundScan : Screen("sound_scan")
+    object Paywall : Screen("paywall")
     object Detail : Screen("detail/{${Constants.KEY_INSECT_ID}}") {
         fun createRoute(insectId: Long) = "detail/$insectId"
     }

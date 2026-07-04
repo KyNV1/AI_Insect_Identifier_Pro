@@ -91,4 +91,26 @@
     <string name="sound_scan_instruction">Hold your phone close to the sound source.</string>
     <string name="sound_scan_confidence_format">Confidence Match: %1$d%%</string>
     <string name="sound_scan_btn_view_details">View Insect Details</string>
+
+    <!-- Paywall / Premium Upgrade Screen Strings -->
+    <string name="paywall_upgrade_premium">UNLOCK ALL ACCESS</string>
+    <string name="paywall_benefit_1">Instantly identify 10,000+ insect species</string>
+    <string name="paywall_benefit_2">Complete access to our extensive bug library</string>
+    <string name="paywall_benefit_3">Direct answers from our AI bug specialist</string>
+    <string name="paywall_testimonial_quote">"Extremely accurate! Helped me identify every garden bug I found in seconds. Recommended! ❤️"</string>
+    <string name="paywall_weekly">Weekly</string>
+    <string name="paywall_weekly_price">92.000 ₫</string>
+    <string name="paywall_weekly_sub">renews weekly</string>
+    <string name="paywall_yearly">Yearly</string>
+    <string name="paywall_yearly_price">929.000 ₫</string>
+    <string name="paywall_yearly_sub">17.865 ₫/week</string>
+    <string name="paywall_monthly">Monthly</string>
+    <string name="paywall_monthly_price">229.000 ₫</string>
+    <string name="paywall_monthly_sub">57.250 ₫/week</string>
+    <string name="paywall_continue">GET STARTED</string>
+    <string name="paywall_disclaimer">By starting your subscription, you agree to allow billing to your Google Play account according to the chosen package. Cancel anytime via settings. Subscriptions automatically renew unless auto-renewal is deactivated at least 24 hours before the current billing period expires. Renewal charges will be applied within 24 hours prior to the period\'s end.</string>
+    <string name="paywall_term_of_service">Terms of Use</string>
+    <string name="paywall_privacy_policy">Privacy Policy</string>
+    <string name="paywall_best_value">BEST DEAL</string>
+    <string name="paywall_discount_badge">SAVE 85%</string>
 </resources>
