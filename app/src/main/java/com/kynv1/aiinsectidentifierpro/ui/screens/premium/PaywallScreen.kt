@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -81,10 +80,10 @@ fun PaywallScreen(
     var selectedOption by remember { mutableIntStateOf(1) } // 0: Weekly, 1: Yearly, 2: Monthly
 
     val imageList = listOf(
-        R.drawable.img_onboarding_green_beetle,
-        R.drawable.img_onboarding_honey_bee,
-        R.drawable.img_onboarding_red_beetle,
-        R.drawable.img_onboarding_atlas_moth
+        R.drawable.img_paywall_green_beetle,
+        R.drawable.img_paywall_honey_bee,
+        R.drawable.img_paywall_red_beetle,
+        R.drawable.img_paywall_atlas_moth
     )
 
     val pagerState = rememberPagerState(pageCount = { imageList.size })
@@ -103,215 +102,220 @@ fun PaywallScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        // 1. Top Section - Insect Image Pager (occupies ~35% of screen height)
-        Box(
+        // Main scrollable content
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.35f)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxSize()
-            ) { page ->
-                Image(
-                    painter = painterResource(id = imageList[page]),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
+            // 1. Top Section - Insect Image Pager (perfect height to avoid extreme zoom-in)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(280.dp)
+            ) {
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier.fillMaxSize()
+                ) { page ->
+                    Image(
+                        painter = painterResource(id = imageList[page]),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+
+                // Viewfinder Grid Brackets
+                ViewfinderBrackets(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size(140.dp)
                 )
             }
 
-            // Viewfinder Grid Brackets
-            ViewfinderBrackets(
+            // 2. Bottom Section - Premium Subscription Info Card (wrap content size)
+            Card(
+                colors = CardDefaults.cardColors(containerColor = Color.White),
+                shape = RoundedCornerShape(topStart = Dimens.dp_32, topEnd = Dimens.dp_32),
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(160.dp)
-            )
-
-            // Close Button (X) in Top Right
-            IconButton(
-                onClick = { onNavigateToHome() },
-                modifier = Modifier
-                    .statusBarsPadding()
-                    .align(Alignment.TopEnd)
-                    .padding(Dimens.dp_16)
-                    .size(Dimens.dp_36)
-                    .background(Color.Black.copy(alpha = 0.4f), CircleShape)
+                    .fillMaxWidth()
+                    .offset(y = (-24).dp) // Overlap the bottom of the image slightly
             ) {
-                Icon(
-                    imageVector = Icons.Default.Close,
-                    contentDescription = "Close paywall",
-                    tint = Color.White,
-                    modifier = Modifier.size(Dimens.dp_20)
-                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = Dimens.dp_20)
+                        .padding(top = Dimens.dp_24, bottom = Dimens.dp_32),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    // Header Title
+                    Text(
+                        text = stringResource(id = R.string.paywall_upgrade_premium),
+                        color = NatureGreen,
+                        fontSize = 24.sp,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 0.5.sp
+                    )
+
+                    Spacer(modifier = Modifier.height(Dimens.dp_16))
+
+                    // Premium Benefits List
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(Dimens.dp_10)
+                    ) {
+                        BenefitItem(
+                            icon = Icons.Default.LockOpen,
+                            text = stringResource(id = R.string.paywall_benefit_1)
+                        )
+                        BenefitItem(
+                            icon = Icons.Default.BugReport,
+                            text = stringResource(id = R.string.paywall_benefit_2)
+                        )
+                        BenefitItem(
+                            icon = Icons.AutoMirrored.Filled.Chat,
+                            text = stringResource(id = R.string.paywall_benefit_3)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(Dimens.dp_16))
+
+                    // Testimonial Banner
+                    TestimonialView()
+
+                    Spacer(modifier = Modifier.height(Dimens.dp_16))
+
+                    // Subscription Plan Selection Rows
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(Dimens.dp_8)
+                    ) {
+                        // Weekly Card
+                        PlanCard(
+                            title = stringResource(id = R.string.paywall_weekly),
+                            price = stringResource(id = R.string.paywall_weekly_price),
+                            subtext = stringResource(id = R.string.paywall_weekly_sub),
+                            isSelected = selectedOption == 0,
+                            onClick = { selectedOption = 0 },
+                            modifier = Modifier.weight(1f)
+                        )
+
+                        // Yearly Card (Highlighted)
+                        PlanCard(
+                            title = stringResource(id = R.string.paywall_yearly),
+                            price = stringResource(id = R.string.paywall_yearly_price),
+                            subtext = stringResource(id = R.string.paywall_yearly_sub),
+                            isSelected = selectedOption == 1,
+                            isHighlighted = true,
+                            badgeText = stringResource(id = R.string.paywall_discount_badge),
+                            valueText = stringResource(id = R.string.paywall_best_value),
+                            onClick = { selectedOption = 1 },
+                            modifier = Modifier.weight(1.1f)
+                        )
+
+                        // Monthly Card
+                        PlanCard(
+                            title = stringResource(id = R.string.paywall_monthly),
+                            price = stringResource(id = R.string.paywall_monthly_price),
+                            subtext = stringResource(id = R.string.paywall_monthly_sub),
+                            isSelected = selectedOption == 2,
+                            onClick = { selectedOption = 2 },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(Dimens.dp_20))
+
+                    // CONTINUE Button
+                    Button(
+                        onClick = {
+                            homeViewModel.purchasePremium()
+                            Toast.makeText(context, "Premium Actived! Thank you!", Toast.LENGTH_LONG).show()
+                            onNavigateToHome()
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = NatureGreen),
+                        shape = CircleShape,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(Dimens.dp_56)
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.paywall_continue).uppercase(),
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(Dimens.dp_12))
+
+                    // Legal Subtext Disclaimer
+                    Text(
+                        text = stringResource(id = R.string.paywall_disclaimer),
+                        color = Color.Gray,
+                        fontSize = 10.sp,
+                        textAlign = TextAlign.Center,
+                        lineHeight = 14.sp
+                    )
+
+                    Spacer(modifier = Modifier.height(Dimens.dp_10))
+
+                    // Terms and Privacy policy
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.paywall_term_of_service),
+                            color = Color.Gray,
+                            fontSize = 11.sp,
+                            textDecoration = TextDecoration.Underline,
+                            modifier = Modifier
+                                .clickable {
+                                    Toast.makeText(context, "Terms of Service Clicked", Toast.LENGTH_SHORT).show()
+                                }
+                                .padding(horizontal = Dimens.dp_8)
+                        )
+                        Text(
+                            text = "|",
+                            color = Color.Gray,
+                            fontSize = 11.sp
+                        )
+                        Text(
+                            text = stringResource(id = R.string.paywall_privacy_policy),
+                            color = Color.Gray,
+                            fontSize = 11.sp,
+                            textDecoration = TextDecoration.Underline,
+                            modifier = Modifier
+                                .clickable {
+                                    Toast.makeText(context, "Privacy Policy Clicked", Toast.LENGTH_SHORT).show()
+                                }
+                                .padding(horizontal = Dimens.dp_8)
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.navigationBarsPadding())
+                }
             }
         }
 
-        // 2. Bottom Section - Premium Subscription Info Card
-        Card(
-            colors = CardDefaults.cardColors(containerColor = Color.White),
-            shape = RoundedCornerShape(topStart = Dimens.dp_32, topEnd = Dimens.dp_32),
+        // Close Button (X) stays floating at the Top Right of the screen
+        IconButton(
+            onClick = { onNavigateToHome() },
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.68f)
-                .align(Alignment.BottomCenter)
+                .statusBarsPadding()
+                .align(Alignment.TopEnd)
+                .padding(Dimens.dp_16)
+                .size(Dimens.dp_36)
+                .background(Color.Black.copy(alpha = 0.4f), CircleShape)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = Dimens.dp_20)
-                    .padding(top = Dimens.dp_24, bottom = Dimens.dp_16),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                // Header Title
-                Text(
-                    text = stringResource(id = R.string.paywall_upgrade_premium),
-                    color = NatureGreen,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 0.5.sp
-                )
-
-                Spacer(modifier = Modifier.height(Dimens.dp_16))
-
-                // Premium Benefits List
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalArrangement = Arrangement.spacedBy(Dimens.dp_10)
-                ) {
-                    BenefitItem(
-                        icon = Icons.Default.LockOpen,
-                        text = stringResource(id = R.string.paywall_benefit_1)
-                    )
-                    BenefitItem(
-                        icon = Icons.Default.BugReport,
-                        text = stringResource(id = R.string.paywall_benefit_2)
-                    )
-                    BenefitItem(
-                        icon = Icons.AutoMirrored.Filled.Chat,
-                        text = stringResource(id = R.string.paywall_benefit_3)
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(Dimens.dp_16))
-
-                // Testimonial Banner
-                TestimonialView()
-
-                Spacer(modifier = Modifier.height(Dimens.dp_16))
-
-                // Subscription Plan Selection Rows
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(Dimens.dp_8)
-                ) {
-                    // Weekly Card
-                    PlanCard(
-                        title = stringResource(id = R.string.paywall_weekly),
-                        price = stringResource(id = R.string.paywall_weekly_price),
-                        subtext = stringResource(id = R.string.paywall_weekly_sub),
-                        isSelected = selectedOption == 0,
-                        onClick = { selectedOption = 0 },
-                        modifier = Modifier.weight(1f)
-                    )
-
-                    // Yearly Card (Highlighted)
-                    PlanCard(
-                        title = stringResource(id = R.string.paywall_yearly),
-                        price = stringResource(id = R.string.paywall_yearly_price),
-                        subtext = stringResource(id = R.string.paywall_yearly_sub),
-                        isSelected = selectedOption == 1,
-                        isHighlighted = true,
-                        badgeText = stringResource(id = R.string.paywall_discount_badge),
-                        valueText = stringResource(id = R.string.paywall_best_value),
-                        onClick = { selectedOption = 1 },
-                        modifier = Modifier.weight(1.1f)
-                    )
-
-                    // Monthly Card
-                    PlanCard(
-                        title = stringResource(id = R.string.paywall_monthly),
-                        price = stringResource(id = R.string.paywall_monthly_price),
-                        subtext = stringResource(id = R.string.paywall_monthly_sub),
-                        isSelected = selectedOption == 2,
-                        onClick = { selectedOption = 2 },
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(Dimens.dp_20))
-
-                // CONTINUE Button
-                Button(
-                    onClick = {
-                        homeViewModel.purchasePremium()
-                        Toast.makeText(context, "Premium Actived! Thank you!", Toast.LENGTH_LONG).show()
-                        onNavigateToHome()
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = NatureGreen),
-                    shape = RoundedCornerShape(100.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(Dimens.dp_56)
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.paywall_continue).uppercase(),
-                        color = Color.White,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(Dimens.dp_12))
-
-                // Legal Subtext Disclaimer
-                Text(
-                    text = stringResource(id = R.string.paywall_disclaimer),
-                    color = Color.Gray,
-                    fontSize = 10.sp,
-                    textAlign = TextAlign.Center,
-                    lineHeight = 14.sp
-                )
-
-                Spacer(modifier = Modifier.height(Dimens.dp_10))
-
-                // Terms and Privacy policy
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.paywall_term_of_service),
-                        color = Color.Gray,
-                        fontSize = 11.sp,
-                        textDecoration = TextDecoration.Underline,
-                        modifier = Modifier
-                            .clickable {
-                                Toast.makeText(context, "Terms of Service Clicked", Toast.LENGTH_SHORT).show()
-                            }
-                            .padding(horizontal = Dimens.dp_8)
-                    )
-                    Text(
-                        text = "|",
-                        color = Color.Gray,
-                        fontSize = 11.sp
-                    )
-                    Text(
-                        text = stringResource(id = R.string.paywall_privacy_policy),
-                        color = Color.Gray,
-                        fontSize = 11.sp,
-                        textDecoration = TextDecoration.Underline,
-                        modifier = Modifier
-                            .clickable {
-                                Toast.makeText(context, "Privacy Policy Clicked", Toast.LENGTH_SHORT).show()
-                            }
-                            .padding(horizontal = Dimens.dp_8)
-                    )
-                }
-
-                Spacer(modifier = Modifier.navigationBarsPadding())
-            }
+            Icon(
+                imageVector = Icons.Default.Close,
+                contentDescription = "Close paywall",
+                tint = Color.White,
+                modifier = Modifier.size(Dimens.dp_20)
+            )
         }
     }
 }
@@ -431,13 +435,13 @@ fun PlanCard(
 ) {
     Box(
         modifier = modifier
-            .clip(RoundedCornerShape(Dimens.dp_16))
             .clickable { onClick() }
     ) {
         // Main plan card layout
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .clip(RoundedCornerShape(Dimens.dp_16))
                 .background(
                     if (isSelected) {
                         if (isHighlighted) Color(0xFFFFFDF3) else Color(0xFFF1F8E9)
@@ -453,81 +457,78 @@ fun PlanCard(
                         Color(0xFFE0E0E0)
                     },
                     shape = RoundedCornerShape(Dimens.dp_16)
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally
+                )
+                .padding(top = 16.dp, bottom = 16.dp)
+                .padding(horizontal = Dimens.dp_4),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            if (isHighlighted && badgeText != null) {
-                // Top yellow bar spanning the width of the card
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(Color(0xFFFFCA28)) // Yellow/Gold
-                        .padding(vertical = 4.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = badgeText,
-                        color = Color.Black,
-                        fontSize = 10.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
+            // Plan Title
+            Text(
+                text = title,
+                color = if (isSelected) Color.Black else Color.Gray,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold
+            )
 
-            // Sub-container for contents below the top yellow bar
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = if (isHighlighted) 12.dp else 16.dp, bottom = 16.dp)
-                    .padding(horizontal = Dimens.dp_4),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                // Plan Title
-                Text(
-                    text = title,
-                    color = if (isSelected) Color.Black else Color.Gray,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
-                )
+            Spacer(modifier = Modifier.height(Dimens.dp_8))
 
-                Spacer(modifier = Modifier.height(Dimens.dp_8))
+            // Plan Price
+            Text(
+                text = price,
+                color = if (isSelected) Color.Black else Color.DarkGray,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Black
+            )
 
-                // Plan Price
-                Text(
-                    text = price,
-                    color = if (isSelected) Color.Black else Color.DarkGray,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Black
-                )
+            Spacer(modifier = Modifier.height(Dimens.dp_4))
 
-                Spacer(modifier = Modifier.height(Dimens.dp_4))
-
-                // Plan Subtext
-                Text(
-                    text = subtext,
-                    color = Color.Gray,
-                    fontSize = 10.sp,
-                    textAlign = TextAlign.Center
-                )
-            }
+            // Plan Subtext
+            Text(
+                text = subtext,
+                color = Color.Gray,
+                fontSize = 10.sp,
+                textAlign = TextAlign.Center
+            )
         }
 
-        // Overlay the Red "Best Value" Badge below the yellow header
-        if (isHighlighted && valueText != null) {
-            Box(
+        // Overlay the Red "BEST" and Yellow "85% OFF" Badges side-by-side at the top center
+        if (isHighlighted && (valueText != null || badgeText != null)) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .offset(y = 20.dp) // Sit exactly overlapping the bottom border of the yellow bar
+                    .offset(y = (-10).dp) // Sit exactly hanging over the top edge of the card
                     .align(Alignment.TopCenter)
-                    .background(Color(0xFFE53935), RoundedCornerShape(Dimens.dp_4))
-                    .padding(horizontal = Dimens.dp_6, vertical = 2.dp)
             ) {
-                Text(
-                    text = valueText.uppercase(),
-                    color = Color.White,
-                    fontSize = 8.sp,
-                    fontWeight = FontWeight.Black
-                )
+                valueText?.let {
+                    Box(
+                        modifier = Modifier
+                            .background(Color(0xFFE53935), RoundedCornerShape(Dimens.dp_4))
+                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                    ) {
+                        Text(
+                            text = it.uppercase(),
+                            color = Color.White,
+                            fontSize = 8.sp,
+                            fontWeight = FontWeight.Black
+                        )
+                    }
+                }
+                badgeText?.let {
+                    Box(
+                        modifier = Modifier
+                            .background(Color(0xFFFFCA28), RoundedCornerShape(Dimens.dp_4))
+                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                    ) {
+                        Text(
+                            text = it,
+                            color = Color.Black,
+                            fontSize = 8.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                }
             }
         }
     }
