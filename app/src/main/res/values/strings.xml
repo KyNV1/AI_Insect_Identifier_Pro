@@ -3,17 +3,17 @@
 
     <!-- Onboarding Flow Strings -->
     <string name="onboarding_btn_continue">CONTINUE</string>
-    <string name="onboarding_p1_subtitle">Identify insects</string>
-    <string name="onboarding_p1_title">Worldwide</string>
+    <string name="onboarding_p1_subtitle">Discover species</string>
+    <string name="onboarding_p1_title">Across the globe</string>
     <string name="onboarding_p2_card_title">Honey Bee</string>
-    <string name="onboarding_p2_card_desc">Western honey bee (Apis mellifera) is the most common species of honeybee in the world...</string>
+    <string name="onboarding_p2_card_desc">The Western honey bee (Apis mellifera) is widely recognized as the most common honeybee species on Earth…</string>
     <string name="onboarding_p2_subtitle">Explore</string>
-    <string name="onboarding_p2_title">insects around you</string>
-    <string name="onboarding_p3_subtitle">Identify Bugs</string>
-    <string name="onboarding_p3_title">by Sound</string>
-    <string name="onboarding_p3_desc">Discover the hidden acoustic world of nature, right from your pocket.</string>
-    <string name="onboarding_p4_card_title">Help us grow</string>
-    <string name="onboarding_p4_card_desc">Please show us your love by rating us 5 stars on GooglePlay</string>
+    <string name="onboarding_p2_title">local bugs</string>
+    <string name="onboarding_p3_subtitle">Identify bugs</string>
+    <string name="onboarding_p3_title">by their sounds</string>
+    <string name="onboarding_p3_desc">Listen to nature and instantly identify bug species by their unique calls.</string>
+    <string name="onboarding_p4_card_title">Support our app</string>
+    <string name="onboarding_p4_card_desc">If you enjoy using our app, please show your support by leaving a 5-star rating on Google Play!</string>
 
     <!-- Detail Screen Strings -->
     <string name="detail_title">Chi Tiết Nhận Diện</string>
@@ -57,7 +57,7 @@
     <string name="error_occurred_format">Có lỗi xảy ra: %1$s</string>
 
     <!-- Splash Screen Strings -->
-    <string name="splash_loading_text">Preparing for loading…</string>
+    <string name="splash_loading_text">Getting ready…</string>
 
     <!-- Home Screen Strings -->
     <string name="home_title">Insect</string>

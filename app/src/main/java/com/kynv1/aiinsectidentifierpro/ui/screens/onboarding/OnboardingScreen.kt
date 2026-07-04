@@ -55,10 +55,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.foundation.clickable
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.ui.theme.AccentLime
+import com.kynv1.aiinsectidentifierpro.ui.theme.ButtonGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
 import com.kynv1.aiinsectidentifierpro.ui.theme.NatureGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.StarGold
@@ -208,22 +210,7 @@ fun OnboardingScreen(
                 }
             }
 
-            Button(
-                onClick = {
-                    if (pagerState.currentPage < 3) {
-                        coroutineScope.launch {
-                            pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                        }
-                    } else {
-                        viewModel.completeOnboarding()
-                        onNavigateToScan()
-                    }
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = NatureGreen,
-                    contentColor = Color.White
-                ),
-                shape = RoundedCornerShape(Dimens.dp_28),
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -231,9 +218,30 @@ fun OnboardingScreen(
                         vertical = Dimens.dp_24
                     )
                     .height(Dimens.dp_56)
+                    .clip(RoundedCornerShape(Dimens.dp_28))
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(
+                                ButtonGreen,
+                                NatureGreen
+                            )
+                        )
+                    )
+                    .clickable {
+                        if (pagerState.currentPage < 3) {
+                            coroutineScope.launch {
+                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                            }
+                        } else {
+                            viewModel.completeOnboarding()
+                            onNavigateToScan()
+                        }
+                    },
+                contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = stringResource(id = R.string.onboarding_btn_continue),
+                    color = Color.White,
                     fontSize = Dimens.sp_16,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 1.sp
@@ -542,7 +550,7 @@ private fun RatingCardContent() {
                 Text(
                     text = "👆",
                     fontSize = Dimens.sp_20,
-                    modifier = Modifier.offset(x = 10.dp, y = 10.dp)
+                    modifier = Modifier.offset(x = Dimens.dp_10, y = Dimens.dp_10)
                 )
             }
         }
