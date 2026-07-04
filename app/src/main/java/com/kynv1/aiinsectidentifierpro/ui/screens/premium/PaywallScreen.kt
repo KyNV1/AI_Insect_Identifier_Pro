@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,6 +38,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -47,6 +49,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
@@ -62,6 +65,8 @@ import androidx.compose.ui.unit.sp
 import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.ui.screens.home.HomeViewModel
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.ButtonGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.DarkForestGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
 import com.kynv1.aiinsectidentifierpro.ui.theme.NatureGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.StarGold
@@ -143,9 +148,9 @@ fun PaywallScreen(
                 ) {
                     Text(
                         text = stringResource(id = R.string.paywall_upgrade_premium),
-                        color = NatureGreen,
-                        fontSize = Dimens.sp_24,
-                        fontWeight = FontWeight.Bold,
+                        color = DarkForestGreen,
+                        fontSize = Dimens.sp_22,
+                        fontWeight = FontWeight.ExtraBold,
                         letterSpacing = 0.5.sp
                     )
 
@@ -175,20 +180,19 @@ fun PaywallScreen(
 
                     Spacer(modifier = Modifier.height(Dimens.dp_16))
 
-                    Row(
+                    Column(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(Dimens.dp_8)
+                        verticalArrangement = Arrangement.spacedBy(Dimens.dp_10)
                     ) {
-                        PlanCard(
+                        VerticalPlanCard(
                             title = stringResource(id = R.string.paywall_weekly),
                             price = stringResource(id = R.string.paywall_weekly_price),
                             subtext = stringResource(id = R.string.paywall_weekly_sub),
                             isSelected = selectedOption == 0,
-                            onClick = { selectedOption = 0 },
-                            modifier = Modifier.weight(1f)
+                            onClick = { selectedOption = 0 }
                         )
 
-                        PlanCard(
+                        VerticalPlanCard(
                             title = stringResource(id = R.string.paywall_yearly),
                             price = stringResource(id = R.string.paywall_yearly_price),
                             subtext = stringResource(id = R.string.paywall_yearly_sub),
@@ -196,33 +200,39 @@ fun PaywallScreen(
                             isHighlighted = true,
                             badgeText = stringResource(id = R.string.paywall_discount_badge),
                             valueText = stringResource(id = R.string.paywall_best_value),
-                            onClick = { selectedOption = 1 },
-                            modifier = Modifier.weight(1.1f)
+                            onClick = { selectedOption = 1 }
                         )
 
-                        PlanCard(
+                        VerticalPlanCard(
                             title = stringResource(id = R.string.paywall_monthly),
                             price = stringResource(id = R.string.paywall_monthly_price),
                             subtext = stringResource(id = R.string.paywall_monthly_sub),
                             isSelected = selectedOption == 2,
-                            onClick = { selectedOption = 2 },
-                            modifier = Modifier.weight(1f)
+                            onClick = { selectedOption = 2 }
                         )
                     }
 
                     Spacer(modifier = Modifier.height(Dimens.dp_20))
 
-                    Button(
-                        onClick = {
-                            homeViewModel.purchasePremium()
-                            Toast.makeText(context, "Premium Actived! Thank you!", Toast.LENGTH_LONG).show()
-                            onNavigateToHome()
-                        },
-                        colors = ButtonDefaults.buttonColors(containerColor = NatureGreen),
-                        shape = CircleShape,
+                    Box(
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(Dimens.dp_56)
+                            .clip(CircleShape)
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    colors = listOf(
+                                        ButtonGreen,
+                                        NatureGreen
+                                    )
+                                )
+                            )
+                            .clickable {
+                                homeViewModel.purchasePremium()
+                                Toast.makeText(context, "Premium Active! Thank you!", Toast.LENGTH_LONG).show()
+                                onNavigateToHome()
+                            },
+                        contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = stringResource(id = R.string.paywall_continue).uppercase(),
@@ -338,67 +348,56 @@ fun BenefitItem(
 @Composable
 fun TestimonialView(modifier: Modifier = Modifier) {
     Card(
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFF9FBF9)),
-        border = BorderStroke(Dimens.dp_1, Color(0xFFECECEC)),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFFF7FAF7)),
         shape = RoundedCornerShape(Dimens.dp_16),
         modifier = modifier.fillMaxWidth()
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(Dimens.dp_12),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(horizontal = Dimens.dp_16, vertical = Dimens.dp_14)
         ) {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(Dimens.dp_2)
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                repeat(5) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_navigation_start),
-                        contentDescription = "StarGold",
-                        tint = StarGold,
-                    )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(Dimens.dp_2)
+                ) {
+                    repeat(5) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_navigation_start),
+                            contentDescription = "Star",
+                            tint = StarGold,
+                            modifier = Modifier.size(Dimens.dp_14)
+                        )
+                    }
                 }
+
+                Text(
+                    text = "5.0 rating",
+                    color = Color.Gray,
+                    fontSize = Dimens.sp_10,
+                    fontWeight = FontWeight.Bold
+                )
             }
-
-            Spacer(modifier = Modifier.height(Dimens.dp_6))
-
-            Text(
-                text = stringResource(id = R.string.paywall_testimonial_quote),
-                color = Color.Gray,
-                fontSize = Dimens.sp_13,
-                textAlign = TextAlign.Center,
-                lineHeight = Dimens.sp_16
-            )
 
             Spacer(modifier = Modifier.height(Dimens.dp_8))
 
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(Dimens.dp_4),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(width = Dimens.dp_12, height = Dimens.dp_4)
-                        .background(NatureGreen, RoundedCornerShape(Dimens.dp_2))
-                )
-                Box(
-                    modifier = Modifier
-                        .size(Dimens.dp_4)
-                        .background(Color.LightGray, CircleShape)
-                )
-                Box(
-                    modifier = Modifier
-                        .size(Dimens.dp_4)
-                        .background(Color.LightGray, CircleShape)
-                )
-            }
+            Text(
+                text = stringResource(id = R.string.paywall_testimonial_quote),
+                color = Color.DarkGray,
+                fontSize = Dimens.sp_12,
+                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                lineHeight = Dimens.sp_16
+            )
         }
     }
 }
 
 @Composable
-fun PlanCard(
+fun VerticalPlanCard(
     title: String,
     price: String,
     subtext: String,
@@ -409,91 +408,91 @@ fun PlanCard(
     valueText: String? = null,
     onClick: () -> Unit
 ) {
+    val borderColor = if (isSelected) {
+        if (isHighlighted) Color(0xFFFFB300) else NatureGreen
+    } else {
+        Color(0xFFE5EBE6)
+    }
+
+    val borderWidth = if (isSelected) Dimens.dp_2 else Dimens.dp_1
+    val backgroundColor = if (isSelected) {
+        if (isHighlighted) Color(0xFFFFFDF3) else Color(0xFFF1F8E9)
+    } else {
+        Color.White
+    }
+
     Box(
         modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(Dimens.dp_16))
+            .background(backgroundColor)
+            .border(borderWidth, borderColor, RoundedCornerShape(Dimens.dp_16))
             .clickable { onClick() }
+            .padding(horizontal = Dimens.dp_16, vertical = Dimens.dp_14)
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(Dimens.dp_16))
-                .background(
-                    if (isSelected) {
-                        if (isHighlighted) Color(0xFFFFFDF3) else Color(0xFFF1F8E9)
-                    } else {
-                        Color.White
-                    }
-                )
-                .border(
-                    width = if (isSelected) Dimens.dp_2 else Dimens.dp_1,
-                    color = if (isSelected) {
-                        if (isHighlighted) Color(0xFFFFB300) else NatureGreen
-                    } else {
-                        Color(0xFFE0E0E0)
-                    },
-                    shape = RoundedCornerShape(Dimens.dp_16)
-                )
-                .padding(top = Dimens.dp_16, bottom = Dimens.dp_16)
-                .padding(horizontal = Dimens.dp_4),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = title,
-                color = if (isSelected) Color.Black else Color.Gray,
-                fontSize = Dimens.sp_14,
-                fontWeight = FontWeight.Bold
-            )
-
-            Spacer(modifier = Modifier.height(Dimens.dp_8))
-
-            Text(
-                text = price,
-                color = if (isSelected) Color.Black else Color.DarkGray,
-                fontSize = Dimens.sp_16,
-                fontWeight = FontWeight.Black
-            )
-
-            Spacer(modifier = Modifier.height(Dimens.dp_4))
-
-            Text(
-                text = subtext,
-                color = Color.Gray,
-                fontSize = Dimens.sp_14,
-                textAlign = TextAlign.Center
-            )
-        }
-
-        if (isHighlighted && (valueText != null || badgeText != null)) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(Dimens.dp_4),
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .offset(y = -Dimens.dp_10)
-                    .align(Alignment.TopCenter)
+            Column(
+                modifier = Modifier.weight(1f)
             ) {
-                valueText?.let {
-                    Box(
-                        modifier = Modifier
-                            .background(Color(0xFFE53935), RoundedCornerShape(Dimens.dp_4))
-                            .padding(horizontal = Dimens.dp_6, vertical = Dimens.dp_2)
-                    ) {
-                        Text(
-                            text = it.uppercase(),
-                            color = Color.White,
-                            fontSize = Dimens.sp_8,
-                            fontWeight = FontWeight.Black
-                        )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(Dimens.dp_6)
+                ) {
+                    Text(
+                        text = title,
+                        color = Color.Black,
+                        fontSize = Dimens.sp_14,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    if (isHighlighted && valueText != null) {
+                        Box(
+                            modifier = Modifier
+                                .background(Color(0xFFE53935), RoundedCornerShape(Dimens.dp_4))
+                                .padding(horizontal = Dimens.dp_6, vertical = Dimens.dp_2)
+                        ) {
+                            Text(
+                                text = valueText.uppercase(),
+                                color = Color.White,
+                                fontSize = Dimens.sp_8,
+                                fontWeight = FontWeight.Black
+                            )
+                        }
                     }
                 }
-                badgeText?.let {
+
+                Spacer(modifier = Modifier.height(Dimens.dp_4))
+
+                Text(
+                    text = subtext,
+                    color = Color.Gray,
+                    fontSize = Dimens.sp_11
+                )
+            }
+
+            Column(
+                horizontalAlignment = Alignment.End
+            ) {
+                Text(
+                    text = price,
+                    color = Color.Black,
+                    fontSize = Dimens.sp_16,
+                    fontWeight = FontWeight.Black
+                )
+
+                if (isHighlighted && badgeText != null) {
+                    Spacer(modifier = Modifier.height(Dimens.dp_2))
                     Box(
                         modifier = Modifier
                             .background(Color(0xFFFFCA28), RoundedCornerShape(Dimens.dp_4))
                             .padding(horizontal = Dimens.dp_6, vertical = Dimens.dp_2)
                     ) {
                         Text(
-                            text = it,
+                            text = badgeText,
                             color = Color.Black,
                             fontSize = Dimens.sp_8,
                             fontWeight = FontWeight.Bold
