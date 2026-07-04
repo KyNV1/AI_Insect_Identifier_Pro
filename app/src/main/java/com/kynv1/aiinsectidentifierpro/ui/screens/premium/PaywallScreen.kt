@@ -237,8 +237,7 @@ fun PaywallScreen(
                     Text(
                         text = stringResource(id = R.string.paywall_disclaimer),
                         color = Color.Gray,
-                        fontSize = Dimens.sp_10,
-                        textAlign = TextAlign.Center,
+                        fontSize = Dimens.sp_13,
                         lineHeight = Dimens.sp_14
                     )
 
@@ -255,7 +254,7 @@ fun PaywallScreen(
                             textDecoration = TextDecoration.Underline,
                             modifier = Modifier
                                 .clickable {
-                                    Toast.makeText(context, "Terms of Service Clicked", Toast.LENGTH_SHORT).show()
+                                    //TODO: Open Terms of Service
                                 }
                                 .padding(horizontal = Dimens.dp_8)
                         )
@@ -271,7 +270,7 @@ fun PaywallScreen(
                             textDecoration = TextDecoration.Underline,
                             modifier = Modifier
                                 .clickable {
-                                    Toast.makeText(context, "Privacy Policy Clicked", Toast.LENGTH_SHORT).show()
+                                    //TODO: Open Privacy Policy
                                 }
                                 .padding(horizontal = Dimens.dp_8)
                         )
@@ -355,10 +354,9 @@ fun TestimonialView(modifier: Modifier = Modifier) {
             ) {
                 repeat(5) {
                     Icon(
-                        imageVector = Icons.Default.Star,
-                        contentDescription = "Star",
+                        painter = painterResource(id = R.drawable.ic_navigation_start),
+                        contentDescription = "StarGold",
                         tint = StarGold,
-                        modifier = Modifier.size(Dimens.dp_16)
                     )
                 }
             }
@@ -368,7 +366,7 @@ fun TestimonialView(modifier: Modifier = Modifier) {
             Text(
                 text = stringResource(id = R.string.paywall_testimonial_quote),
                 color = Color.Gray,
-                fontSize = Dimens.sp_11,
+                fontSize = Dimens.sp_13,
                 textAlign = TextAlign.Center,
                 lineHeight = Dimens.sp_16
             )
@@ -461,7 +459,7 @@ fun PlanCard(
             Text(
                 text = subtext,
                 color = Color.Gray,
-                fontSize = Dimens.sp_10,
+                fontSize = Dimens.sp_14,
                 textAlign = TextAlign.Center
             )
         }
