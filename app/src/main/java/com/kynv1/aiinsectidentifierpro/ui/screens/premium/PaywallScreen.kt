@@ -79,10 +79,10 @@ fun PaywallScreen(
     var selectedOption by remember { mutableIntStateOf(1) }
 
     val imageList = listOf(
-        R.drawable.img_paywall_green_beetle,
-        R.drawable.img_paywall_honey_bee,
-        R.drawable.img_paywall_red_beetle,
-        R.drawable.img_paywall_atlas_moth
+        R.drawable.img_onboarding_green_beetle,
+        R.drawable.img_onboarding_honey_bee,
+        R.drawable.img_onboarding_red_beetle,
+        R.drawable.img_onboarding_atlas_moth
     )
 
     val pagerState = rememberPagerState(pageCount = { imageList.size })
