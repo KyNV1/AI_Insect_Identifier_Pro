@@ -60,7 +60,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.ui.screens.home.HomeViewModel
@@ -77,7 +76,7 @@ fun PaywallScreen(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    var selectedOption by remember { mutableIntStateOf(1) } // 0: Weekly, 1: Yearly, 2: Monthly
+    var selectedOption by remember { mutableIntStateOf(1) }
 
     val imageList = listOf(
         R.drawable.img_paywall_green_beetle,
@@ -88,7 +87,6 @@ fun PaywallScreen(
 
     val pagerState = rememberPagerState(pageCount = { imageList.size })
 
-    // Auto-scroll the top images
     LaunchedEffect(key1 = pagerState) {
         while (true) {
             delay(3000)
@@ -102,17 +100,15 @@ fun PaywallScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        // Main scrollable content
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
-            // 1. Top Section - Insect Image Pager (perfect height to avoid extreme zoom-in)
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(280.dp)
+                    .height(Dimens.dp_280)
             ) {
                 HorizontalPager(
                     state = pagerState,
@@ -126,21 +122,19 @@ fun PaywallScreen(
                     )
                 }
 
-                // Viewfinder Grid Brackets
                 ViewfinderBrackets(
                     modifier = Modifier
                         .align(Alignment.Center)
-                        .size(140.dp)
+                        .size(Dimens.dp_140)
                 )
             }
 
-            // 2. Bottom Section - Premium Subscription Info Card (wrap content size)
             Card(
                 colors = CardDefaults.cardColors(containerColor = Color.White),
                 shape = RoundedCornerShape(topStart = Dimens.dp_32, topEnd = Dimens.dp_32),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .offset(y = (-24).dp) // Overlap the bottom of the image slightly
+                    .offset(y = -Dimens.dp_24)
             ) {
                 Column(
                     modifier = Modifier
@@ -149,18 +143,16 @@ fun PaywallScreen(
                         .padding(top = Dimens.dp_24, bottom = Dimens.dp_32),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Header Title
                     Text(
                         text = stringResource(id = R.string.paywall_upgrade_premium),
                         color = NatureGreen,
-                        fontSize = 24.sp,
+                        fontSize = Dimens.sp_24,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 0.5.sp
                     )
 
                     Spacer(modifier = Modifier.height(Dimens.dp_16))
 
-                    // Premium Benefits List
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.spacedBy(Dimens.dp_10)
@@ -181,17 +173,14 @@ fun PaywallScreen(
 
                     Spacer(modifier = Modifier.height(Dimens.dp_16))
 
-                    // Testimonial Banner
                     TestimonialView()
 
                     Spacer(modifier = Modifier.height(Dimens.dp_16))
 
-                    // Subscription Plan Selection Rows
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(Dimens.dp_8)
                     ) {
-                        // Weekly Card
                         PlanCard(
                             title = stringResource(id = R.string.paywall_weekly),
                             price = stringResource(id = R.string.paywall_weekly_price),
@@ -201,7 +190,6 @@ fun PaywallScreen(
                             modifier = Modifier.weight(1f)
                         )
 
-                        // Yearly Card (Highlighted)
                         PlanCard(
                             title = stringResource(id = R.string.paywall_yearly),
                             price = stringResource(id = R.string.paywall_yearly_price),
@@ -214,7 +202,6 @@ fun PaywallScreen(
                             modifier = Modifier.weight(1.1f)
                         )
 
-                        // Monthly Card
                         PlanCard(
                             title = stringResource(id = R.string.paywall_monthly),
                             price = stringResource(id = R.string.paywall_monthly_price),
@@ -227,7 +214,6 @@ fun PaywallScreen(
 
                     Spacer(modifier = Modifier.height(Dimens.dp_20))
 
-                    // CONTINUE Button
                     Button(
                         onClick = {
                             homeViewModel.purchasePremium()
@@ -243,25 +229,23 @@ fun PaywallScreen(
                         Text(
                             text = stringResource(id = R.string.paywall_continue).uppercase(),
                             color = Color.White,
-                            fontSize = 16.sp,
+                            fontSize = Dimens.sp_16,
                             fontWeight = FontWeight.Bold
                         )
                     }
 
                     Spacer(modifier = Modifier.height(Dimens.dp_12))
 
-                    // Legal Subtext Disclaimer
                     Text(
                         text = stringResource(id = R.string.paywall_disclaimer),
                         color = Color.Gray,
-                        fontSize = 10.sp,
+                        fontSize = Dimens.sp_10,
                         textAlign = TextAlign.Center,
-                        lineHeight = 14.sp
+                        lineHeight = Dimens.sp_14
                     )
 
                     Spacer(modifier = Modifier.height(Dimens.dp_10))
 
-                    // Terms and Privacy policy
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Center
@@ -269,7 +253,7 @@ fun PaywallScreen(
                         Text(
                             text = stringResource(id = R.string.paywall_term_of_service),
                             color = Color.Gray,
-                            fontSize = 11.sp,
+                            fontSize = Dimens.sp_11,
                             textDecoration = TextDecoration.Underline,
                             modifier = Modifier
                                 .clickable {
@@ -280,12 +264,12 @@ fun PaywallScreen(
                         Text(
                             text = "|",
                             color = Color.Gray,
-                            fontSize = 11.sp
+                            fontSize = Dimens.sp_11
                         )
                         Text(
                             text = stringResource(id = R.string.paywall_privacy_policy),
                             color = Color.Gray,
-                            fontSize = 11.sp,
+                            fontSize = Dimens.sp_11,
                             textDecoration = TextDecoration.Underline,
                             modifier = Modifier
                                 .clickable {
@@ -300,7 +284,6 @@ fun PaywallScreen(
             }
         }
 
-        // Close Button (X) stays floating at the Top Right of the screen
         IconButton(
             onClick = { onNavigateToHome() },
             modifier = Modifier
@@ -342,14 +325,14 @@ fun BenefitItem(
                 imageVector = icon,
                 contentDescription = null,
                 tint = NatureGreen,
-                modifier = Modifier.size(14.dp)
+                modifier = Modifier.size(Dimens.dp_14)
             )
         }
         Spacer(modifier = Modifier.width(Dimens.dp_12))
         Text(
             text = text,
             color = Color.DarkGray,
-            fontSize = 13.sp,
+            fontSize = Dimens.sp_13,
             fontWeight = FontWeight.Medium
         )
     }
@@ -359,7 +342,7 @@ fun BenefitItem(
 fun TestimonialView(modifier: Modifier = Modifier) {
     Card(
         colors = CardDefaults.cardColors(containerColor = Color(0xFFF9FBF9)),
-        border = BorderStroke(1.dp, Color(0xFFECECEC)),
+        border = BorderStroke(Dimens.dp_1, Color(0xFFECECEC)),
         shape = RoundedCornerShape(Dimens.dp_16),
         modifier = modifier.fillMaxWidth()
     ) {
@@ -369,7 +352,6 @@ fun TestimonialView(modifier: Modifier = Modifier) {
                 .padding(Dimens.dp_12),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Star rating row
             Row(
                 horizontalArrangement = Arrangement.spacedBy(Dimens.dp_2)
             ) {
@@ -385,18 +367,16 @@ fun TestimonialView(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(Dimens.dp_6))
 
-            // Testimonial Text
             Text(
                 text = stringResource(id = R.string.paywall_testimonial_quote),
                 color = Color.Gray,
-                fontSize = 11.sp,
+                fontSize = Dimens.sp_11,
                 textAlign = TextAlign.Center,
-                lineHeight = 16.sp
+                lineHeight = Dimens.sp_16
             )
 
             Spacer(modifier = Modifier.height(Dimens.dp_8))
 
-            // Indicator Dots
             Row(
                 horizontalArrangement = Arrangement.spacedBy(Dimens.dp_4),
                 verticalAlignment = Alignment.CenterVertically
@@ -437,7 +417,6 @@ fun PlanCard(
         modifier = modifier
             .clickable { onClick() }
     ) {
-        // Main plan card layout
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -450,7 +429,7 @@ fun PlanCard(
                     }
                 )
                 .border(
-                    width = if (isSelected) 2.dp else 1.dp,
+                    width = if (isSelected) Dimens.dp_2 else Dimens.dp_1,
                     color = if (isSelected) {
                         if (isHighlighted) Color(0xFFFFB300) else NatureGreen
                     } else {
@@ -458,59 +437,55 @@ fun PlanCard(
                     },
                     shape = RoundedCornerShape(Dimens.dp_16)
                 )
-                .padding(top = 16.dp, bottom = 16.dp)
+                .padding(top = Dimens.dp_16, bottom = Dimens.dp_16)
                 .padding(horizontal = Dimens.dp_4),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Plan Title
             Text(
                 text = title,
                 color = if (isSelected) Color.Black else Color.Gray,
-                fontSize = 14.sp,
+                fontSize = Dimens.sp_14,
                 fontWeight = FontWeight.Bold
             )
 
             Spacer(modifier = Modifier.height(Dimens.dp_8))
 
-            // Plan Price
             Text(
                 text = price,
                 color = if (isSelected) Color.Black else Color.DarkGray,
-                fontSize = 16.sp,
+                fontSize = Dimens.sp_16,
                 fontWeight = FontWeight.Black
             )
 
             Spacer(modifier = Modifier.height(Dimens.dp_4))
 
-            // Plan Subtext
             Text(
                 text = subtext,
                 color = Color.Gray,
-                fontSize = 10.sp,
+                fontSize = Dimens.sp_10,
                 textAlign = TextAlign.Center
             )
         }
 
-        // Overlay the Red "BEST" and Yellow "85% OFF" Badges side-by-side at the top center
         if (isHighlighted && (valueText != null || badgeText != null)) {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(Dimens.dp_4),
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .offset(y = (-10).dp) // Sit exactly hanging over the top edge of the card
+                    .offset(y = -Dimens.dp_10)
                     .align(Alignment.TopCenter)
             ) {
                 valueText?.let {
                     Box(
                         modifier = Modifier
                             .background(Color(0xFFE53935), RoundedCornerShape(Dimens.dp_4))
-                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                            .padding(horizontal = Dimens.dp_6, vertical = Dimens.dp_2)
                     ) {
                         Text(
                             text = it.uppercase(),
                             color = Color.White,
-                            fontSize = 8.sp,
+                            fontSize = Dimens.sp_8,
                             fontWeight = FontWeight.Black
                         )
                     }
@@ -519,12 +494,12 @@ fun PlanCard(
                     Box(
                         modifier = Modifier
                             .background(Color(0xFFFFCA28), RoundedCornerShape(Dimens.dp_4))
-                            .padding(horizontal = 6.dp, vertical = 2.dp)
+                            .padding(horizontal = Dimens.dp_6, vertical = Dimens.dp_2)
                     ) {
                         Text(
                             text = it,
                             color = Color.Black,
-                            fontSize = 8.sp,
+                            fontSize = Dimens.sp_8,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -537,11 +512,10 @@ fun PlanCard(
 @Composable
 fun ViewfinderBrackets(modifier: Modifier = Modifier) {
     Canvas(modifier = modifier) {
-        val strokeWidth = 3.dp.toPx()
-        val cornerLength = 20.dp.toPx()
+        val strokeWidth = Dimens.dp_3.toPx()
+        val cornerLength = Dimens.dp_20.toPx()
         val color = ActiveGreen
 
-        // Top Left Corner
         val pathTopLeft = Path().apply {
             moveTo(0f, cornerLength)
             lineTo(0f, 0f)
@@ -553,7 +527,6 @@ fun ViewfinderBrackets(modifier: Modifier = Modifier) {
             style = Stroke(width = strokeWidth, cap = StrokeCap.Round)
         )
 
-        // Top Right Corner
         val pathTopRight = Path().apply {
             moveTo(size.width - cornerLength, 0f)
             lineTo(size.width, 0f)
@@ -565,7 +538,6 @@ fun ViewfinderBrackets(modifier: Modifier = Modifier) {
             style = Stroke(width = strokeWidth, cap = StrokeCap.Round)
         )
 
-        // Bottom Left Corner
         val pathBottomLeft = Path().apply {
             moveTo(0f, size.height - cornerLength)
             lineTo(0f, size.height)
@@ -577,7 +549,6 @@ fun ViewfinderBrackets(modifier: Modifier = Modifier) {
             style = Stroke(width = strokeWidth, cap = StrokeCap.Round)
         )
 
-        // Bottom Right Corner
         val pathBottomRight = Path().apply {
             moveTo(size.width - cornerLength, size.height)
             lineTo(size.width, size.height)
