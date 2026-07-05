@@ -1,5 +1,6 @@
 package com.kynv1.aiinsectidentifierpro
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.app.Activity
 import androidx.activity.ComponentActivity
@@ -11,6 +12,7 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,6 +36,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -85,6 +88,7 @@ import com.kynv1.aiinsectidentifierpro.ui.screens.splash.SplashScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.premium.PaywallScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.assistance.AssistanceScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.assistance.AssistanceViewModel
+import com.kynv1.aiinsectidentifierpro.ui.screens.settings.SettingsScreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.AIInsectIdentifierProTheme
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.ButtonGreen
@@ -116,6 +120,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainAppScreen(onboardingStore: OnboardingStore) {
     val navController = rememberNavController()
@@ -168,7 +173,7 @@ fun MainAppScreen(onboardingStore: OnboardingStore) {
             }
         },
         modifier = Modifier.fillMaxSize()
-    ) { innerPadding ->
+    ) {
         AppNavHost(
             navController = navController,
             startDestination = startDestination,
@@ -179,7 +184,7 @@ fun MainAppScreen(onboardingStore: OnboardingStore) {
             detailViewModel = detailViewModel,
             onboardingViewModel = onboardingViewModel,
             assistanceViewModel = assistanceViewModel,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.statusBarsPadding()
         )
     }
 }
@@ -265,7 +270,10 @@ fun MainBottomBar(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .clickable {
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
                         if (currentRoute != Screen.Home.route) {
                             navController.navigate(Screen.Home.route) {
                                 popUpTo(navController.graph.findStartDestination().id) {
@@ -296,7 +304,10 @@ fun MainBottomBar(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .clickable {
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
                         if (currentRoute != Screen.History.route) {
                             navController.navigate(Screen.History.route) {
                                 popUpTo(navController.graph.findStartDestination().id) {
@@ -425,6 +436,9 @@ fun AppNavHost(
                 },
                 onNavigateToAssistance = {
                     navController.navigate(Screen.Assistance.route)
+                },
+                onNavigateToSettings = {
+                    navController.navigate(Screen.Settings.route)
                 }
             )
         }
@@ -489,6 +503,18 @@ fun AppNavHost(
             AssistanceScreen(
                 viewModel = assistanceViewModel,
                 onNavigateBack = { navController.popBackStack() }
+            )
+        }
+        composable(
+            route = Screen.Settings.route,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
+        ) {
+            SettingsScreen(
+                onBack = { navController.popBackStack() },
+                onNavigateToPaywall = { navController.navigate(Screen.Paywall.route) }
             )
         }
     }

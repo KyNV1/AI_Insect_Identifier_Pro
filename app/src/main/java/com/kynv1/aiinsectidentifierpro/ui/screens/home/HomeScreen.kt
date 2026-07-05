@@ -70,6 +70,7 @@ fun HomeScreen(
     onNavigateToSoundScan: () -> Unit,
     onNavigateToDetail: (Long) -> Unit,
     onNavigateToAssistance: () -> Unit,
+    onNavigateToSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -80,6 +81,7 @@ fun HomeScreen(
         onNavigateToDetail = onNavigateToDetail,
         onGetPremiumClick = { viewModel.purchasePremium() },
         onNavigateToAssistance = onNavigateToAssistance,
+        onNavigateToSettings = onNavigateToSettings,
         modifier = modifier
     )
 }
@@ -92,132 +94,132 @@ fun HomeScreenContent(
     onNavigateToDetail: (Long) -> Unit,
     onGetPremiumClick: () -> Unit,
     onNavigateToAssistance: () -> Unit,
+    onNavigateToSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
     Box(modifier = modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(LightMilkBackground)
-                .verticalScroll(scrollState)
-                .padding(bottom = 80.dp)
-        ) {
-        // 1. Header
-        HomeHeader(onSettingsClick = {
-            Toast.makeText(context, "Settings under development", Toast.LENGTH_SHORT).show()
-        })
+         Column(
+             modifier = Modifier
+                 .fillMaxSize()
+                 .background(LightMilkBackground)
+                 .verticalScroll(scrollState)
+                 .padding(bottom = 80.dp)
+         ) {
+             // 1. Header
+             HomeHeader(onSettingsClick = onNavigateToSettings)
 
-        // 2. Premium Banner
-        if (!uiState.isPremium) {
-            PremiumBanner(
-                onGetPremiumClick = {
-                    onGetPremiumClick()
-                    Toast.makeText(context, "Premium Actived! Thank you!", Toast.LENGTH_LONG).show()
-                }
+            // 2. Premium Banner
+            if (!uiState.isPremium) {
+                PremiumBanner(
+                    onGetPremiumClick = {
+                        onGetPremiumClick()
+                        Toast.makeText(context, "Premium Actived! Thank you!", Toast.LENGTH_LONG)
+                            .show()
+                    }
+                )
+            }
+
+            // 3. Identification Cards
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = Dimens.dp_16, vertical = Dimens.dp_8),
+                horizontalArrangement = Arrangement.spacedBy(Dimens.dp_16)
+            ) {
+                IdentificationCard(
+                    title = stringResource(id = R.string.home_photo_id),
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.CameraAlt,
+                            contentDescription = null,
+                            tint = ActiveGreen,
+                            modifier = Modifier.size(Dimens.dp_28)
+                        )
+                    },
+                    onClick = onNavigateToScan,
+                    modifier = Modifier.weight(1f)
+                )
+
+                IdentificationCard(
+                    title = stringResource(id = R.string.home_sound_id),
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.Hearing,
+                            contentDescription = null,
+                            tint = WarningOrange,
+                            modifier = Modifier.size(Dimens.dp_28)
+                        )
+                    },
+                    onClick = onNavigateToSoundScan,
+                    modifier = Modifier.weight(1f),
+                    badgeText = "New"
+                )
+            }
+
+            Spacer(modifier = Modifier.height(Dimens.dp_16))
+
+            // 4. Most Common List
+            InsectSectionList(
+                title = stringResource(id = R.string.home_most_common_title),
+                subtitle = stringResource(id = R.string.home_most_common_desc),
+                insects = uiState.mostCommonInsects,
+                onInsectClick = onNavigateToDetail
             )
-        }
 
-        // 3. Identification Cards
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = Dimens.dp_16, vertical = Dimens.dp_8),
-            horizontalArrangement = Arrangement.spacedBy(Dimens.dp_16)
-        ) {
-            IdentificationCard(
-                title = stringResource(id = R.string.home_photo_id),
-                icon = {
-                    Icon(
-                        imageVector = Icons.Default.CameraAlt,
-                        contentDescription = null,
-                        tint = ActiveGreen,
-                        modifier = Modifier.size(Dimens.dp_28)
-                    )
-                },
-                onClick = onNavigateToScan,
-                modifier = Modifier.weight(1f)
+            Spacer(modifier = Modifier.height(Dimens.dp_24))
+
+            // 5. Garden Insect List
+            InsectSectionList(
+                title = stringResource(id = R.string.home_garden_insect_title),
+                subtitle = stringResource(id = R.string.home_garden_insect_desc),
+                insects = uiState.gardenInsects,
+                onInsectClick = onNavigateToDetail
             )
 
-            IdentificationCard(
-                title = stringResource(id = R.string.home_sound_id),
-                icon = {
-                    Icon(
-                        imageVector = Icons.Default.Hearing,
-                        contentDescription = null,
-                        tint = WarningOrange,
-                        modifier = Modifier.size(Dimens.dp_28)
-                    )
-                },
-                onClick = onNavigateToSoundScan,
-                modifier = Modifier.weight(1f),
-                badgeText = "New"
+            Spacer(modifier = Modifier.height(Dimens.dp_24))
+
+            // 6. Fun Bug Facts List
+            ArticleSectionList(
+                title = stringResource(id = R.string.home_fun_facts_title),
+                subtitle = stringResource(id = R.string.home_fun_facts_desc),
+                articles = uiState.funFactsArticles,
+                onArticleClick = onNavigateToDetail
             )
-        }
 
-        Spacer(modifier = Modifier.height(Dimens.dp_16))
+            Spacer(modifier = Modifier.height(Dimens.dp_24))
 
-        // 4. Most Common List
-        InsectSectionList(
-            title = stringResource(id = R.string.home_most_common_title),
-            subtitle = stringResource(id = R.string.home_most_common_desc),
-            insects = uiState.mostCommonInsects,
-            onInsectClick = onNavigateToDetail
-        )
+            // 7. Pest Control List
+            ArticleSectionList(
+                title = stringResource(id = R.string.home_pest_control_title),
+                subtitle = stringResource(id = R.string.home_pest_control_desc),
+                articles = uiState.pestControlArticles,
+                onArticleClick = onNavigateToDetail
+            )
 
-        Spacer(modifier = Modifier.height(Dimens.dp_24))
+            Spacer(modifier = Modifier.height(Dimens.dp_24))
 
-        // 5. Garden Insect List
-        InsectSectionList(
-            title = stringResource(id = R.string.home_garden_insect_title),
-            subtitle = stringResource(id = R.string.home_garden_insect_desc),
-            insects = uiState.gardenInsects,
-            onInsectClick = onNavigateToDetail
-        )
+            // 8. Bug Bite Help List
+            ArticleSectionList(
+                title = stringResource(id = R.string.home_bug_bite_title),
+                subtitle = stringResource(id = R.string.home_bug_bite_desc),
+                articles = uiState.bugBiteArticles,
+                onArticleClick = onNavigateToDetail
+            )
 
-        Spacer(modifier = Modifier.height(Dimens.dp_24))
+            Spacer(modifier = Modifier.height(Dimens.dp_24))
 
-        // 6. Fun Bug Facts List
-        ArticleSectionList(
-            title = stringResource(id = R.string.home_fun_facts_title),
-            subtitle = stringResource(id = R.string.home_fun_facts_desc),
-            articles = uiState.funFactsArticles,
-            onArticleClick = onNavigateToDetail
-        )
+            // 9. Remarkable Collection List
+            ArticleSectionList(
+                title = stringResource(id = R.string.home_remarkable_coll_title),
+                subtitle = stringResource(id = R.string.home_remarkable_coll_desc),
+                articles = uiState.remarkableCollArticles,
+                onArticleClick = onNavigateToDetail
+            )
 
-        Spacer(modifier = Modifier.height(Dimens.dp_24))
-
-        // 7. Pest Control List
-        ArticleSectionList(
-            title = stringResource(id = R.string.home_pest_control_title),
-            subtitle = stringResource(id = R.string.home_pest_control_desc),
-            articles = uiState.pestControlArticles,
-            onArticleClick = onNavigateToDetail
-        )
-
-        Spacer(modifier = Modifier.height(Dimens.dp_24))
-
-        // 8. Bug Bite Help List
-        ArticleSectionList(
-            title = stringResource(id = R.string.home_bug_bite_title),
-            subtitle = stringResource(id = R.string.home_bug_bite_desc),
-            articles = uiState.bugBiteArticles,
-            onArticleClick = onNavigateToDetail
-        )
-
-        Spacer(modifier = Modifier.height(Dimens.dp_24))
-
-        // 9. Remarkable Collection List
-        ArticleSectionList(
-            title = stringResource(id = R.string.home_remarkable_coll_title),
-            subtitle = stringResource(id = R.string.home_remarkable_coll_desc),
-            articles = uiState.remarkableCollArticles,
-            onArticleClick = onNavigateToDetail
-        )
-
-        Spacer(modifier = Modifier.height(Dimens.dp_24))
+            Spacer(modifier = Modifier.height(Dimens.dp_24))
         }
 
         Box(
@@ -278,10 +280,10 @@ fun HomeHeader(
             modifier = Modifier.size(48.dp)
         ) {
             Icon(
-                imageVector = Icons.Default.Settings,
+                painter = painterResource(id = R.drawable.ic_setting),
                 contentDescription = "Settings",
                 tint = Color.Black,
-                modifier = Modifier.size(Dimens.dp_24)
+                modifier = Modifier.size(Dimens.dp_28)
             )
         }
     }
@@ -613,6 +615,7 @@ private fun HomeScreenPreview() {
         onNavigateToSoundScan = {},
         onNavigateToDetail = {},
         onGetPremiumClick = {},
-        onNavigateToAssistance = {}
+        onNavigateToAssistance = {},
+        onNavigateToSettings = {}
     )
 }
