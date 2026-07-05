@@ -282,7 +282,6 @@ fun MainBottomBar(
                     painter = painterResource(id = R.drawable.ic_home),
                     contentDescription = stringResource(id = R.string.home_tab_home),
                     tint = if (currentRoute == Screen.Home.route) ActiveGreen else Color.Gray,
-                    modifier = Modifier.size(Dimens.dp_24)
                 )
                 Text(
                     text = stringResource(id = R.string.home_tab_home),
@@ -492,17 +491,5 @@ fun AppNavHost(
                 onNavigateBack = { navController.popBackStack() }
             )
         }
-    }
-}
-
-@Composable
-fun TestScreen(
-    modifier: Modifier = Modifier
-) {
-    Box(modifier = modifier.fillMaxSize()) {
-        Text(
-            text = "nguyen anh ky hoc vien cong nghe buu chinh vien thong",
-            modifier = Modifier.align(Alignment.Center)
-        )
     }
 }
