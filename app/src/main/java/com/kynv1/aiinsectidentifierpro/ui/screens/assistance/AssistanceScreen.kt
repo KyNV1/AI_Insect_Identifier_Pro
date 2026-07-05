@@ -1,0 +1,318 @@
+package com.kynv1.aiinsectidentifierpro.ui.screens.assistance
+
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.Lightbulb
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.kynv1.aiinsectidentifierpro.R
+import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
+import com.kynv1.aiinsectidentifierpro.ui.theme.LightMilkBackground
+import com.kynv1.aiinsectidentifierpro.ui.theme.LightCardBorder
+import com.kynv1.aiinsectidentifierpro.ui.theme.LightGreyBorder
+import kotlinx.coroutines.launch
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AssistanceScreen(
+    viewModel: AssistanceViewModel,
+    onNavigateBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val uiState by viewModel.uiState.collectAsState()
+    var inputText by remember { mutableStateOf("") }
+    val listState = rememberLazyListState()
+
+    val quickQuestions = listOf(
+        stringResource(id = R.string.assistance_q1),
+        stringResource(id = R.string.assistance_q2),
+        stringResource(id = R.string.assistance_q3),
+        stringResource(id = R.string.assistance_q4),
+        stringResource(id = R.string.assistance_q5)
+    )
+
+    // Scroll to bottom when new messages are added
+    LaunchedEffect(uiState.messages.size) {
+        if (uiState.messages.isNotEmpty()) {
+            listState.animateScrollToItem(uiState.messages.size - 1)
+        }
+    }
+
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.assistance_title),
+                        fontSize = Dimens.sp_18,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.Black
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateBack) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            tint = Color.Black
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = LightMilkBackground
+                )
+            )
+        },
+        containerColor = LightMilkBackground,
+        modifier = modifier.fillMaxSize()
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
+            // Chat Message List
+            LazyColumn(
+                state = listState,
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(horizontal = Dimens.dp_16),
+                verticalArrangement = Arrangement.spacedBy(Dimens.dp_12),
+                contentPadding = PaddingValues(top = Dimens.dp_8, bottom = Dimens.dp_16)
+            ) {
+                // If no messages, show start guide & quick bubbles
+                if (uiState.messages.isEmpty()) {
+                    item {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = Dimens.dp_16)
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.assistance_start_chatting),
+                                fontSize = Dimens.sp_18,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black,
+                                modifier = Modifier.padding(bottom = Dimens.dp_16)
+                            )
+
+                            quickQuestions.forEach { question ->
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = Dimens.dp_6)
+                                        .background(Color.White, RoundedCornerShape(Dimens.dp_20))
+                                        .border(
+                                            width = Dimens.dp_1,
+                                            color = LightGreyBorder,
+                                            shape = RoundedCornerShape(Dimens.dp_20)
+                                        )
+                                        .clickable {
+                                            viewModel.sendMessage(question)
+                                        }
+                                        .padding(horizontal = Dimens.dp_16, vertical = Dimens.dp_12)
+                                ) {
+                                    Text(
+                                        text = question,
+                                        fontSize = Dimens.sp_14,
+                                        color = Color.DarkGray,
+                                        lineHeight = 18.sp
+                                    )
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    items(uiState.messages, key = { it.id }) { message ->
+                        ChatBubble(message = message)
+                    }
+                    if (uiState.isSending) {
+                        item {
+                            TypingIndicator()
+                        }
+                    }
+                }
+            }
+
+            // Bottom Input Row
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = Dimens.dp_16, vertical = Dimens.dp_12),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(48.dp)
+                        .background(Color.White, RoundedCornerShape(24.dp))
+                        .border(Dimens.dp_1, LightGreyBorder, RoundedCornerShape(24.dp))
+                        .padding(horizontal = Dimens.dp_16),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Lightbulb,
+                        contentDescription = "AI Hint",
+                        tint = ActiveGreen,
+                        modifier = Modifier.size(Dimens.dp_20)
+                    )
+                    Spacer(modifier = Modifier.width(Dimens.dp_10))
+                    
+                    Box(
+                        modifier = Modifier.weight(1f),
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+                        if (inputText.isEmpty()) {
+                            Text(
+                                text = stringResource(id = R.string.assistance_message_placeholder),
+                                color = Color.Gray,
+                                fontSize = Dimens.sp_14
+                            )
+                        }
+                        BasicTextField(
+                            value = inputText,
+                            onValueChange = { inputText = it },
+                            modifier = Modifier.fillMaxWidth(),
+                            singleLine = true
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(Dimens.dp_12))
+
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .background(ActiveGreen, CircleShape)
+                        .clip(CircleShape)
+                        .clickable {
+                            if (inputText.isNotBlank()) {
+                                viewModel.sendMessage(inputText)
+                                inputText = ""
+                            }
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.Send,
+                        contentDescription = "Send",
+                        tint = Color.White,
+                        modifier = Modifier.size(Dimens.dp_20)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun ChatBubble(message: Message) {
+    val arrangement = if (message.isUser) Arrangement.End else Arrangement.Start
+    val bubbleBgColor = if (message.isUser) ActiveGreen else Color.White
+    val bubbleTextColor = if (message.isUser) Color.White else Color.Black
+    val bubbleShape = if (message.isUser) {
+        RoundedCornerShape(
+            topStart = Dimens.dp_16,
+            topEnd = Dimens.dp_16,
+            bottomStart = Dimens.dp_16,
+            bottomEnd = 0.dp
+        )
+    } else {
+        RoundedCornerShape(
+            topStart = Dimens.dp_16,
+            topEnd = Dimens.dp_16,
+            bottomStart = 0.dp,
+            bottomEnd = Dimens.dp_16
+        )
+    }
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = arrangement
+    ) {
+        Box(
+            modifier = Modifier
+                .widthIn(max = 280.dp)
+                .background(bubbleBgColor, bubbleShape)
+                .then(
+                    if (!message.isUser) Modifier.border(
+                        Dimens.dp_1,
+                        LightCardBorder,
+                        bubbleShape
+                    ) else Modifier
+                )
+                .padding(horizontal = Dimens.dp_16, vertical = Dimens.dp_12)
+        ) {
+            Text(
+                text = message.text,
+                color = bubbleTextColor,
+                fontSize = Dimens.sp_14,
+                lineHeight = 18.sp
+            )
+        }
+    }
+}
+
+@Composable
+fun TypingIndicator() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Start
+    ) {
+        Box(
+            modifier = Modifier
+                .background(
+                    Color.White,
+                    RoundedCornerShape(
+                        topStart = Dimens.dp_16,
+                        topEnd = Dimens.dp_16,
+                        bottomStart = 0.dp,
+                        bottomEnd = Dimens.dp_16
+                    )
+                )
+                .border(
+                    Dimens.dp_1,
+                    LightCardBorder,
+                    RoundedCornerShape(
+                        topStart = Dimens.dp_16,
+                        topEnd = Dimens.dp_16,
+                        bottomStart = 0.dp,
+                        bottomEnd = Dimens.dp_16
+                    )
+                )
+                .padding(horizontal = Dimens.dp_16, vertical = Dimens.dp_12)
+        ) {
+            Text(
+                text = stringResource(id = R.string.assistance_thinking),
+                color = Color.Gray,
+                fontSize = Dimens.sp_14,
+                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
+            )
+        }
+    }
+}

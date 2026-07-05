@@ -10,6 +10,7 @@ sealed class Screen(val route: String) {
     object Splash : Screen("splash")
     object SoundScan : Screen("sound_scan")
     object Paywall : Screen("paywall")
+    object Assistance : Screen("assistance")
     object Detail : Screen("detail/{${Constants.KEY_INSECT_ID}}") {
         fun createRoute(insectId: Long) = "detail/$insectId"
     }

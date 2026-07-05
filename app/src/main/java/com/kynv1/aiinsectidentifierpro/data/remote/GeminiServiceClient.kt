@@ -92,4 +92,38 @@ class GeminiServiceClient {
             )
         }
     }
+
+    suspend fun getChatResponse(prompt: String): String = withContext(Dispatchers.IO) {
+        val apiKey = GeminiConfig.API_KEY
+        if (apiKey.isBlank()) {
+            return@withContext when {
+                prompt.contains("many different kinds", ignoreCase = true) -> 
+                    "There are over 1 million described species of insects, representing more than half of all known living organisms. Entomologists estimate there could be 5 to 30 million species in total yet to be discovered!"
+                prompt.contains("insects grow", ignoreCase = true) -> 
+                    "Insects grow through a process called metamorphosis. Some undergo complete metamorphosis (egg -> larva -> pupa -> adult, like butterflies), while others undergo incomplete metamorphosis (egg -> nymph -> adult, like grasshoppers) shedding their exoskeletons as they grow."
+                prompt.contains("flower to flower", ignoreCase = true) -> 
+                    "Butterflies and other insects fly from flower to flower to feed on nectar, which is high in sugars. In doing so, they pollinate the flowers by transferring pollen grains from the male anther to the female stigma, helping plants reproduce."
+                prompt.contains("largest insect", ignoreCase = true) -> 
+                    "By weight, the heaviest insect is the Giant Weta from New Zealand (up to 70g). By length, the longest is the Giant Stick Insect (Phryganistria chinensis), measuring over 62 cm (24 inches)!"
+                prompt.contains("insect and a spider", ignoreCase = true) -> 
+                    "Insects have 3 body segments (head, thorax, abdomen), 6 legs, antennae, and often wings. Spiders have 2 body segments (cephalothorax, abdomen), 8 legs, no antennae, and no wings. Spiders belong to the class Arachnida, not Insecta."
+                else -> 
+                    "I am your AI Bug Specialist! To enable full interactive AI chat, please configure your Gemini API Key in the 'GeminiConfig.kt' file."
+            }
+        }
+
+        try {
+            val systemInstructionText = "You are an expert entomologist AI. Answer the user's questions about insects, spiders, bugs, or arthropods in a friendly, helpful, and highly detailed manner. Keep it concise but educational."
+            val model = GenerativeModel(
+                modelName = "gemini-1.5-flash",
+                apiKey = apiKey,
+                systemInstruction = content { text(systemInstructionText) }
+            )
+            val response = model.generateContent(prompt)
+            response.text ?: "No response from Gemini."
+        } catch (e: Exception) {
+            e.printStackTrace()
+            "Connection error with Gemini API: ${e.localizedMessage}"
+        }
+    }
 }

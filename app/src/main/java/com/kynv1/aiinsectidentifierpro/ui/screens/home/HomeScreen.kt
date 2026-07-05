@@ -2,9 +2,9 @@ package com.kynv1.aiinsectidentifierpro.ui.screens.home
 
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
-import com.kynv1.aiinsectidentifierpro.data.model.HomeArticle
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -53,18 +54,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.kynv1.aiinsectidentifierpro.R
+import com.kynv1.aiinsectidentifierpro.data.model.HomeArticle
 import com.kynv1.aiinsectidentifierpro.data.model.InsectShort
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
-import com.kynv1.aiinsectidentifierpro.ui.theme.AccentLime
-import com.kynv1.aiinsectidentifierpro.ui.theme.CardBackground
-import com.kynv1.aiinsectidentifierpro.ui.theme.CardBorder
-import com.kynv1.aiinsectidentifierpro.ui.theme.DarkBackground
-import com.kynv1.aiinsectidentifierpro.ui.theme.DarkForestGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
-import com.kynv1.aiinsectidentifierpro.ui.theme.MediumForestGreen
-import com.kynv1.aiinsectidentifierpro.ui.theme.StarGold
+import com.kynv1.aiinsectidentifierpro.ui.theme.LightMilkBackground
+import com.kynv1.aiinsectidentifierpro.ui.theme.LightCardBorder
+import com.kynv1.aiinsectidentifierpro.ui.theme.WarningOrange
 
 @Composable
 fun HomeScreen(
@@ -72,6 +69,7 @@ fun HomeScreen(
     onNavigateToScan: () -> Unit,
     onNavigateToSoundScan: () -> Unit,
     onNavigateToDetail: (Long) -> Unit,
+    onNavigateToAssistance: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -81,6 +79,7 @@ fun HomeScreen(
         onNavigateToSoundScan = onNavigateToSoundScan,
         onNavigateToDetail = onNavigateToDetail,
         onGetPremiumClick = { viewModel.purchasePremium() },
+        onNavigateToAssistance = onNavigateToAssistance,
         modifier = modifier
     )
 }
@@ -92,18 +91,20 @@ fun HomeScreenContent(
     onNavigateToSoundScan: () -> Unit,
     onNavigateToDetail: (Long) -> Unit,
     onGetPremiumClick: () -> Unit,
+    onNavigateToAssistance: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(DarkBackground)
-            .verticalScroll(scrollState)
-            .padding(bottom = 16.dp)
-    ) {
+    Box(modifier = modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(LightMilkBackground)
+                .verticalScroll(scrollState)
+                .padding(bottom = 80.dp)
+        ) {
         // 1. Header
         HomeHeader(onSettingsClick = {
             Toast.makeText(context, "Settings under development", Toast.LENGTH_SHORT).show()
@@ -146,12 +147,13 @@ fun HomeScreenContent(
                     Icon(
                         imageVector = Icons.Default.Hearing,
                         contentDescription = null,
-                        tint = AccentLime,
+                        tint = WarningOrange,
                         modifier = Modifier.size(Dimens.dp_28)
                     )
                 },
                 onClick = onNavigateToSoundScan,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                badgeText = "New"
             )
         }
 
@@ -216,6 +218,26 @@ fun HomeScreenContent(
         )
 
         Spacer(modifier = Modifier.height(Dimens.dp_24))
+        }
+
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(bottom = Dimens.dp_16, end = Dimens.dp_16)
+                .size(Dimens.dp_64)
+                .background(Color.White, CircleShape)
+                .border(width = Dimens.dp_1, color = LightCardBorder, shape = CircleShape)
+                .clip(CircleShape)
+                .clickable { onNavigateToAssistance() }
+                .padding(Dimens.dp_8),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_assistance_bee),
+                contentDescription = "AI Assistance",
+                modifier = Modifier.fillMaxSize()
+            )
+        }
     }
 }
 
@@ -239,27 +261,27 @@ fun HomeHeader(
         Column {
             Text(
                 text = stringResource(id = R.string.home_title),
-                color = ActiveGreen,
+                color = Color.Black,
                 fontSize = Dimens.sp_28,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.ExtraBold
             )
             Text(
                 text = stringResource(id = R.string.home_subtitle),
-                color = Color.White.copy(alpha = 0.7f),
-                fontSize = Dimens.sp_14
+                color = Color.Black.copy(alpha = 0.6f),
+                fontSize = Dimens.sp_14,
+                fontStyle = FontStyle.Italic
             )
         }
 
         IconButton(
             onClick = onSettingsClick,
-            modifier = Modifier
-                .background(MediumForestGreen, shape = CircleShape)
-                .size(40.dp)
+            modifier = Modifier.size(48.dp)
         ) {
             Icon(
                 imageVector = Icons.Default.Settings,
                 contentDescription = "Settings",
-                tint = Color.White
+                tint = Color.Black,
+                modifier = Modifier.size(Dimens.dp_24)
             )
         }
     }
@@ -272,20 +294,19 @@ fun PremiumBanner(
 ) {
     Card(
         shape = RoundedCornerShape(Dimens.dp_16),
-        border = BorderStroke(Dimens.dp_1, Brush.horizontalGradient(listOf(CardBorder, StarGold))),
+        border = BorderStroke(Dimens.dp_1, Color(0xFF81C784).copy(alpha = 0.5f)),
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = Dimens.dp_16, vertical = Dimens.dp_8),
-        colors = CardDefaults.cardColors(containerColor = CardBackground)
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
     ) {
         Box(
             modifier = Modifier
                 .background(
                     brush = Brush.linearGradient(
                         colors = listOf(
-                            CardBackground,
-                            MediumForestGreen.copy(alpha = 0.5f),
-                            DarkForestGreen
+                            Color(0xFF66BB6A),
+                            Color(0xFF4DB6AC)
                         )
                     )
                 )
@@ -301,7 +322,7 @@ fun PremiumBanner(
                         Icon(
                             imageVector = Icons.Default.Star,
                             contentDescription = null,
-                            tint = StarGold,
+                            tint = Color.Yellow,
                             modifier = Modifier.size(20.dp)
                         )
                         Spacer(modifier = Modifier.width(Dimens.dp_4))
@@ -315,17 +336,17 @@ fun PremiumBanner(
                     Spacer(modifier = Modifier.height(Dimens.dp_4))
                     Text(
                         text = stringResource(id = R.string.home_premium_desc),
-                        color = Color.White.copy(alpha = 0.8f),
+                        color = Color.White.copy(alpha = 0.9f),
                         fontSize = Dimens.sp_12
                     )
                 }
 
                 Button(
                     onClick = onGetPremiumClick,
-                    shape = RoundedCornerShape(Dimens.dp_50),
+                    shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = StarGold,
-                        contentColor = Color.Black
+                        containerColor = Color.Black,
+                        contentColor = Color.White
                     ),
                     contentPadding = PaddingValues(
                         horizontal = Dimens.dp_16,
@@ -348,30 +369,52 @@ fun IdentificationCard(
     title: String,
     icon: @Composable () -> Unit,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    badgeText: String? = null
 ) {
-    Card(
-        shape = RoundedCornerShape(Dimens.dp_16),
-        border = BorderStroke(Dimens.dp_1, CardBorder),
-        colors = CardDefaults.cardColors(containerColor = CardBackground),
-        modifier = modifier
-            .height(110.dp)
-            .clickable(onClick = onClick)
-    ) {
-        Column(
+    Box(modifier = modifier) {
+        Card(
+            shape = RoundedCornerShape(Dimens.dp_16),
+            border = BorderStroke(Dimens.dp_1, LightCardBorder),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
             modifier = Modifier
-                .fillMaxSize()
-                .padding(Dimens.dp_16),
-            verticalArrangement = Arrangement.SpaceBetween
+                .fillMaxWidth()
+                .height(110.dp)
+                .clip(RoundedCornerShape(Dimens.dp_16))
+                .clickable(onClick = onClick)
         ) {
-            icon()
-            Text(
-                text = title,
-                color = Color.White,
-                fontSize = Dimens.sp_16,
-                fontWeight = FontWeight.Bold,
-                lineHeight = 18.sp
-            )
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(Dimens.dp_16),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                icon()
+                Text(
+                    text = title,
+                    color = Color.Black,
+                    fontSize = Dimens.sp_16,
+                    fontWeight = FontWeight.Bold,
+                    lineHeight = 18.sp
+                )
+            }
+        }
+
+        if (badgeText != null) {
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .offset(x = (-4).dp, y = (-4).dp)
+                    .background(Color(0xFFE53935), RoundedCornerShape(Dimens.dp_8))
+                    .padding(horizontal = Dimens.dp_8, vertical = Dimens.dp_2)
+            ) {
+                Text(
+                    text = badgeText,
+                    color = Color.White,
+                    fontSize = Dimens.sp_10,
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
     }
 }
@@ -388,14 +431,14 @@ fun InsectSectionList(
         Column(modifier = Modifier.padding(horizontal = Dimens.dp_16)) {
             Text(
                 text = title,
-                color = Color.White,
+                color = Color.Black,
                 fontSize = Dimens.sp_18,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = subtitle,
-                color = Color.White.copy(alpha = 0.6f),
+                color = Color.Black.copy(alpha = 0.6f),
                 fontSize = Dimens.sp_12
             )
         }
@@ -424,10 +467,11 @@ fun InsectListItem(
 ) {
     Card(
         shape = RoundedCornerShape(Dimens.dp_16),
-        border = BorderStroke(Dimens.dp_1, CardBorder),
-        colors = CardDefaults.cardColors(containerColor = CardBackground),
+        border = BorderStroke(Dimens.dp_1, LightCardBorder),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
         modifier = modifier
             .width(140.dp)
+            .clip(RoundedCornerShape(Dimens.dp_16))
             .clickable(onClick = onClick)
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
@@ -453,7 +497,7 @@ fun InsectListItem(
             ) {
                 Text(
                     text = insect.commonName,
-                    color = Color.White,
+                    color = Color.Black,
                     fontSize = Dimens.sp_14,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1
@@ -483,14 +527,14 @@ fun ArticleSectionList(
         Column(modifier = Modifier.padding(horizontal = Dimens.dp_16)) {
             Text(
                 text = title,
-                color = Color.White,
+                color = Color.Black,
                 fontSize = Dimens.sp_18,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = subtitle,
-                color = Color.White.copy(alpha = 0.6f),
+                color = Color.Black.copy(alpha = 0.6f),
                 fontSize = Dimens.sp_12
             )
         }
@@ -519,10 +563,11 @@ fun ArticleListItem(
 ) {
     Card(
         shape = RoundedCornerShape(Dimens.dp_16),
-        border = BorderStroke(Dimens.dp_1, CardBorder),
-        colors = CardDefaults.cardColors(containerColor = CardBackground),
+        border = BorderStroke(Dimens.dp_1, LightCardBorder),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
         modifier = modifier
             .width(140.dp)
+            .clip(RoundedCornerShape(Dimens.dp_16))
             .clickable(onClick = onClick)
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
@@ -548,7 +593,7 @@ fun ArticleListItem(
             ) {
                 Text(
                     text = article.title,
-                    color = Color.White,
+                    color = Color.Black,
                     fontSize = Dimens.sp_14,
                     fontWeight = FontWeight.Bold,
                     maxLines = 2,
@@ -567,6 +612,7 @@ private fun HomeScreenPreview() {
         onNavigateToScan = {},
         onNavigateToSoundScan = {},
         onNavigateToDetail = {},
-        onGetPremiumClick = {}
+        onGetPremiumClick = {},
+        onNavigateToAssistance = {}
     )
 }

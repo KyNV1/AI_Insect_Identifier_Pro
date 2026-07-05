@@ -113,4 +113,15 @@
     <string name="paywall_privacy_policy">Privacy Policy</string>
     <string name="paywall_best_value">BEST DEAL</string>
     <string name="paywall_discount_badge">SAVE 85%</string>
+
+    <!-- Assistance Screen Strings -->
+    <string name="assistance_title">Assistance</string>
+    <string name="assistance_start_chatting">Click and start chatting:</string>
+    <string name="assistance_message_placeholder">Message</string>
+    <string name="assistance_thinking">AI is thinking…</string>
+    <string name="assistance_q1">How many different kinds of insects are there?</string>
+    <string name="assistance_q2">How do insects grow?</string>
+    <string name="assistance_q3">Why do butterflies and other insects fly from flower to flower?</string>
+    <string name="assistance_q4">What is the largest insect on Earth?</string>
+    <string name="assistance_q5">What\'s the difference between an insect and a spider?</string>
 </resources>

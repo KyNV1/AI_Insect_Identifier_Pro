@@ -21,6 +21,7 @@ object Dimens {
     val dp_28 = 28.dp
     val dp_32 = 32.dp
     val dp_36 = 36.dp
+    val dp_38 = 38.dp
     val dp_40 = 40.dp
     val dp_48 = 48.dp
     val dp_50 = 50.dp
@@ -57,6 +58,5 @@ object Dimens {
     val sp_28 = 28.sp
     val sp_32 = 32.sp
     val sp_54 = 54.sp
-    val sp_0_5 = 0.5.sp
 
 }
