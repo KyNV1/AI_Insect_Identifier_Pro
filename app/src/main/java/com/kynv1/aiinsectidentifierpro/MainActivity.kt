@@ -54,6 +54,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -278,7 +279,7 @@ fun MainBottomBar(
                     .padding(Dimens.dp_8)
             ) {
                 Icon(
-                    imageVector = Icons.Default.Home,
+                    painter = painterResource(id = R.drawable.ic_home),
                     contentDescription = stringResource(id = R.string.home_tab_home),
                     tint = if (currentRoute == Screen.Home.route) ActiveGreen else Color.Gray,
                     modifier = Modifier.size(Dimens.dp_24)
