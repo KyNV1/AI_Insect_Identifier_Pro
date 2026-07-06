@@ -30,6 +30,7 @@ object Dimens {
     val dp_64 = 64.dp
     val dp_80 = 80.dp
     val dp_84 = 84.dp
+    val dp_100 = 100.dp
     val dp_140 = 140.dp
     val dp_160 = 160.dp
     val dp_180 = 180.dp

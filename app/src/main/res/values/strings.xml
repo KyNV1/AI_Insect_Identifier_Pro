@@ -128,10 +128,10 @@
     <!-- Settings Screen Strings -->
     <string name="settings_title">Settings</string>
     <string name="settings_section_spread_word">Spread the Word</string>
-    <string name="settings_item_rate">Rate Us on Google Play</string>
-    <string name="settings_item_share">Recommend App to Friends</string>
-    <string name="settings_item_feedback">Contact Support</string>
+    <string name="settings_item_rate">Love the app? Review us!</string>
+    <string name="settings_item_share">Tell a Friend About Us</string>
+    <string name="settings_item_feedback">Help &amp; Bug Reporting</string>
     <string name="settings_section_legal">Legal &amp; Policy</string>
-    <string name="settings_item_agreement">User Agreement</string>
-    <string name="settings_item_privacy">Data Privacy Policy</string>
+    <string name="settings_item_agreement">Service Agreement &amp; Rules</string>
+    <string name="settings_item_privacy">Security &amp; Privacy Commitment</string>
 </resources>

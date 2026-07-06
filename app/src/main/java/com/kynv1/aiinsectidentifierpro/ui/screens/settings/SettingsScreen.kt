@@ -225,7 +225,7 @@ fun SettingsRowItem(
             text = title,
             color = Color.Black,
             fontSize = Dimens.sp_14,
-            fontWeight = FontWeight.SemiBold,
+            fontWeight = FontWeight.Normal,
             modifier = Modifier.weight(1f)
         )
         Icon(

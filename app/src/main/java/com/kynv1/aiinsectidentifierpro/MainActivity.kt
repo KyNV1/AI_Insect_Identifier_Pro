@@ -173,7 +173,7 @@ fun MainAppScreen(onboardingStore: OnboardingStore) {
             }
         },
         modifier = Modifier.fillMaxSize()
-    ) {
+    ) { innerPadding ->
         AppNavHost(
             navController = navController,
             startDestination = startDestination,
@@ -184,7 +184,7 @@ fun MainAppScreen(onboardingStore: OnboardingStore) {
             detailViewModel = detailViewModel,
             onboardingViewModel = onboardingViewModel,
             assistanceViewModel = assistanceViewModel,
-            modifier = Modifier.statusBarsPadding()
+            modifier = Modifier.fillMaxSize().padding(innerPadding)
         )
     }
 }
