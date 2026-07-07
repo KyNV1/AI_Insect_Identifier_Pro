@@ -198,8 +198,8 @@ fun AssistanceScreen(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .then(if (isKeyboardVisible) Modifier else Modifier.navigationBarsPadding())
                 .background(LightMilkBackground)
+                .then(if (isKeyboardVisible) Modifier else Modifier.navigationBarsPadding())
                 .padding(bottom = keyboardBottomPadding),
             contentAlignment = Alignment.BottomCenter
         ) {
