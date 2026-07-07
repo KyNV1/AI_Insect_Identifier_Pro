@@ -154,14 +154,6 @@ fun MainAppScreen(onboardingStore: OnboardingStore) {
             }
         }
     }
-
-    val homeViewModel: HomeViewModel = hiltViewModel()
-    val scanViewModel: ScanViewModel = hiltViewModel()
-    val historyViewModel: HistoryViewModel = hiltViewModel()
-    val detailViewModel: DetailViewModel = hiltViewModel()
-    val onboardingViewModel: OnboardingViewModel = hiltViewModel()
-    val assistanceViewModel: AssistanceViewModel = hiltViewModel()
-
     val startDestination = Screen.Splash.route
 
     Scaffold(
@@ -178,12 +170,6 @@ fun MainAppScreen(onboardingStore: OnboardingStore) {
             navController = navController,
             startDestination = startDestination,
             onboardingStore = onboardingStore,
-            homeViewModel = homeViewModel,
-            scanViewModel = scanViewModel,
-            historyViewModel = historyViewModel,
-            detailViewModel = detailViewModel,
-            onboardingViewModel = onboardingViewModel,
-            assistanceViewModel = assistanceViewModel,
             modifier = Modifier.fillMaxSize().padding(innerPadding)
         )
     }
@@ -366,12 +352,12 @@ fun AppNavHost(
     navController: NavHostController,
     startDestination: String,
     onboardingStore: OnboardingStore,
-    homeViewModel: HomeViewModel,
-    scanViewModel: ScanViewModel,
-    historyViewModel: HistoryViewModel,
-    detailViewModel: DetailViewModel,
-    onboardingViewModel: OnboardingViewModel,
-    assistanceViewModel: AssistanceViewModel,
+    homeViewModel: HomeViewModel = hiltViewModel(),
+    scanViewModel: ScanViewModel = hiltViewModel(),
+    historyViewModel: HistoryViewModel = hiltViewModel(),
+    detailViewModel: DetailViewModel = hiltViewModel(),
+    onboardingViewModel: OnboardingViewModel = hiltViewModel(),
+    assistanceViewModel: AssistanceViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
     NavHost(
