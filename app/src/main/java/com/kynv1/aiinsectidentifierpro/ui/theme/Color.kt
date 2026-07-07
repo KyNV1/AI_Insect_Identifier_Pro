@@ -27,3 +27,8 @@ val WarningOrange = Color(0xFFFF9800)
 val DangerRedBackground = Color(0xFF241414)
 val DangerRedBorder = Color(0xFF5E2020)
 val DeleteRed = Color(0xFFC62828)
+
+// Light Mode Theme Colors
+val LightMilkBackground = Color(0xFFF9FBF9)
+val LightCardBorder = Color(0xFFE8EFE8)
+val LightGreyBorder = Color(0xFFCCCCCC)

@@ -36,6 +36,8 @@ import com.kynv1.aiinsectidentifierpro.ui.theme.DarkBackground
 import com.kynv1.aiinsectidentifierpro.ui.theme.DarkForestGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
 import com.kynv1.aiinsectidentifierpro.ui.theme.DeleteRed
+import com.kynv1.aiinsectidentifierpro.ui.theme.LightMilkBackground
+import com.kynv1.aiinsectidentifierpro.ui.theme.LightCardBorder
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -55,11 +57,7 @@ fun HistoryScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(DarkForestGreen, DarkBackground)
-                )
-            )
+            .background(LightMilkBackground)
             .padding(Dimens.dp_16)
     ) {
         Column(
@@ -82,7 +80,7 @@ fun HistoryScreen(
                 Spacer(modifier = Modifier.width(Dimens.dp_12))
                 Text(
                     text = stringResource(id = R.string.history_title),
-                    color = Color.White,
+                    color = Color.Black,
                     fontSize = Dimens.sp_22,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 1.sp
@@ -103,13 +101,13 @@ fun HistoryScreen(
                         Icon(
                             imageVector = Icons.Default.History,
                             contentDescription = null,
-                            tint = CardBorder,
+                            tint = Color.Gray,
                             modifier = Modifier.size(Dimens.dp_80)
                         )
                         Spacer(modifier = Modifier.height(Dimens.dp_16))
                         Text(
                             text = stringResource(id = R.string.history_empty_title),
-                            color = Color.LightGray,
+                            color = Color.Black.copy(alpha = 0.7f),
                             fontSize = Dimens.sp_18,
                             fontWeight = FontWeight.Bold
                         )
@@ -154,10 +152,11 @@ fun HistoryItem(
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .clip(RoundedCornerShape(Dimens.dp_16))
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(Dimens.dp_16),
-        colors = CardDefaults.cardColors(containerColor = CardBackground),
-        border = BorderStroke(Dimens.dp_1, CardBorder)
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        border = BorderStroke(Dimens.dp_1, LightCardBorder)
     ) {
         Row(
             modifier = Modifier
@@ -184,7 +183,7 @@ fun HistoryItem(
             ) {
                 Text(
                     text = insect.commonName,
-                    color = Color.White,
+                    color = Color.Black,
                     fontSize = Dimens.sp_16,
                     fontWeight = FontWeight.Bold
                 )

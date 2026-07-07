@@ -1,6 +1,8 @@
 package com.kynv1.aiinsectidentifierpro
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.app.Activity
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.SystemBarStyle
@@ -10,10 +12,21 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.runtime.SideEffect
+import androidx.core.view.WindowCompat
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,6 +36,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -43,6 +57,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -71,6 +86,9 @@ import com.kynv1.aiinsectidentifierpro.ui.screens.scan.ScanViewModel
 import com.kynv1.aiinsectidentifierpro.ui.screens.sound.SoundScanScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.splash.SplashScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.premium.PaywallScreen
+import com.kynv1.aiinsectidentifierpro.ui.screens.assistance.AssistanceScreen
+import com.kynv1.aiinsectidentifierpro.ui.screens.assistance.AssistanceViewModel
+import com.kynv1.aiinsectidentifierpro.ui.screens.settings.SettingsScreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.AIInsectIdentifierProTheme
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.ButtonGreen
@@ -78,6 +96,7 @@ import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
 import com.kynv1.aiinsectidentifierpro.ui.theme.CardBorder
 import com.kynv1.aiinsectidentifierpro.ui.theme.DarkBackground
 import com.kynv1.aiinsectidentifierpro.ui.theme.DarkForestGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.LightMilkBackground
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -101,6 +120,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainAppScreen(onboardingStore: OnboardingStore) {
     val navController = rememberNavController()
@@ -121,16 +141,23 @@ fun MainAppScreen(onboardingStore: OnboardingStore) {
         }
     }
 
-    val homeViewModel: HomeViewModel = hiltViewModel()
-    val scanViewModel: ScanViewModel = hiltViewModel()
-    val historyViewModel: HistoryViewModel = hiltViewModel()
-    val detailViewModel: DetailViewModel = hiltViewModel()
-    val onboardingViewModel: OnboardingViewModel = hiltViewModel()
-
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        val window = (view.context as? Activity)?.window
+        if (window != null) {
+            val isLightScreen = currentRoute == Screen.Home.route || currentRoute == Screen.History.route
+            SideEffect {
+                WindowCompat.getInsetsController(window, view).apply {
+                    isAppearanceLightStatusBars = isLightScreen
+                    isAppearanceLightNavigationBars = isLightScreen
+                }
+            }
+        }
+    }
     val startDestination = Screen.Splash.route
 
     Scaffold(
-        containerColor = DarkBackground,
+        containerColor = if (currentRoute in tabRoutes) LightMilkBackground else DarkBackground,
         bottomBar = {
             val showBottomBar = currentRoute in tabRoutes && stableRoute in tabRoutes
             if (showBottomBar) {
@@ -143,13 +170,54 @@ fun MainAppScreen(onboardingStore: OnboardingStore) {
             navController = navController,
             startDestination = startDestination,
             onboardingStore = onboardingStore,
-            homeViewModel = homeViewModel,
-            scanViewModel = scanViewModel,
-            historyViewModel = historyViewModel,
-            detailViewModel = detailViewModel,
-            onboardingViewModel = onboardingViewModel,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.fillMaxSize().padding(innerPadding)
         )
+    }
+}
+
+class CurvedBottomBarShape(
+    private val cradleRadius: Dp,
+    private val cornerRadius: Dp
+) : Shape {
+    override fun createOutline(
+        size: Size,
+        layoutDirection: LayoutDirection,
+        density: Density
+    ): Outline {
+        val path = Path().apply {
+            val cradleRadiusPx = with(density) { cradleRadius.toPx() }
+            val cornerRadiusPx = with(density) { cornerRadius.toPx() }
+            val width = size.width
+            val height = size.height
+
+            moveTo(0f, cornerRadiusPx)
+            quadraticTo(0f, 0f, cornerRadiusPx, 0f)
+
+            val middleX = width / 2
+            val cradleStartX = middleX - cradleRadiusPx
+            val cradleEndX = middleX + cradleRadiusPx
+
+            lineTo(cradleStartX, 0f)
+
+            cubicTo(
+                x1 = cradleStartX + cradleRadiusPx / 3, y1 = 0f,
+                x2 = middleX - cradleRadiusPx * 2 / 3, y2 = cradleRadiusPx,
+                x3 = middleX, y3 = cradleRadiusPx
+            )
+            cubicTo(
+                x1 = middleX + cradleRadiusPx * 2 / 3, y1 = cradleRadiusPx,
+                x2 = cradleEndX - cradleRadiusPx / 3, y2 = 0f,
+                x3 = cradleEndX, y3 = 0f
+            )
+
+            lineTo(width - cornerRadiusPx, 0f)
+            quadraticTo(width, 0f, width, cornerRadiusPx)
+
+            lineTo(width, height)
+            lineTo(0f, height)
+            close()
+        }
+        return Outline.Generic(path)
     }
 }
 
@@ -163,7 +231,7 @@ fun MainBottomBar(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .background(DarkBackground)
+            .background(Color.Transparent)
             .navigationBarsPadding()
             .height(Dimens.dp_84),
         contentAlignment = Alignment.BottomCenter
@@ -173,19 +241,13 @@ fun MainBottomBar(
                 .fillMaxWidth()
                 .height(Dimens.dp_64)
                 .background(
-                    color = DarkForestGreen,
-                    shape = RoundedCornerShape(
-                        topStart = bottomBarCornerRadius,
-                        topEnd = bottomBarCornerRadius
-                    )
+                    color = Color.White,
+                    shape = CurvedBottomBarShape(cradleRadius = Dimens.dp_38, cornerRadius = bottomBarCornerRadius)
                 )
                 .border(
                     width = Dimens.dp_1,
-                    color = CardBorder,
-                    shape = RoundedCornerShape(
-                        topStart = bottomBarCornerRadius,
-                        topEnd = bottomBarCornerRadius
-                    )
+                    color = Color(0xFFE5EBE6),
+                    shape = CurvedBottomBarShape(cradleRadius = Dimens.dp_38, cornerRadius = bottomBarCornerRadius)
                 )
                 .padding(horizontal = Dimens.dp_32),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -194,7 +256,10 @@ fun MainBottomBar(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .clickable {
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
                         if (currentRoute != Screen.Home.route) {
                             navController.navigate(Screen.Home.route) {
                                 popUpTo(navController.graph.findStartDestination().id) {
@@ -208,10 +273,9 @@ fun MainBottomBar(
                     .padding(Dimens.dp_8)
             ) {
                 Icon(
-                    imageVector = Icons.Default.Home,
+                    painter = painterResource(id = R.drawable.ic_home),
                     contentDescription = stringResource(id = R.string.home_tab_home),
                     tint = if (currentRoute == Screen.Home.route) ActiveGreen else Color.Gray,
-                    modifier = Modifier.size(Dimens.dp_24)
                 )
                 Text(
                     text = stringResource(id = R.string.home_tab_home),
@@ -226,7 +290,10 @@ fun MainBottomBar(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
-                    .clickable {
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
                         if (currentRoute != Screen.History.route) {
                             navController.navigate(Screen.History.route) {
                                 popUpTo(navController.graph.findStartDestination().id) {
@@ -264,7 +331,7 @@ fun MainBottomBar(
                     ),
                     shape = CircleShape
                 )
-                .border(width = Dimens.dp_4, color = DarkBackground, shape = CircleShape)
+                .border(width = Dimens.dp_4, color = LightMilkBackground, shape = CircleShape)
                 .clickable {
                     navController.navigate(Screen.Scan.route)
                 },
@@ -285,11 +352,12 @@ fun AppNavHost(
     navController: NavHostController,
     startDestination: String,
     onboardingStore: OnboardingStore,
-    homeViewModel: HomeViewModel,
-    scanViewModel: ScanViewModel,
-    historyViewModel: HistoryViewModel,
-    detailViewModel: DetailViewModel,
-    onboardingViewModel: OnboardingViewModel,
+    homeViewModel: HomeViewModel = hiltViewModel(),
+    scanViewModel: ScanViewModel = hiltViewModel(),
+    historyViewModel: HistoryViewModel = hiltViewModel(),
+    detailViewModel: DetailViewModel = hiltViewModel(),
+    onboardingViewModel: OnboardingViewModel = hiltViewModel(),
+    assistanceViewModel: AssistanceViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -351,6 +419,12 @@ fun AppNavHost(
                 },
                 onNavigateToDetail = { id ->
                     navController.navigate(Screen.Detail.createRoute(id))
+                },
+                onNavigateToAssistance = {
+                    navController.navigate(Screen.Assistance.route)
+                },
+                onNavigateToSettings = {
+                    navController.navigate(Screen.Settings.route)
                 }
             )
         }
@@ -405,17 +479,29 @@ fun AppNavHost(
                 onBack = { navController.popBackStack() }
             )
         }
-    }
-}
-
-@Composable
-fun TestScreen(
-    modifier: Modifier = Modifier
-) {
-    Box(modifier = modifier.fillMaxSize()) {
-        Text(
-            text = "nguyen anh ky hoc vien cong nghe buu chinh vien thong",
-            modifier = Modifier.align(Alignment.Center)
-        )
+        composable(
+            route = Screen.Assistance.route,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
+        ) {
+            AssistanceScreen(
+                viewModel = assistanceViewModel,
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+        composable(
+            route = Screen.Settings.route,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
+        ) {
+            SettingsScreen(
+                onBack = { navController.popBackStack() },
+                onNavigateToPaywall = { navController.navigate(Screen.Paywall.route) }
+            )
+        }
     }
 }

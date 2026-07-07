@@ -60,25 +60,25 @@
     <string name="splash_loading_text">Getting ready…</string>
 
     <!-- Home Screen Strings -->
-    <string name="home_title">Insect</string>
-    <string name="home_subtitle">identification by photo</string>
-    <string name="home_premium_title">Try Premium</string>
-    <string name="home_premium_desc">Identify any insect species with a snap</string>
-    <string name="home_premium_btn">Get It Now</string>
-    <string name="home_photo_id">Photo\nIdentification</string>
-    <string name="home_sound_id">Sound ID</string>
-    <string name="home_most_common_title">Most common</string>
-    <string name="home_most_common_desc">Discover the most frequently encountered insects</string>
-    <string name="home_garden_insect_title">Garden Insect</string>
-    <string name="home_garden_insect_desc">Explore the diverse bugs found in gardens</string>
-    <string name="home_fun_facts_title">Fun Bug Facts</string>
-    <string name="home_fun_facts_desc">Learn intriguing facts about insects</string>
-    <string name="home_pest_control_title">Pest Control</string>
-    <string name="home_pest_control_desc">Find strategies for managing pests</string>
-    <string name="home_bug_bite_title">Bug Bite Help</string>
-    <string name="home_bug_bite_desc">Valuable guidance for managing various types of bug bites</string>
-    <string name="home_remarkable_coll_title">Remarkable Collection</string>
-    <string name="home_remarkable_coll_desc">View unique insects from around the world</string>
+    <string name="home_title">Bug Finder</string>
+    <string name="home_subtitle">Scan and identify species</string>
+    <string name="home_premium_title">Unlock Pro Tier</string>
+    <string name="home_premium_desc">Scan unlimited bugs with premium precision</string>
+    <string name="home_premium_btn">Unlock Pro</string>
+    <string name="home_photo_id">Camera\nIdentification</string>
+    <string name="home_sound_id">Acoustic ID</string>
+    <string name="home_most_common_title">Common Bugs</string>
+    <string name="home_most_common_desc">Bugs frequently spotted in nature</string>
+    <string name="home_garden_insect_title">Backyard Bugs</string>
+    <string name="home_garden_insect_desc">Discover species that thrive in gardens and yards</string>
+    <string name="home_fun_facts_title">Amazing Bug Facts</string>
+    <string name="home_fun_facts_desc">Fascinating secrets of the insect world</string>
+    <string name="home_pest_control_title">Bug Prevention</string>
+    <string name="home_pest_control_desc">Eco-friendly tips to protect your home and yard</string>
+    <string name="home_bug_bite_title">Bite Care Guide</string>
+    <string name="home_bug_bite_desc">Essential tips to identify and treat insect bites</string>
+    <string name="home_remarkable_coll_title">Curated Collections</string>
+    <string name="home_remarkable_coll_desc">Admire rare and extraordinary specimens worldwide</string>
     <string name="home_tab_home">Home</string>
     <string name="home_tab_collections">Collections</string>
 
@@ -113,4 +113,25 @@
     <string name="paywall_privacy_policy">Privacy Policy</string>
     <string name="paywall_best_value">BEST DEAL</string>
     <string name="paywall_discount_badge">SAVE 85%</string>
+
+    <!-- Assistance Screen Strings -->
+    <string name="assistance_title">Assistance</string>
+    <string name="assistance_start_chatting">Click and start chatting:</string>
+    <string name="assistance_message_placeholder">Message</string>
+    <string name="assistance_thinking">AI is thinking…</string>
+    <string name="assistance_q1">How many different kinds of insects are there?</string>
+    <string name="assistance_q2">How do insects grow?</string>
+    <string name="assistance_q3">Why do butterflies and other insects fly from flower to flower?</string>
+    <string name="assistance_q4">What is the largest insect on Earth?</string>
+    <string name="assistance_q5">What\'s the difference between an insect and a spider?</string>
+
+    <!-- Settings Screen Strings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_section_spread_word">Spread the Word</string>
+    <string name="settings_item_rate">Love the app? Review us!</string>
+    <string name="settings_item_share">Tell a Friend About Us</string>
+    <string name="settings_item_feedback">Help &amp; Bug Reporting</string>
+    <string name="settings_section_legal">Legal &amp; Policy</string>
+    <string name="settings_item_agreement">Service Agreement &amp; Rules</string>
+    <string name="settings_item_privacy">Security &amp; Privacy Commitment</string>
 </resources>

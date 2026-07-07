@@ -491,4 +491,8 @@ class InsectRepository(
     suspend fun identifyInsect(bitmap: Bitmap): InsectInfo? {
         return geminiServiceClient.identifyInsect(bitmap)
     }
+
+    suspend fun getChatResponse(prompt: String): String {
+        return geminiServiceClient.getChatResponse(prompt)
+    }
 }
