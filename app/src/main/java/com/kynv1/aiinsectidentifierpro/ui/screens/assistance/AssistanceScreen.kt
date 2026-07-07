@@ -12,10 +12,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
@@ -32,9 +34,7 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -46,6 +46,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -57,7 +58,6 @@ import com.kynv1.aiinsectidentifierpro.ui.theme.LightCardBorder
 import com.kynv1.aiinsectidentifierpro.ui.theme.LightGreyBorder
 import com.kynv1.aiinsectidentifierpro.ui.theme.LightMilkBackground
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AssistanceScreen(
     viewModel: AssistanceViewModel,
@@ -67,6 +67,8 @@ fun AssistanceScreen(
     val uiState by viewModel.uiState.collectAsState()
     var inputText by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
+    val density = LocalDensity.current
+    val isKeyboardVisible = WindowInsets.ime.getBottom(density) > 0
 
     val quickQuestions = listOf(
         stringResource(id = R.string.assistance_q1),
@@ -83,170 +85,190 @@ fun AssistanceScreen(
         }
     }
 
-    Column(
+    Box(
         modifier = modifier
             .fillMaxSize()
             .background(LightMilkBackground)
     ) {
-        // Custom Top Bar using Box
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(Dimens.dp_56)
-                .background(LightMilkBackground),
-            contentAlignment = Alignment.Center
+        Column(
+            modifier = Modifier.fillMaxSize()
         ) {
-            IconButton(
-                onClick = onNavigateBack,
+            // Custom Top Bar using Box
+            Box(
                 modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(start = Dimens.dp_8)
+                    .fillMaxWidth()
+                    .height(Dimens.dp_56)
+                    .background(LightMilkBackground),
+                contentAlignment = Alignment.Center
             ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = Color.Black
+                IconButton(
+                    onClick = onNavigateBack,
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(start = Dimens.dp_8)
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.Black
+                    )
+                }
+                Text(
+                    text = stringResource(id = R.string.assistance_title),
+                    fontSize = Dimens.sp_18,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.Black
                 )
             }
-            Text(
-                text = stringResource(id = R.string.assistance_title),
-                fontSize = Dimens.sp_18,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
-            )
-        }
 
-        // Chat Message List
-        LazyColumn(
-            state = listState,
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .padding(horizontal = Dimens.dp_16),
-            verticalArrangement = Arrangement.spacedBy(Dimens.dp_12),
-            contentPadding = PaddingValues(top = Dimens.dp_8, bottom = Dimens.dp_16)
-        ) {
-            // If no messages, show start guide & quick bubbles
-            if (uiState.messages.isEmpty()) {
-                item {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = Dimens.dp_16)
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.assistance_start_chatting),
-                            fontSize = Dimens.sp_18,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.Black,
-                            modifier = Modifier.padding(bottom = Dimens.dp_16)
-                        )
+            // Chat Message List
+            LazyColumn(
+                state = listState,
+                modifier = Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(horizontal = Dimens.dp_16),
+                verticalArrangement = Arrangement.spacedBy(Dimens.dp_12),
+                contentPadding = PaddingValues(top = Dimens.dp_8, bottom = Dimens.dp_100)
+            ) {
+                // If no messages, show start guide & quick bubbles
+                if (uiState.messages.isEmpty()) {
+                    item {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = Dimens.dp_16)
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.assistance_start_chatting),
+                                fontSize = Dimens.sp_18,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Black,
+                                modifier = Modifier.padding(bottom = Dimens.dp_16)
+                            )
 
-                        quickQuestions.forEach { question ->
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = Dimens.dp_6)
-                                    .background(Color.White, RoundedCornerShape(Dimens.dp_20))
-                                    .border(
-                                        width = Dimens.dp_1,
-                                        color = LightGreyBorder,
-                                        shape = RoundedCornerShape(Dimens.dp_20)
+                            quickQuestions.forEach { question ->
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(vertical = Dimens.dp_6)
+                                        .background(Color.White, RoundedCornerShape(Dimens.dp_20))
+                                        .border(
+                                            width = Dimens.dp_1,
+                                            color = LightGreyBorder,
+                                            shape = RoundedCornerShape(Dimens.dp_20)
+                                        )
+                                        .clickable {
+                                            viewModel.sendMessage(question)
+                                        }
+                                        .padding(horizontal = Dimens.dp_16, vertical = Dimens.dp_12)
+                                ) {
+                                    Text(
+                                        text = question,
+                                        fontSize = Dimens.sp_14,
+                                        color = Color.DarkGray,
+                                        lineHeight = 18.sp
                                     )
-                                    .clickable {
-                                        viewModel.sendMessage(question)
-                                    }
-                                    .padding(horizontal = Dimens.dp_16, vertical = Dimens.dp_12)
-                            ) {
-                                Text(
-                                    text = question,
-                                    fontSize = Dimens.sp_14,
-                                    color = Color.DarkGray,
-                                    lineHeight = 18.sp
-                                )
+                                }
                             }
                         }
                     }
-                }
-            } else {
-                items(uiState.messages, key = { it.id }) { message ->
-                    ChatBubble(message = message)
-                }
-                if (uiState.isSending) {
-                    item {
-                        TypingIndicator()
+                } else {
+                    items(uiState.messages, key = { it.id }) { message ->
+                        ChatBubble(message = message)
+                    }
+                    if (uiState.isSending) {
+                        item {
+                            TypingIndicator()
+                        }
                     }
                 }
             }
         }
 
-        // Bottom Input Row
+        AssistanceInputBar(
+            inputText = inputText,
+            onInputChange = { inputText = it },
+            onSend = {
+                if (inputText.isNotBlank()) {
+                    viewModel.sendMessage(inputText)
+                    inputText = ""
+                }
+            },
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .then(if (isKeyboardVisible) Modifier.imePadding() else Modifier.navigationBarsPadding())
+                .background(LightMilkBackground)
+                .padding(horizontal = Dimens.dp_16, vertical = Dimens.dp_12)
+        )
+    }
+}
+
+@Composable
+fun AssistanceInputBar(
+    inputText: String,
+    onInputChange: (String) -> Unit,
+    onSend: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .navigationBarsPadding()
-                .padding(horizontal = Dimens.dp_16, vertical = Dimens.dp_12),
+                .weight(1f)
+                .height(Dimens.dp_48)
+                .background(Color.White, RoundedCornerShape(Dimens.dp_24))
+                .border(Dimens.dp_1, LightGreyBorder, RoundedCornerShape(Dimens.dp_24))
+                .padding(horizontal = Dimens.dp_16),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(Dimens.dp_48)
-                    .background(Color.White, RoundedCornerShape(Dimens.dp_24))
-                    .border(Dimens.dp_1, LightGreyBorder, RoundedCornerShape(Dimens.dp_24))
-                    .padding(horizontal = Dimens.dp_16),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Lightbulb,
-                    contentDescription = "AI Hint",
-                    tint = ActiveGreen,
-                    modifier = Modifier.size(Dimens.dp_20)
-                )
-                Spacer(modifier = Modifier.width(Dimens.dp_10))
-
-                Box(
-                    modifier = Modifier.weight(1f),
-                    contentAlignment = Alignment.CenterStart
-                ) {
-                    if (inputText.isEmpty()) {
-                        Text(
-                            text = stringResource(id = R.string.assistance_message_placeholder),
-                            color = Color.Gray,
-                            fontSize = Dimens.sp_14
-                        )
-                    }
-                    BasicTextField(
-                        value = inputText,
-                        onValueChange = { inputText = it },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.width(Dimens.dp_12))
+            Icon(
+                imageVector = Icons.Default.Lightbulb,
+                contentDescription = "AI Hint",
+                tint = ActiveGreen,
+                modifier = Modifier.size(Dimens.dp_20)
+            )
+            Spacer(modifier = Modifier.width(Dimens.dp_10))
 
             Box(
-                modifier = Modifier
-                    .size(Dimens.dp_48)
-                    .background(ActiveGreen, CircleShape)
-                    .clip(CircleShape)
-                    .clickable {
-                        if (inputText.isNotBlank()) {
-                            viewModel.sendMessage(inputText)
-                            inputText = ""
-                        }
-                    },
-                contentAlignment = Alignment.Center
+                modifier = Modifier.weight(1f),
+                contentAlignment = Alignment.CenterStart
             ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.Send,
-                    contentDescription = "Send",
-                    tint = Color.White,
-                    modifier = Modifier.size(Dimens.dp_20)
+                if (inputText.isEmpty()) {
+                    Text(
+                        text = stringResource(id = R.string.assistance_message_placeholder),
+                        color = Color.Gray,
+                        fontSize = Dimens.sp_14
+                    )
+                }
+                BasicTextField(
+                    value = inputText,
+                    onValueChange = onInputChange,
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
                 )
             }
+        }
+
+        Spacer(modifier = Modifier.width(Dimens.dp_12))
+
+        Box(
+            modifier = Modifier
+                .size(Dimens.dp_48)
+                .background(ActiveGreen, CircleShape)
+                .clip(CircleShape)
+                .clickable(onClick = onSend),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.Send,
+                contentDescription = "Send",
+                tint = Color.White,
+                modifier = Modifier.size(Dimens.dp_20)
+            )
         }
     }
 }
