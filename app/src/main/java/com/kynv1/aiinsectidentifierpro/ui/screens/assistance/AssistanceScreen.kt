@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.WindowInsets
@@ -68,20 +69,21 @@ fun AssistanceScreen(
     var inputText by remember { mutableStateOf("") }
     val listState = rememberLazyListState()
     val density = LocalDensity.current
-    val isKeyboardVisible = WindowInsets.ime.getBottom(density) > 0
+    val imeBottomPx = WindowInsets.ime.getBottom(density)
+    val imeBottomPadding = with(density) { imeBottomPx.toDp() }
+    val isKeyboardVisible = imeBottomPx > 0
 
     val quickQuestions = listOf(
         stringResource(id = R.string.assistance_q1),
         stringResource(id = R.string.assistance_q2),
         stringResource(id = R.string.assistance_q3),
-        stringResource(id = R.string.assistance_q4),
-        stringResource(id = R.string.assistance_q5)
     )
 
-    // Scroll to bottom when new messages are added
+    // Scroll only when a new message is added. Keyboard insets animate frame-by-frame,
+    // so using them as a key here makes the chat list visibly jump.
     LaunchedEffect(uiState.messages.size) {
         if (uiState.messages.isNotEmpty()) {
-            listState.animateScrollToItem(uiState.messages.size - 1)
+            listState.scrollToItem(uiState.messages.lastIndex)
         }
     }
 
@@ -129,7 +131,10 @@ fun AssistanceScreen(
                     .fillMaxWidth()
                     .padding(horizontal = Dimens.dp_16),
                 verticalArrangement = Arrangement.spacedBy(Dimens.dp_12),
-                contentPadding = PaddingValues(top = Dimens.dp_8, bottom = Dimens.dp_100)
+                contentPadding = PaddingValues(
+                    top = Dimens.dp_8,
+                    bottom = Dimens.dp_100 + imeBottomPadding
+                )
             ) {
                 // If no messages, show start guide & quick bubbles
                 if (uiState.messages.isEmpty()) {
@@ -199,8 +204,14 @@ fun AssistanceScreen(
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
                 .then(if (isKeyboardVisible) Modifier.imePadding() else Modifier.navigationBarsPadding())
+                .offset(y = if (isKeyboardVisible) Dimens.dp_48 else 0.dp)
                 .background(LightMilkBackground)
-                .padding(horizontal = Dimens.dp_16, vertical = Dimens.dp_12)
+                .padding(
+                    start = Dimens.dp_16,
+                    top = if (isKeyboardVisible) Dimens.dp_8 else Dimens.dp_12,
+                    end = Dimens.dp_16,
+                    bottom = if (isKeyboardVisible) 0.dp else Dimens.dp_12
+                )
         )
     }
 }
