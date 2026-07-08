@@ -43,6 +43,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.ui.screens.home.PremiumBanner
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
@@ -74,19 +75,18 @@ fun SettingsScreen(
             Box(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
-                    .padding(start = Dimens.dp_16)
+                    .padding(start = Dimens.dp_8)
+                    .size(Dimens.dp_48)
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null
-                    ) {
-                        onBack()
-                    }
+                    ) { onBack() },
+                contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_back),
-                    contentDescription = "Back",
-                    tint = Color.Black,
-                    modifier = Modifier.size(Dimens.dp_28)
+                    painter = painterResource(R.drawable.ic_back_left),
+                    contentDescription = stringResource(id = R.string.detail_btn_back),
+                    tint = Color.Black
                 )
             }
             Text(
