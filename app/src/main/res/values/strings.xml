@@ -18,6 +18,8 @@
     <!-- Detail Screen Strings -->
     <string name="detail_title">Chi Tiết Nhận Diện</string>
     <string name="detail_btn_back">Back</string>
+    <string name="detail_taxonomy_header">CHI TIẾT PHÂN LOẠI</string>
+    <string name="detail_latin_name">Tên Latin</string>
     <string name="detail_confidence">Độ tin cậy</string>
     <string name="detail_danger_level">Mức độ nguy hại</string>
     <string name="detail_danger_high">Nguy hiểm</string>

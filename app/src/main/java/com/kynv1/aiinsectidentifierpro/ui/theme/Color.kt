@@ -32,3 +32,8 @@ val DeleteRed = Color(0xFFC62828)
 val LightMilkBackground = Color(0xFFF9FBF9)
 val LightCardBorder = Color(0xFFE8EFE8)
 val LightGreyBorder = Color(0xFFCCCCCC)
+
+// Chip Colors
+val ChipTextGreen = Color(0xFF3C6A00)
+val ChipBackgroundGreen = Color(0xFFE8F5E9)
+val ChipBorderGreen = Color(0xFFC2C9B5)
