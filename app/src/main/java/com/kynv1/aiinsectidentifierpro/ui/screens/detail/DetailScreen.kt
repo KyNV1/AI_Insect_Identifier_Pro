@@ -13,14 +13,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -48,17 +46,15 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.data.model.InsectInfo
-import com.kynv1.aiinsectidentifierpro.utils.Constants
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
-import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
-import com.kynv1.aiinsectidentifierpro.ui.theme.WarningOrange
-import com.kynv1.aiinsectidentifierpro.ui.theme.DangerRedBackground
-import com.kynv1.aiinsectidentifierpro.ui.theme.DangerRedBorder
-import com.kynv1.aiinsectidentifierpro.ui.theme.LightCardBorder
-import com.kynv1.aiinsectidentifierpro.ui.theme.LightMilkBackground
-import com.kynv1.aiinsectidentifierpro.ui.theme.ChipTextGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.ChipBackgroundGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.ChipBorderGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.ChipTextGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
+import com.kynv1.aiinsectidentifierpro.ui.theme.LightCardBorder
+import com.kynv1.aiinsectidentifierpro.ui.theme.LightMilkBackground
+import com.kynv1.aiinsectidentifierpro.ui.theme.WarningOrange
+import com.kynv1.aiinsectidentifierpro.utils.Constants
 
 @Composable
 fun DetailScreen(
@@ -148,21 +144,12 @@ fun DetailScreen(
                         modifier = Modifier
                             .fillMaxSize()
                             .verticalScroll(scrollState)
-                            .padding(horizontal = Dimens.dp_16, vertical = Dimens.dp_8)
+                            .padding(horizontal = Dimens.dp_16, vertical = Dimens.dp_8),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         SpecimenImageCard(imageUri = insect.imageUri)
                         TaxonomyDetailsCard(info = info)
-                        Spacer(modifier = Modifier.height(Dimens.dp_12))
                         DescriptionCard(description = info.description)
-                        if (info.characteristics.isNotEmpty()) {
-                            Spacer(modifier = Modifier.height(Dimens.dp_12))
-                            CharacteristicsCard(characteristics = info.characteristics)
-                        }
-                        if (info.dangerDescription.isNotBlank()) {
-                            Spacer(modifier = Modifier.height(Dimens.dp_12))
-                            SafetyWarningCard(dangerDescription = info.dangerDescription)
-                        }
-
                         Spacer(modifier = Modifier.height(Dimens.dp_24))
                     }
                 }
@@ -182,7 +169,6 @@ private fun SpecimenImageCard(
         colors = CardDefaults.cardColors(containerColor = Color.White),
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = Dimens.dp_8)
     ) {
         AsyncImage(
             model = imageUri,
@@ -207,7 +193,6 @@ private fun TaxonomyDetailsCard(
         colors = CardDefaults.cardColors(containerColor = Color.White),
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = Dimens.dp_8)
     ) {
         Column(
             modifier = Modifier.padding(Dimens.dp_20)
@@ -351,7 +336,6 @@ private fun DescriptionCard(
         colors = CardDefaults.cardColors(containerColor = Color.White),
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = Dimens.dp_8)
     ) {
         Column(
             modifier = Modifier.padding(Dimens.dp_20)
@@ -384,7 +368,6 @@ private fun CharacteristicsCard(
         colors = CardDefaults.cardColors(containerColor = Color.White),
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = Dimens.dp_8)
     ) {
         Column(
             modifier = Modifier.padding(Dimens.dp_20)
@@ -423,49 +406,6 @@ private fun CharacteristicsCard(
     }
 }
 
-@Composable
-private fun SafetyWarningCard(
-    dangerDescription: String,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        colors = CardDefaults.cardColors(
-            containerColor = DangerRedBackground
-        ),
-        shape = RoundedCornerShape(24.dp),
-        border = BorderStroke(Dimens.dp_1, DangerRedBorder),
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = Dimens.dp_8)
-    ) {
-        Row(
-            modifier = Modifier.padding(Dimens.dp_20),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.Default.Warning,
-                contentDescription = null,
-                tint = Color.Red,
-                modifier = Modifier.size(Dimens.dp_24)
-            )
-            Spacer(modifier = Modifier.width(Dimens.dp_16))
-            Column {
-                Text(
-                    text = stringResource(id = R.string.detail_safety_warning_header),
-                    color = Color.Red,
-                    fontSize = Dimens.sp_14,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = dangerDescription,
-                    color = Color.DarkGray,
-                    fontSize = Dimens.sp_12,
-                    modifier = Modifier.padding(top = Dimens.dp_4)
-                )
-            }
-        }
-    }
-}
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
