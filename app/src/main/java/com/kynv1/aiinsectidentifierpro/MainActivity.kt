@@ -159,22 +159,22 @@ fun MainAppScreen(onboardingStore: OnboardingStore) {
                 activity.enableEdgeToEdge(
                     statusBarStyle = if (isLightScreen) {
                         SystemBarStyle.light(
-                            android.graphics.Color.TRANSPARENT,
-                            android.graphics.Color.TRANSPARENT
+                            TRANSPARENT,
+                            TRANSPARENT
                         )
                     } else {
                         SystemBarStyle.dark(
-                            android.graphics.Color.TRANSPARENT
+                            TRANSPARENT
                         )
                     },
                     navigationBarStyle = if (isLightScreen) {
                         SystemBarStyle.light(
-                            android.graphics.Color.TRANSPARENT,
-                            android.graphics.Color.TRANSPARENT
+                            TRANSPARENT,
+                            TRANSPARENT
                         )
                     } else {
                         SystemBarStyle.dark(
-                            android.graphics.Color.TRANSPARENT
+                            TRANSPARENT
                         )
                     }
                 )
