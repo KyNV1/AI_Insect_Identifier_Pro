@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 import com.google.ai.client.generativeai.type.generationConfig
+import com.google.ai.client.generativeai.type.RequestOptions
 import com.kynv1.aiinsectidentifierpro.data.model.InsectInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -59,10 +60,11 @@ class GeminiServiceClient {
             """.trimIndent()
 
             val model = GenerativeModel(
-                modelName = "gemini-1.5-flash",
+                modelName = "gemini-2.5-flash",
                 apiKey = apiKey,
                 generationConfig = config,
-                systemInstruction = content { text(systemInstructionText) }
+                systemInstruction = content { text(systemInstructionText) },
+                requestOptions = RequestOptions(apiVersion = "v1beta")
             )
 
             val response = model.generateContent(
@@ -115,9 +117,10 @@ class GeminiServiceClient {
         try {
             val systemInstructionText = "You are an expert entomologist AI. Answer the user's questions about insects, spiders, bugs, or arthropods in a friendly, helpful, and highly detailed manner. Keep it concise but educational."
             val model = GenerativeModel(
-                modelName = "gemini-1.5-flash",
+                modelName = "gemini-2.5-flash",
                 apiKey = apiKey,
-                systemInstruction = content { text(systemInstructionText) }
+                systemInstruction = content { text(systemInstructionText) },
+                requestOptions = RequestOptions(apiVersion = "v1beta")
             )
             val response = model.generateContent(prompt)
             response.text ?: "No response from Gemini."
