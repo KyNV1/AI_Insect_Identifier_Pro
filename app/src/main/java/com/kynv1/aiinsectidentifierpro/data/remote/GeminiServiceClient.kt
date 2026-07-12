@@ -35,26 +35,26 @@ class GeminiServiceClient {
                 You are an expert entomologist AI. Identify the insect or bug in the provided image.
                 You MUST respond ONLY with a JSON object matching this schema:
                 {
-                  "commonName": "Tên tiếng Việt thông dụng (ví dụ: Ong mật, Bướm Monarch, Kiến lửa)",
+                  "commonName": "Common name (e.g. Honey Bee, Monarch Butterfly, Fire Ant)",
                   "scientificName": "Scientific name",
                   "confidence": 95, // Integer between 0 and 100 representing confidence percentage
-                  "description": "Mô tả ngắn gọn về loài, đặc trưng cơ bản",
-                  "characteristics": ["Đặc điểm nổi bật 1", "Đặc điểm nổi bật 2", "Đặc điểm nổi bật 3"],
-                  "habitat": "Môi trường sống của loài",
+                  "description": "A brief description of the species, its key features",
+                  "characteristics": ["Key feature 1", "Key feature 2", "Key feature 3"],
+                  "habitat": "Natural habitat of the species",
                   "dangerLevel": "Low" or "Medium" or "High",
-                  "dangerDescription": "Mô tả mức độ nguy hiểm đối với con người hoặc vật nuôi, cảnh báo nếu độc hoặc cắn"
+                  "dangerDescription": "Description of the danger to humans or pets, warnings if venomous, bites or stings"
                 }
                 Do not write any markdown code blocks, comments, or backticks wrapper, just return the raw JSON object.
                 If the image does not contain an insect, spider, bug, or any arthropod, return this exact JSON structure:
                 {
-                  "commonName": "Không nhận diện được",
+                  "commonName": "Unrecognized",
                   "scientificName": "None",
                   "confidence": 0,
-                  "description": "Hình ảnh này không chứa côn trùng hoặc sâu bọ có thể nhận diện.",
+                  "description": "This image does not contain an identifiable insect or bug.",
                   "characteristics": [],
-                  "habitat": "Không rõ",
+                  "habitat": "Unknown",
                   "dangerLevel": "Low",
-                  "dangerDescription": "Không có thông tin."
+                  "dangerDescription": "No information."
                 }
             """.trimIndent()
 

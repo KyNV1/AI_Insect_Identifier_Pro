@@ -3,6 +3,7 @@ package com.kynv1.aiinsectidentifierpro.ui.screens.assistance
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -106,18 +108,24 @@ fun AssistanceScreen(
                     .background(LightMilkBackground),
                 contentAlignment = Alignment.Center
             ) {
-                IconButton(
-                    onClick = onNavigateBack,
+                Box(
                     modifier = Modifier
                         .align(Alignment.CenterStart)
                         .padding(start = Dimens.dp_8)
+                        .size(Dimens.dp_48)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = null
+                        ) { onNavigateBack() },
+                    contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
+                        painter = painterResource(R.drawable.ic_back_left),
+                        contentDescription = stringResource(id = R.string.detail_btn_back),
                         tint = Color.Black
                     )
                 }
+
                 Text(
                     text = stringResource(id = R.string.assistance_title),
                     fontSize = Dimens.sp_18,

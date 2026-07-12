@@ -1,6 +1,7 @@
 package com.kynv1.aiinsectidentifierpro.ui.screens.settings
 
 import android.widget.Toast
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -35,12 +36,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.ui.screens.home.PremiumBanner
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
@@ -72,19 +75,18 @@ fun SettingsScreen(
             Box(
                 modifier = Modifier
                     .align(Alignment.CenterStart)
-                    .padding(start = Dimens.dp_16)
+                    .padding(start = Dimens.dp_8)
+                    .size(Dimens.dp_48)
                     .clickable(
                         interactionSource = remember { MutableInteractionSource() },
                         indication = null
-                    ) {
-                        onBack()
-                    }
+                    ) { onBack() },
+                contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_back),
-                    contentDescription = "Back",
-                    tint = Color.Black,
-                    modifier = Modifier.size(Dimens.dp_28)
+                    painter = painterResource(R.drawable.ic_back_left),
+                    contentDescription = stringResource(id = R.string.detail_btn_back),
+                    tint = Color.Black
                 )
             }
             Text(
@@ -121,7 +123,7 @@ fun SettingsScreen(
             ) {
                 Column {
                     SettingsRowItem(
-                        icon = Icons.Default.Star,
+                        icon = R.drawable.ic_star,
                         title = stringResource(id = R.string.settings_item_rate),
                         onClick = {
                             Toast.makeText(context, "Rate Us clicked", Toast.LENGTH_SHORT).show()
@@ -129,7 +131,7 @@ fun SettingsScreen(
                     )
                     HorizontalDivider(color = LightCardBorder, thickness = Dimens.dp_1)
                     SettingsRowItem(
-                        icon = Icons.Default.Share,
+                        icon = R.drawable.ic_share,
                         title = stringResource(id = R.string.settings_item_share),
                         onClick = {
                             Toast.makeText(context, "Share App clicked", Toast.LENGTH_SHORT).show()
@@ -137,7 +139,7 @@ fun SettingsScreen(
                     )
                     HorizontalDivider(color = LightCardBorder, thickness = Dimens.dp_1)
                     SettingsRowItem(
-                        icon = Icons.Default.Feedback,
+                        icon = R.drawable.ic_comment,
                         title = stringResource(id = R.string.settings_item_feedback),
                         onClick = {
                             Toast.makeText(context, "Contact Support clicked", Toast.LENGTH_SHORT)
@@ -161,7 +163,7 @@ fun SettingsScreen(
             ) {
                 Column {
                     SettingsRowItem(
-                        icon = Icons.Default.Article,
+                        icon = R.drawable.ic_description,
                         title = stringResource(id = R.string.settings_item_agreement),
                         onClick = {
                             Toast.makeText(context, "User Agreement clicked", Toast.LENGTH_SHORT)
@@ -170,7 +172,7 @@ fun SettingsScreen(
                     )
                     HorizontalDivider(color = LightCardBorder, thickness = Dimens.dp_1)
                     SettingsRowItem(
-                        icon = Icons.Default.Shield,
+                        icon = R.drawable.ic_security,
                         title = stringResource(id = R.string.settings_item_privacy),
                         onClick = {
                             Toast.makeText(context, "Privacy Policy clicked", Toast.LENGTH_SHORT)
@@ -199,7 +201,7 @@ fun SettingsSectionHeader(
 
 @Composable
 fun SettingsRowItem(
-    icon: ImageVector,
+    @DrawableRes icon: Int,
     title: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -215,7 +217,7 @@ fun SettingsRowItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            imageVector = icon,
+            painter = painterResource(icon),
             contentDescription = null,
             tint = ActiveGreen,
             modifier = Modifier.size(Dimens.dp_24)
@@ -229,7 +231,7 @@ fun SettingsRowItem(
             modifier = Modifier.weight(1f)
         )
         Icon(
-            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+            painter = painterResource(R.drawable.ic_back_right),
             contentDescription = null,
             tint = Color.Gray,
             modifier = Modifier.size(Dimens.dp_20)

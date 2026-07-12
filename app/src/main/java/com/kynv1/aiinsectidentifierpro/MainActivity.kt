@@ -1,11 +1,11 @@
 package com.kynv1.aiinsectidentifierpro
 
 import android.annotation.SuppressLint
+import android.graphics.Color.TRANSPARENT
 import android.os.Bundle
-import android.app.Activity
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.activity.SystemBarStyle
+import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -17,53 +17,54 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Outline
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.platform.LocalView
-import androidx.compose.runtime.SideEffect
-import androidx.core.view.WindowCompat
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -72,7 +73,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.kynv1.aiinsectidentifierpro.data.local.OnboardingStore
 import com.kynv1.aiinsectidentifierpro.ui.navigation.Screen
-import com.kynv1.aiinsectidentifierpro.utils.Constants
+import com.kynv1.aiinsectidentifierpro.ui.screens.assistance.AssistanceScreen
+import com.kynv1.aiinsectidentifierpro.ui.screens.assistance.AssistanceViewModel
 import com.kynv1.aiinsectidentifierpro.ui.screens.detail.DetailScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.detail.DetailViewModel
 import com.kynv1.aiinsectidentifierpro.ui.screens.history.HistoryScreen
@@ -81,24 +83,22 @@ import com.kynv1.aiinsectidentifierpro.ui.screens.home.HomeScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.home.HomeViewModel
 import com.kynv1.aiinsectidentifierpro.ui.screens.onboarding.OnboardingScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.onboarding.OnboardingViewModel
+import com.kynv1.aiinsectidentifierpro.ui.screens.premium.PaywallScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.scan.ScanScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.scan.ScanViewModel
+import com.kynv1.aiinsectidentifierpro.ui.screens.settings.SettingsScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.sound.SoundScanScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.splash.SplashScreen
-import com.kynv1.aiinsectidentifierpro.ui.screens.premium.PaywallScreen
-import com.kynv1.aiinsectidentifierpro.ui.screens.assistance.AssistanceScreen
-import com.kynv1.aiinsectidentifierpro.ui.screens.assistance.AssistanceViewModel
-import com.kynv1.aiinsectidentifierpro.ui.screens.settings.SettingsScreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.AIInsectIdentifierProTheme
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.ButtonGreen
-import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
-import com.kynv1.aiinsectidentifierpro.ui.theme.CardBorder
 import com.kynv1.aiinsectidentifierpro.ui.theme.DarkBackground
-import com.kynv1.aiinsectidentifierpro.ui.theme.DarkForestGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
 import com.kynv1.aiinsectidentifierpro.ui.theme.LightMilkBackground
+import com.kynv1.aiinsectidentifierpro.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import androidx.core.graphics.toColorInt
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -109,8 +109,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(
-            statusBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT),
-            navigationBarStyle = SystemBarStyle.dark(android.graphics.Color.TRANSPARENT)
+            statusBarStyle = SystemBarStyle.dark(TRANSPARENT),
+            navigationBarStyle = SystemBarStyle.dark(TRANSPARENT)
         )
         setContent {
             AIInsectIdentifierProTheme {
@@ -120,7 +120,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainAppScreen(onboardingStore: OnboardingStore) {
     val navController = rememberNavController()
@@ -141,15 +140,49 @@ fun MainAppScreen(onboardingStore: OnboardingStore) {
         }
     }
 
+    val isLightScreen = currentRoute == Screen.Home.route ||
+            currentRoute == Screen.History.route ||
+            currentRoute == Screen.Settings.route ||
+            currentRoute == Screen.Assistance.route ||
+            currentRoute?.startsWith("detail") == true
+
     val view = LocalView.current
     if (!view.isInEditMode) {
-        val window = (view.context as? Activity)?.window
-        if (window != null) {
-            val isLightScreen = currentRoute == Screen.Home.route || currentRoute == Screen.History.route
+        var context = view.context
+        while (context is android.content.ContextWrapper) {
+            if (context is ComponentActivity) break
+            context = context.baseContext
+        }
+        val activity = context as? ComponentActivity
+        if (activity != null) {
             SideEffect {
-                WindowCompat.getInsetsController(window, view).apply {
+                activity.enableEdgeToEdge(
+                    statusBarStyle = if (isLightScreen) {
+                        SystemBarStyle.light(
+                            TRANSPARENT,
+                            TRANSPARENT
+                        )
+                    } else {
+                        SystemBarStyle.dark(
+                            TRANSPARENT
+                        )
+                    },
+                    navigationBarStyle = if (isLightScreen) {
+                        SystemBarStyle.light(
+                            TRANSPARENT,
+                            TRANSPARENT
+                        )
+                    } else {
+                        SystemBarStyle.dark(
+                            TRANSPARENT
+                        )
+                    }
+                )
+                WindowCompat.getInsetsController(activity.window, view).apply {
                     isAppearanceLightStatusBars = isLightScreen
                     isAppearanceLightNavigationBars = isLightScreen
+                    hide(WindowInsetsCompat.Type.navigationBars())
+                    systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                 }
             }
         }
@@ -157,7 +190,7 @@ fun MainAppScreen(onboardingStore: OnboardingStore) {
     val startDestination = Screen.Splash.route
 
     Scaffold(
-        containerColor = if (currentRoute in tabRoutes) LightMilkBackground else DarkBackground,
+        containerColor = if (isLightScreen) LightMilkBackground else DarkBackground,
         bottomBar = {
             val showBottomBar = currentRoute in tabRoutes && stableRoute in tabRoutes
             if (showBottomBar) {

@@ -16,45 +16,47 @@
     <string name="onboarding_p4_card_desc">If you enjoy using our app, please show your support by leaving a 5-star rating on Google Play!</string>
 
     <!-- Detail Screen Strings -->
-    <string name="detail_title">Chi Tiết Nhận Diện</string>
+    <string name="detail_title">Details</string>
     <string name="detail_btn_back">Back</string>
-    <string name="detail_confidence">Độ tin cậy</string>
-    <string name="detail_danger_level">Mức độ nguy hại</string>
-    <string name="detail_danger_high">Nguy hiểm</string>
-    <string name="detail_danger_medium">Cảnh báo</string>
-    <string name="detail_danger_low">An toàn</string>
-    <string name="detail_description_header">Mô tả loài</string>
-    <string name="detail_characteristics_header">Đặc điểm nhận dạng</string>
-    <string name="detail_habitat_header">Môi trường sống</string>
-    <string name="detail_safety_warning_header">Lưu ý an toàn</string>
+    <string name="detail_taxonomy_header">TAXONOMY DETAILS</string>
+    <string name="detail_latin_name">Latin Name</string>
+    <string name="detail_confidence">Confidence</string>
+    <string name="detail_danger_level">Danger Level</string>
+    <string name="detail_danger_high">High</string>
+    <string name="detail_danger_medium">Warning</string>
+    <string name="detail_danger_low">Low</string>
+    <string name="detail_description_header">Description</string>
+    <string name="detail_characteristics_header">Characteristics</string>
+    <string name="detail_habitat_header">Habitat</string>
+    <string name="detail_safety_warning_header">Safety Warning</string>
 
     <!-- History Screen Strings -->
-    <string name="history_title">LỊCH SỬ QUÉT</string>
-    <string name="history_empty_title">Lịch sử trống</string>
-    <string name="history_empty_desc">Các loài côn trùng bạn đã quét sẽ xuất hiện ở đây để tiện xem lại sau.</string>
+    <string name="history_title">SCAN HISTORY</string>
+    <string name="history_empty_title">History is Empty</string>
+    <string name="history_empty_desc">Your scanned insect species will appear here for easy review later.</string>
     <string name="history_btn_delete_desc">Delete item</string>
-    <string name="history_item_confidence_format">%1$s  •  Độ tin cậy: %2$d%%</string>
+    <string name="history_item_confidence_format">%1$s  •  Confidence: %2$d%%</string>
 
     <!-- Scan Screen Strings -->
     <string name="scan_title">INSECT IDENTIFIER</string>
-    <string name="scan_subtitle">Chụp hoặc chọn ảnh côn trùng để nhận diện bằng AI</string>
-    <string name="scan_empty_title">Chưa chọn hình ảnh nào</string>
-    <string name="scan_empty_desc">Bấm chụp ảnh hoặc chọn ảnh từ máy để bắt đầu.</string>
-    <string name="scan_btn_take_photo">Chụp Ảnh</string>
-    <string name="scan_btn_gallery">Thư Viện</string>
-    <string name="scan_btn_identify">NHẬN DIỆN NGAY</string>
-    <string name="scan_loading_title">AI đang phân tích ảnh...</string>
-    <string name="scan_loading_desc">Mô hình Gemini 1.5 Flash đang nhận dạng côn trùng, vui lòng đợi trong giây lát.</string>
-    <string name="scan_error_title">Lỗi nhận diện</string>
-    <string name="scan_btn_close">Đóng</string>
+    <string name="scan_subtitle">Take or select an insect photo to identify with AI</string>
+    <string name="scan_empty_title">No image selected</string>
+    <string name="scan_empty_desc">Tap to take a photo or select an image from your device.</string>
+    <string name="scan_btn_take_photo">Take Photo</string>
+    <string name="scan_btn_gallery">Gallery</string>
+    <string name="scan_btn_identify">IDENTIFY NOW</string>
+    <string name="scan_loading_title">AI is analyzing image...</string>
+    <string name="scan_loading_desc">Gemini 1.5 Flash model is identifying the insect, please wait a moment.</string>
+    <string name="scan_error_title">Identification Error</string>
+    <string name="scan_btn_close">Close</string>
 
     <!-- General Errors -->
-    <string name="error_insect_not_found">Không tìm thấy thông tin côn trùng.</string>
-    <string name="error_load_failed_format">Lỗi tải dữ liệu: %1$s</string>
-    <string name="error_no_image_selected">Vui lòng chụp hoặc chọn một bức ảnh trước.</string>
-    <string name="error_cannot_read_image">Không thể đọc được file ảnh.</string>
-    <string name="error_gemini_no_response">Gemini không phản hồi hoặc trả về dữ liệu sai định dạng.</string>
-    <string name="error_occurred_format">Có lỗi xảy ra: %1$s</string>
+    <string name="error_insect_not_found">Insect information not found.</string>
+    <string name="error_load_failed_format">Data loading error: %1$s</string>
+    <string name="error_no_image_selected">Please take or select a photo first.</string>
+    <string name="error_cannot_read_image">Cannot read the image file.</string>
+    <string name="error_gemini_no_response">Gemini did not respond or returned invalid data format.</string>
+    <string name="error_occurred_format">An error occurred: %1$s</string>
 
     <!-- Splash Screen Strings -->
     <string name="splash_loading_text">Getting ready…</string>
