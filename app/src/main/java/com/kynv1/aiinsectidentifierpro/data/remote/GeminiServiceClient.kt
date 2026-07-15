@@ -60,7 +60,7 @@ class GeminiServiceClient {
             """.trimIndent()
 
             val model = GenerativeModel(
-                modelName = "gemini-2.5-flash",
+                modelName = "gemini-3.1-flash-lite",
                 apiKey = apiKey,
                 generationConfig = config,
                 systemInstruction = content { text(systemInstructionText) },
@@ -117,7 +117,7 @@ class GeminiServiceClient {
         try {
             val systemInstructionText = "You are an expert entomologist AI. Answer the user's questions about insects, spiders, bugs, or arthropods in a friendly, helpful, and highly detailed manner. Keep it concise but educational."
             val model = GenerativeModel(
-                modelName = "gemini-2.5-flash",
+                modelName = "gemini-3.1-flash-lite",
                 apiKey = apiKey,
                 systemInstruction = content { text(systemInstructionText) },
                 requestOptions = RequestOptions(apiVersion = "v1beta")
