@@ -1,5 +1,7 @@
 package com.kynv1.aiinsectidentifierpro.ui.screens.settings
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
@@ -51,6 +53,7 @@ import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
 import com.kynv1.aiinsectidentifierpro.ui.theme.LightCardBorder
 import com.kynv1.aiinsectidentifierpro.ui.theme.LightMilkBackground
 
+@SuppressLint("LocalContextGetResourceValueCall")
 @Composable
 fun SettingsScreen(
     onBack: () -> Unit,
@@ -134,7 +137,13 @@ fun SettingsScreen(
                         icon = R.drawable.ic_share,
                         title = stringResource(id = R.string.settings_item_share),
                         onClick = {
-                            Toast.makeText(context, "Share App clicked", Toast.LENGTH_SHORT).show()
+                            val appName = context.getString(R.string.app_name)
+                            val shareText = "Download $appName app: https://play.google.com/store/apps/details?id=${context.packageName}"
+                            val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                                type = "text/plain"
+                                putExtra(Intent.EXTRA_TEXT, shareText)
+                            }
+                            context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.settings_item_share)))
                         }
                     )
                     HorizontalDivider(color = LightCardBorder, thickness = Dimens.dp_1)
