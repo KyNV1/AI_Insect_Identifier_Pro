@@ -1,5 +1,7 @@
 package com.kynv1.aiinsectidentifierpro.ui.screens.settings
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
@@ -61,6 +63,7 @@ import com.kynv1.aiinsectidentifierpro.ui.theme.LightMilkBackground
 import com.kynv1.aiinsectidentifierpro.ui.theme.NatureGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.StarGold
 
+@SuppressLint("LocalContextGetResourceValueCall")
 @Composable
 fun SettingsScreen(
     onBack: () -> Unit,
@@ -93,10 +96,10 @@ fun SettingsScreen(
                     Toast.makeText(context, "Contact Support clicked", Toast.LENGTH_SHORT).show()
                 },
                 onAgreementClick = {
-                    Toast.makeText(context, "User Agreement clicked", Toast.LENGTH_SHORT).show()
+                    openUrl(context, context.getString(R.string.url_terms))
                 },
                 onPrivacyClick = {
-                    Toast.makeText(context, "Privacy Policy clicked", Toast.LENGTH_SHORT).show()
+                    openUrl(context, context.getString(R.string.url_privacy))
                 }
             )
         }
@@ -203,6 +206,10 @@ private fun SettingsSection(title: String, content: @Composable () -> Unit) {
 private fun openPlayStore(packageName: String, fallback: (String) -> Unit) {
     val url = "https://play.google.com/store/apps/details?id=$packageName"
     fallback(url)
+}
+
+private fun openUrl(context: Context, url: String) {
+    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
 }
 
 // ─── Rate App Dialog ──────────────────────────────────────────────────────────

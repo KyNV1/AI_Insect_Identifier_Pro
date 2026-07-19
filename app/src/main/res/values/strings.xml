@@ -143,4 +143,8 @@
     <string name="rate_dialog_btn_dismiss">No, thanks</string>
     <string name="rate_dialog_btn_confirm">Rate Now</string>
     <string name="rate_dialog_toast_feedback">Thanks for your feedback!</string>
+
+    <!-- Legal URLs — replace with your own Google Sites / website URLs -->
+    <string name="url_terms">https://sites.google.com/view/ai-insect-identifier-pro/terms</string>
+    <string name="url_privacy">https://sites.google.com/view/ai-insect-identifier-pro/privacy</string>
 </resources>
