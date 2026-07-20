@@ -1,6 +1,5 @@
 package com.kynv1.aiinsectidentifierpro
 
-import android.annotation.SuppressLint
 import android.graphics.Color.TRANSPARENT
 import android.os.Bundle
 import androidx.activity.ComponentActivity
