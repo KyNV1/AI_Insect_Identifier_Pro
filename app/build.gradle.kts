@@ -19,9 +19,20 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("release-key.jks")
+            storePassword = "123456"
+            keyAlias = "release-key"
+            keyPassword = "123456"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
+            isCrunchPngs = false
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -55,8 +66,8 @@ dependencies {
     // Navigation & Image Loading
     implementation(libs.androidx.navigation.compose)
     implementation(libs.coil.compose)
-    implementation("androidx.compose.material:material-icons-core")
-    implementation("androidx.compose.material:material-icons-extended")
+    implementation(libs.androidx.compose.material.icons.core)
+    implementation(libs.androidx.compose.material.icons.extended)
 
     // Gemini AI SDK
     implementation(libs.google.generativeai)
@@ -65,7 +76,13 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
-    compileOnly("com.google.errorprone:error_prone_annotations:2.28.0")
+    compileOnly(libs.error.prone.annotations)
+
+    // Google Play Billing
+    implementation(libs.billing)
+
+    // DataStore Preferences
+    implementation(libs.datastore.preferences)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -83,6 +83,7 @@ import com.kynv1.aiinsectidentifierpro.ui.screens.home.HomeViewModel
 import com.kynv1.aiinsectidentifierpro.ui.screens.onboarding.OnboardingScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.onboarding.OnboardingViewModel
 import com.kynv1.aiinsectidentifierpro.ui.screens.premium.PaywallScreen
+import com.kynv1.aiinsectidentifierpro.billing.BillingViewModel
 import com.kynv1.aiinsectidentifierpro.ui.screens.scan.ScanScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.scan.ScanViewModel
 import com.kynv1.aiinsectidentifierpro.ui.screens.settings.SettingsScreen
@@ -390,6 +391,7 @@ fun AppNavHost(
     detailViewModel: DetailViewModel = hiltViewModel(),
     onboardingViewModel: OnboardingViewModel = hiltViewModel(),
     assistanceViewModel: AssistanceViewModel = hiltViewModel(),
+    billingViewModel: BillingViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -405,13 +407,17 @@ fun AppNavHost(
             popExitTransition = { ExitTransition.None }
         ) {
             SplashScreen(
-                onboardingStore = onboardingStore,
                 onNavigateToOnboarding = {
                     navController.navigate(Screen.Onboarding.route) {
                         popUpTo(Screen.Splash.route) { inclusive = true }
                     }
                 },
-                onNavigateToScan = {
+                onNavigateToHome = {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Splash.route) { inclusive = true }
+                    }
+                },
+                onNavigateToPaywall = {
                     navController.navigate(Screen.Paywall.route) {
                         popUpTo(Screen.Splash.route) { inclusive = true }
                     }
@@ -468,7 +474,7 @@ fun AppNavHost(
             popExitTransition = { ExitTransition.None }
         ) {
             PaywallScreen(
-                homeViewModel = homeViewModel,
+                billingViewModel = billingViewModel,
                 onNavigateToHome = {
                     navController.navigate(Screen.Home.route) {
                         popUpTo(Screen.Paywall.route) { inclusive = true }

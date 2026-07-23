@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.kynv1.aiinsectidentifierpro.data.model.InsectShort
 import com.kynv1.aiinsectidentifierpro.data.model.HomeArticle
 import com.kynv1.aiinsectidentifierpro.data.repository.InsectRepository
+import com.kynv1.aiinsectidentifierpro.data.preferences.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,7 +26,8 @@ data class HomeUiState(
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: InsectRepository
+    private val repository: InsectRepository,
+    private val userPreferences: UserPreferences
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -33,6 +35,15 @@ class HomeViewModel @Inject constructor(
 
     init {
         loadInsects()
+        observePremiumStatus()
+    }
+
+    private fun observePremiumStatus() {
+        viewModelScope.launch {
+            userPreferences.isPremium.collect { isPremium ->
+                _uiState.value = _uiState.value.copy(isPremium = isPremium)
+            }
+        }
     }
 
     private fun loadInsects() {
@@ -61,6 +72,8 @@ class HomeViewModel @Inject constructor(
     }
 
     fun purchasePremium() {
-        _uiState.value = _uiState.value.copy(isPremium = true)
+        viewModelScope.launch {
+            userPreferences.setPremium(true)
+        }
     }
 }

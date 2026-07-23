@@ -1,6 +1,5 @@
 package com.kynv1.aiinsectidentifierpro.ui.screens.splash
 
-import android.window.SplashScreen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -31,16 +30,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.kynv1.aiinsectidentifierpro.R
-import com.kynv1.aiinsectidentifierpro.data.local.OnboardingStore
 import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
 import com.kynv1.aiinsectidentifierpro.ui.theme.NatureGreen
 
 @Composable
 fun SplashScreen(
-    onboardingStore: OnboardingStore,
+    splashViewModel: SplashViewModel = hiltViewModel(),
     onNavigateToOnboarding: () -> Unit,
-    onNavigateToScan: () -> Unit,
+    onNavigateToHome: () -> Unit,
+    onNavigateToPaywall: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var progress by remember { mutableStateOf(0f) }
@@ -54,10 +54,12 @@ fun SplashScreen(
             progress = i / 100f
         }
 
-        if (onboardingStore.isOnboardingCompleted()) {
-            onNavigateToScan()
-        } else {
-            onNavigateToOnboarding()
+        splashViewModel.determineNextDestination { destination ->
+            when (destination) {
+                SplashNextDestination.Onboarding -> onNavigateToOnboarding()
+                SplashNextDestination.Home -> onNavigateToHome()
+                SplashNextDestination.Paywall -> onNavigateToPaywall()
+            }
         }
     }
 
@@ -121,8 +123,8 @@ fun SplashScreen(
 @Composable
 private fun SplashScreenPreview() {
     SplashScreen(
-        onboardingStore = OnboardingStore(context = androidx.compose.ui.platform.LocalContext.current),
         onNavigateToOnboarding = {},
-        onNavigateToScan = {}
+        onNavigateToHome = {},
+        onNavigateToPaywall = {}
     )
-}
+}

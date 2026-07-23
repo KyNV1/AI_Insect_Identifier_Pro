@@ -1,5 +1,8 @@
 package com.kynv1.aiinsectidentifierpro.ui.screens.premium
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
@@ -7,6 +10,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Box
@@ -37,6 +41,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -62,8 +67,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kynv1.aiinsectidentifierpro.R
-import com.kynv1.aiinsectidentifierpro.ui.screens.home.HomeViewModel
+import com.kynv1.aiinsectidentifierpro.billing.BillingUiState
+import com.kynv1.aiinsectidentifierpro.billing.BillingViewModel
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.ButtonGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.DarkForestGreen
@@ -74,12 +81,42 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun PaywallScreen(
-    homeViewModel: HomeViewModel,
+    billingViewModel: BillingViewModel,
     onNavigateToHome: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     var selectedOption by remember { mutableIntStateOf(1) }
+
+    val productDetailsList by billingViewModel.productDetailsList.collectAsStateWithLifecycle()
+    val uiState by billingViewModel.uiState.collectAsStateWithLifecycle()
+
+    val weeklyProduct = productDetailsList.find { it.productId == "weekly_premium" }
+    val monthlyProduct = productDetailsList.find { it.productId == "monthly_premium" }
+    val yearlyProduct = productDetailsList.find { it.productId == "yearly_premium" }
+
+    val weeklyPrice = weeklyProduct?.subscriptionOfferDetails?.firstOrNull()?.pricingPhases?.pricingPhaseList?.firstOrNull()?.formattedPrice
+        ?: stringResource(id = R.string.paywall_weekly_price)
+
+    val monthlyPrice = monthlyProduct?.subscriptionOfferDetails?.firstOrNull()?.pricingPhases?.pricingPhaseList?.firstOrNull()?.formattedPrice
+        ?: stringResource(id = R.string.paywall_monthly_price)
+
+    val yearlyPrice = yearlyProduct?.subscriptionOfferDetails?.firstOrNull()?.pricingPhases?.pricingPhaseList?.firstOrNull()?.formattedPrice
+        ?: stringResource(id = R.string.paywall_yearly_price)
+
+    LaunchedEffect(uiState) {
+        when (uiState) {
+            is BillingUiState.Success -> {
+                Toast.makeText(context, "Premium active! Thank you!", Toast.LENGTH_LONG).show()
+                onNavigateToHome()
+            }
+            is BillingUiState.Error -> {
+                Toast.makeText(context, (uiState as BillingUiState.Error).message, Toast.LENGTH_LONG).show()
+                billingViewModel.clearError()
+            }
+            else -> {}
+        }
+    }
 
     val imageList = listOf(
         R.drawable.img_onboarding_green_beetle,
@@ -186,7 +223,7 @@ fun PaywallScreen(
                     ) {
                         VerticalPlanCard(
                             title = stringResource(id = R.string.paywall_weekly),
-                            price = stringResource(id = R.string.paywall_weekly_price),
+                            price = weeklyPrice,
                             subtext = stringResource(id = R.string.paywall_weekly_sub),
                             isSelected = selectedOption == 0,
                             onClick = { selectedOption = 0 }
@@ -194,7 +231,7 @@ fun PaywallScreen(
 
                         VerticalPlanCard(
                             title = stringResource(id = R.string.paywall_yearly),
-                            price = stringResource(id = R.string.paywall_yearly_price),
+                            price = yearlyPrice,
                             subtext = stringResource(id = R.string.paywall_yearly_sub),
                             isSelected = selectedOption == 1,
                             isHighlighted = true,
@@ -205,7 +242,7 @@ fun PaywallScreen(
 
                         VerticalPlanCard(
                             title = stringResource(id = R.string.paywall_monthly),
-                            price = stringResource(id = R.string.paywall_monthly_price),
+                            price = monthlyPrice,
                             subtext = stringResource(id = R.string.paywall_monthly_sub),
                             isSelected = selectedOption == 2,
                             onClick = { selectedOption = 2 }
@@ -227,19 +264,29 @@ fun PaywallScreen(
                                     )
                                 )
                             )
-                            .clickable {
-                                homeViewModel.purchasePremium()
-                                Toast.makeText(context, "Premium Active! Thank you!", Toast.LENGTH_LONG).show()
-                                onNavigateToHome()
+                            .clickable(enabled = uiState !is BillingUiState.Loading) {
+                                val activity = context as? Activity
+                                if (activity != null) {
+                                    val targetProductId = when (selectedOption) {
+                                        0 -> "weekly_premium"
+                                        2 -> "monthly_premium"
+                                        else -> "yearly_premium"
+                                    }
+                                    billingViewModel.launchPurchaseFlow(activity, targetProductId)
+                                }
                             },
                         contentAlignment = Alignment.Center
                     ) {
-                        Text(
-                            text = stringResource(id = R.string.paywall_continue).uppercase(),
-                            color = Color.White,
-                            fontSize = Dimens.sp_16,
-                            fontWeight = FontWeight.Bold
-                        )
+                        if (uiState is BillingUiState.Loading) {
+                            CircularProgressIndicator(color = Color.White, modifier = Modifier.size(Dimens.dp_24))
+                        } else {
+                            Text(
+                                text = stringResource(id = R.string.paywall_continue).uppercase(),
+                                color = Color.White,
+                                fontSize = Dimens.sp_16,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(Dimens.dp_12))
@@ -264,7 +311,8 @@ fun PaywallScreen(
                             textDecoration = TextDecoration.Underline,
                             modifier = Modifier
                                 .clickable {
-                                    //TODO: Open Terms of Service
+                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(context.getString(R.string.url_terms)))
+                                    context.startActivity(intent)
                                 }
                                 .padding(horizontal = Dimens.dp_8)
                         )
@@ -280,7 +328,8 @@ fun PaywallScreen(
                             textDecoration = TextDecoration.Underline,
                             modifier = Modifier
                                 .clickable {
-                                    //TODO: Open Privacy Policy
+                                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(context.getString(R.string.url_privacy)))
+                                    context.startActivity(intent)
                                 }
                                 .padding(horizontal = Dimens.dp_8)
                         )
