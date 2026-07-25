@@ -212,7 +212,6 @@ private fun openUrl(context: Context, url: String) {
     context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
 }
 
-// ─── Rate App Dialog ──────────────────────────────────────────────────────────
 
 @Composable
 fun RateAppDialog(

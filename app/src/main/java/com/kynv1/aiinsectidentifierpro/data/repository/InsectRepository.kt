@@ -24,35 +24,35 @@ class InsectRepository(
                 id = 10001L,
                 commonName = "Ash-black Slug",
                 scientificName = "Limax cinereoniger",
-                imageResId = R.drawable.img_onboarding_green_beetle,
+                imageResId = R.drawable.img_basic_ash_black_slug,
                 category = "Most Common"
             ),
             InsectShort(
                 id = 10002L,
                 commonName = "Black Oil Beetle",
                 scientificName = "Meloe proscarabaeus",
-                imageResId = R.drawable.img_onboarding_red_beetle,
+                imageResId = R.drawable.img_basic_black_oil_beetle,
                 category = "Most Common"
             ),
             InsectShort(
                 id = 10003L,
                 commonName = "Broom-tip Moth",
                 scientificName = "Chesias rufata",
-                imageResId = R.drawable.img_onboarding_atlas_moth,
+                imageResId = R.drawable.img_basic_broom_tip_moth,
                 category = "Most Common"
             ),
             InsectShort(
                 id = 10004L,
                 commonName = "Buffish Mining Bee",
                 scientificName = "Andrena fulva",
-                imageResId = R.drawable.img_onboarding_honey_bee,
+                imageResId = R.drawable.img_basic_buffish_mining_bee,
                 category = "Most Common"
             ),
             InsectShort(
                 id = 10005L,
                 commonName = "Common Wasp",
                 scientificName = "Vespula vulgaris",
-                imageResId = R.drawable.img_onboarding_honey_bee,
+                imageResId = R.drawable.img_basic_common_wasp,
                 category = "Most Common"
             ),
 
@@ -61,21 +61,21 @@ class InsectRepository(
                 id = 10006L,
                 commonName = "Brown-lipped Snail",
                 scientificName = "Cepaea nemoralis",
-                imageResId = R.drawable.img_onboarding_green_beetle,
+                imageResId = R.drawable.img_basic_brown_lipped_snail,
                 category = "Garden Insect"
             ),
             InsectShort(
                 id = 10007L,
                 commonName = "Black and red froghopper",
                 scientificName = "Cercopis vulnerata",
-                imageResId = R.drawable.img_onboarding_red_beetle,
+                imageResId = R.drawable.img_basic_black_red_froghopper,
                 category = "Garden Insect"
             ),
             InsectShort(
                 id = 10008L,
                 commonName = "The Sabre Wasp",
                 scientificName = "Rhyssa persuasoria",
-                imageResId = R.drawable.img_onboarding_atlas_moth,
+                imageResId = R.drawable.img_basic_sabre_wasp,
                 category = "Garden Insect"
             ),
             InsectShort(
@@ -89,7 +89,7 @@ class InsectRepository(
                 id = 10010L,
                 commonName = "Red Ladybug",
                 scientificName = "Harmonia axyridis",
-                imageResId = R.drawable.img_onboarding_red_beetle,
+                imageResId = R.drawable.img_basic_red_ladybug,
                 category = "Garden Insect"
             )
         )
@@ -100,87 +100,155 @@ class InsectRepository(
             // Fun Bug Facts
             HomeArticle(
                 id = 20001L,
-                title = "What? Now ticks can fly?!",
-                imageResId = R.drawable.img_onboarding_honey_bee,
+                commonName = "Deer Tick",
+                scientificName = "Ixodes scapularis",
+                imageResId = R.drawable.img_article_tick,
                 category = "Fun Bug Facts"
             ),
             HomeArticle(
                 id = 20002L,
-                title = "Where Do Termites Hide?",
-                imageResId = R.drawable.img_onboarding_red_beetle,
+                commonName = "Eastern Subterranean Termite",
+                scientificName = "Reticulitermes flavipes",
+                imageResId = R.drawable.img_article_termite,
                 category = "Fun Bug Facts"
             ),
             HomeArticle(
                 id = 20003L,
-                title = "What Do Pill Bugs Eat?",
-                imageResId = R.drawable.img_onboarding_green_beetle,
+                commonName = "Pill Bug",
+                scientificName = "Armadillidium vulgare",
+                imageResId = R.drawable.img_article_pill_bug,
+                category = "Fun Bug Facts"
+            ),
+            HomeArticle(
+                id = 20013L,
+                commonName = "Emperor Dragonfly",
+                scientificName = "Anax imperator",
+                imageResId = R.drawable.img_article_dragonfly,
+                category = "Fun Bug Facts"
+            ),
+            HomeArticle(
+                id = 20014L,
+                commonName = "Eastern Firefly",
+                scientificName = "Photinus pyralis",
+                imageResId = R.drawable.img_article_firefly,
                 category = "Fun Bug Facts"
             ),
 
             // Pest Control
             HomeArticle(
                 id = 20004L,
-                title = "How to Prevent Unwanted Kitchen Pests",
-                imageResId = R.drawable.img_onboarding_atlas_moth,
+                commonName = "German Cockroach",
+                scientificName = "Blattella germanica",
+                imageResId = R.drawable.img_article_kitchen_pest,
                 category = "Pest Control"
             ),
             HomeArticle(
                 id = 20005L,
-                title = "How to Get Rid of Boxelder Bugs",
-                imageResId = R.drawable.img_onboarding_honey_bee,
+                commonName = "Boxelder Bug",
+                scientificName = "Boisea trivittata",
+                imageResId = R.drawable.img_article_boxelder_bug,
                 category = "Pest Control"
             ),
             HomeArticle(
                 id = 20006L,
-                title = "How to Get Rid of Mice",
-                imageResId = R.drawable.img_onboarding_red_beetle,
+                commonName = "House Mouse",
+                scientificName = "Mus musculus",
+                imageResId = R.drawable.img_article_mouse,
+                category = "Pest Control"
+            ),
+            HomeArticle(
+                id = 20015L,
+                commonName = "Common Bed Bug",
+                scientificName = "Cimex lectularius",
+                imageResId = R.drawable.img_article_bed_bug,
+                category = "Pest Control"
+            ),
+            HomeArticle(
+                id = 20016L,
+                commonName = "House Fly",
+                scientificName = "Musca domestica",
+                imageResId = R.drawable.img_article_house_fly,
                 category = "Pest Control"
             ),
 
             // Bug Bite Help
             HomeArticle(
                 id = 20007L,
-                title = "How to Treat a Spider Bite",
-                imageResId = R.drawable.img_onboarding_green_beetle,
+                commonName = "Black Widow Spider",
+                scientificName = "Latrodectus mactans",
+                imageResId = R.drawable.img_article_spider_bite,
                 category = "Bug Bite Help"
             ),
             HomeArticle(
                 id = 20008L,
-                title = "Tips for Treating Insect Stings",
-                imageResId = R.drawable.img_onboarding_atlas_moth,
+                commonName = "Common Wasp",
+                scientificName = "Vespula vulgaris",
+                imageResId = R.drawable.img_article_wasp_sting,
                 category = "Bug Bite Help"
             ),
             HomeArticle(
                 id = 20009L,
-                title = "Flea Bites",
-                imageResId = R.drawable.img_onboarding_honey_bee,
+                commonName = "Cat Flea",
+                scientificName = "Ctenocephalides felis",
+                imageResId = R.drawable.img_article_flea,
+                category = "Bug Bite Help"
+            ),
+            HomeArticle(
+                id = 20017L,
+                commonName = "Yellow Fever Mosquito",
+                scientificName = "Aedes aegypti",
+                imageResId = R.drawable.img_article_mosquito,
+                category = "Bug Bite Help"
+            ),
+            HomeArticle(
+                id = 20018L,
+                commonName = "Giant Centipede",
+                scientificName = "Scolopendra subspinipes",
+                imageResId = R.drawable.img_article_centipede,
                 category = "Bug Bite Help"
             ),
 
             // Remarkable Collection
             HomeArticle(
                 id = 20010L,
-                title = "Creating an Insect Collection",
-                imageResId = R.drawable.img_onboarding_red_beetle,
+                commonName = "Stag Beetle",
+                scientificName = "Lucanus cervus",
+                imageResId = R.drawable.img_article_insect_collection,
                 category = "Remarkable Collection"
             ),
             HomeArticle(
                 id = 20011L,
-                title = "The John Landy Butterfly Collection",
-                imageResId = R.drawable.img_onboarding_green_beetle,
+                commonName = "Monarch Butterfly",
+                scientificName = "Danaus plexippus",
+                imageResId = R.drawable.img_article_butterfly_collection,
                 category = "Remarkable Collection"
             ),
             HomeArticle(
                 id = 20012L,
-                title = "The Scott Sisters Collection",
-                imageResId = R.drawable.img_onboarding_atlas_moth,
+                commonName = "Atlas Moth",
+                scientificName = "Attacus atlas",
+                imageResId = R.drawable.img_article_insect_collection,
+                category = "Remarkable Collection"
+            ),
+            HomeArticle(
+                id = 20019L,
+                commonName = "Luna Moth",
+                scientificName = "Actias luna",
+                imageResId = R.drawable.img_article_luna_moth,
+                category = "Remarkable Collection"
+            ),
+            HomeArticle(
+                id = 20020L,
+                commonName = "Orchid Mantis",
+                scientificName = "Hymenopus coronatus",
+                imageResId = R.drawable.img_article_orchid_mantis,
                 category = "Remarkable Collection"
             )
         )
     }
 
     suspend fun getInsectById(id: Long): InsectEntity? {
-        if (id in 10001L..10010L || id in 20001L..20012L) {
+        if (id in 10001L..10010L || id in 20001L..20020L) {
             return getStaticInsectEntity(id)
         }
         return insectDao.getInsectById(id)
@@ -191,11 +259,11 @@ class InsectRepository(
         return when (id) {
             10001L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_green_beetle}",
+                imageUri = "android.resource://$packageName/${R.drawable.img_basic_ash_black_slug}",
                 commonName = "Ash-black Slug",
                 scientificName = "Limax cinereoniger",
                 confidence = 97,
-                description = "The ash-black slug (Limax cinereoniger) is the largest species of land slug in the world. It is an air-breathing land gastropod mollusk in the family Limacidae.",
+                description = "The ash-black slug (Limax cinereoniger) is the largest species of land slug in the world, with mature specimens often reaching lengths of up to 20 cm or more. Characterized by its dark, ash-grey to black coloration with a pale keel running down its back, this massive gastropod is native to European woodland ecosystems.\n\nUnlike many common garden slugs, the ash-black slug is primarily a forest dweller. It feeds on wild fungi, lichen, moss, and decaying plant matter, which makes it an essential species for nutrient cycling and forest decomposition processes.\n\nTo survive dry conditions, these slugs secrete a thick protective slime coat and remain hidden under rotting logs or leaf litter during the daytime, coming out to forage only in cool, humid night conditions.",
                 characteristicsJson = JSONArray(listOf("Largest land slug", "Air-breathing", "Feeds on fungi and algae")).toString(),
                 habitat = "Old coniferous and deciduous forests",
                 dangerLevel = "Low",
@@ -204,11 +272,11 @@ class InsectRepository(
             )
             10002L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_red_beetle}",
+                imageUri = "android.resource://$packageName/${R.drawable.img_basic_black_oil_beetle}",
                 commonName = "Black Oil Beetle",
                 scientificName = "Meloe proscarabaeus",
                 confidence = 94,
-                description = "The black oil beetle (Meloe proscarabaeus) is a species of oil beetle. It has a large, soft body and can secrete oily droplets of hemolymph containing cantharidin when threatened.",
+                description = "The black oil beetle (Meloe proscarabaeus) is a unique, flightless beetle species native to Europe. It has a distinctive bulbous, soft abdomen that is much larger than its wings, giving it an oil-like, glossy black sheen. When threatened, they exhibit a defense mechanism known as reflexive bleeding, secreting oily droplets of hemolymph from their leg joints containing cantharidin.\n\nTheir life cycle is highly complex and parasitic. Female beetles lay thousands of eggs in the soil. The newly hatched triungulin larvae climb wildflowers and cling to visiting solitary ground bees. Once inside the bee's nest, the triungulin consumes the bee's eggs and stored honey, transforming into a grub-like larva before pupating.\n\nBecause cantharidin is a potent toxin that causes painful blisters on human skin, it is strongly advised to observe these beetles without handling them.",
                 characteristicsJson = JSONArray(listOf("Secretes oily hemolymph", "Parasitic larvae", "Flightless beetle")).toString(),
                 habitat = "Grassy areas, woodlands, and flower fields",
                 dangerLevel = "Medium",
@@ -217,11 +285,11 @@ class InsectRepository(
             )
             10003L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_atlas_moth}",
+                imageUri = "android.resource://$packageName/${R.drawable.img_basic_broom_tip_moth}",
                 commonName = "Broom-tip Moth",
                 scientificName = "Chesias rufata",
                 confidence = 96,
-                description = "The broom-tip (Chesias rufata) is a moth of the family Geometridae. The species is found throughout Europe and North Africa, and its larvae feed primarily on broom plants.",
+                description = "The broom-tip moth (Chesias rufata) is a small nocturnal moth belonging to the family Geometridae. Found throughout Europe and North Africa, adults are characterized by their beautifully camouflaged grey-brown wings with intricate vertical line markings that mimic tree bark and plant stems.\n\nThe larvae (caterpillars) feed almost exclusively on the leaves and tender green stems of broom shrubs (Cytisus scoparius) and other related plants, making them highly dependent on healthy heathland and sand dune habitats.\n\nAdults are active from late spring to mid-summer, flying primarily at night and hiding perfectly flat against wooden fences or branches during the daytime to escape birds and other predators.",
                 characteristicsJson = JSONArray(listOf("Night-flying", "Camouflaged wings", "Feeds on broom shrubs")).toString(),
                 habitat = "Heathlands, sandy hills, and dry valleys",
                 dangerLevel = "Low",
@@ -230,11 +298,11 @@ class InsectRepository(
             )
             10004L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_honey_bee}",
+                imageUri = "android.resource://$packageName/${R.drawable.img_basic_buffish_mining_bee}",
                 commonName = "Buffish Mining Bee",
                 scientificName = "Andrena fulva",
                 confidence = 95,
-                description = "The tawny mining bee (Andrena fulva) is a common European species of mining bee. They are solitary bees, nesting in small tunnels dug directly into lawns and garden soils.",
+                description = "The tawny mining bee (Andrena fulva), also known as the buffish mining bee, is a common and distinctive European solitary bee. Females are easily recognized by their dense, bright reddish-orange coat on their thorax and abdomen, which mimics the appearance of tiny bumblebees.\n\nAs solitary bees, they do not live in hives. Instead, fertilized females dig individual nesting burrows directly into lawns, pathways, and loose garden soil, leaving characteristic small mounds of soil resembling miniature volcanoes. They provision each underground cell with a ball of pollen and nectar for their developing larvae.\n\nThese bees are completely non-aggressive and lack the colony-defense reflex of social wasps or honey bees, making them excellent, safe pollinators for backyard gardens and orchards.",
                 characteristicsJson = JSONArray(listOf("Solitary nester", "Tawny orange coat", "Excellent pollinator")).toString(),
                 habitat = "Gardens, parks, lawns, and meadows",
                 dangerLevel = "Low",
@@ -243,11 +311,11 @@ class InsectRepository(
             )
             10005L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_honey_bee}",
+                imageUri = "android.resource://$packageName/${R.drawable.img_basic_common_wasp}",
                 commonName = "Common Wasp",
                 scientificName = "Vespula vulgaris",
                 confidence = 98,
-                description = "The common wasp (Vespula vulgaris) is a social wasp species found in the Northern Hemisphere. They live in large colonies with a queen and worker wasps, nesting underground or in cavities.",
+                description = "The common wasp (Vespula vulgaris) is a social insect species widespread across the temperate regions of the Northern Hemisphere. They live in highly structured annual colonies consisting of a queen, male drones, and sterile female workers. Their paper-like nests are constructed from chewed wood fibers mixed with saliva, typically hidden underground or in hollow cavities.\n\nDuring the spring and summer, wasps are active predators. They hunt caterpillars, flies, and other garden pests to feed protein to their developing larvae, serving as a natural form of pest control. In late summer, when the queen stops laying eggs and workers no longer receive sweet secretions from the larvae, they actively seek alternative sugary food sources, leading to conflicts with humans.\n\nUnlike honey bees, wasps can sting repeatedly. Their stings are painful and contain venom that can cause severe, life-threatening allergic reactions in sensitive individuals.",
                 characteristicsJson = JSONArray(listOf("Social insect", "Paper-like nests", "Predatory on pests")).toString(),
                 habitat = "Woodlands, gardens, orchards, and urban areas",
                 dangerLevel = "High",
@@ -256,11 +324,11 @@ class InsectRepository(
             )
             10006L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_green_beetle}",
+                imageUri = "android.resource://$packageName/${R.drawable.img_basic_brown_lipped_snail}",
                 commonName = "Brown-lipped Snail",
                 scientificName = "Cepaea nemoralis",
                 confidence = 93,
-                description = "The brown-lipped snail (Cepaea nemoralis) is a highly variable land snail. It is one of the most common species of land snails in Europe and has been introduced to North America.",
+                description = "The brown-lipped snail (Cepaea nemoralis), also known as the grove snail, is one of the most common and widely distributed species of land snails in Europe and North America. It is famous for its extreme polymorphism, meaning its shells come in a vast range of colors (yellow, pink, brown) and bands (ranging from zero to five dark spiral bands).\n\nThe snail's name comes from the dark brown lip at the rim of its shell opening in mature adults. They feed primarily on decaying plant matter, algae, and lichens, helping recycle organic material back into the soil, though they may occasionally nibble on young garden seedlings.\n\nTheir varied shell colors are a classic study in evolutionary biology, as their visual appearance protects them from thrushes and other predators depending on the background habitat they inhabit.",
                 characteristicsJson = JSONArray(listOf("Variable shell color", "Dark brown lip rim", "Herbivorous diet")).toString(),
                 habitat = "Gardens, sand dunes, and hedgerows",
                 dangerLevel = "Low",
@@ -269,11 +337,11 @@ class InsectRepository(
             )
             10007L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_red_beetle}",
+                imageUri = "android.resource://$packageName/${R.drawable.img_basic_black_red_froghopper}",
                 commonName = "Black and red froghopper",
                 scientificName = "Cercopis vulnerata",
                 confidence = 95,
-                description = "The red-and-black froghopper (Cercopis vulnerata) is a species of froghopper common in Europe. It is easily recognized by its bold black and red warning coloration.",
+                description = "The red-and-black froghopper (Cercopis vulnerata) is a small, striking insect native to Europe. Easily recognized by its bold black body decorated with three bright red warning spots, it utilizes this contrast (aposematism) to warn birds and other predators that it is foul-tasting.\n\nAs nymphs, froghoppers live inside a protective mass of white, frothy spit-like bubbles, often referred to as 'cuckoo spit,' which they secrete from their alimentary canal. This foam insulates their soft bodies from extreme temperatures and keeps them moist while hiding them from predators.\n\nAdults feed on plant sap using their specialized piercing-sucking mouthparts. They are famous for their powerful hind legs, which allow them to jump immense heights when disturbed.",
                 characteristicsJson = JSONArray(listOf("Bold warning colors", "Nymphs make spit-like nests", "Herbivorous sap sucker")).toString(),
                 habitat = "Grassy meadows, forest edges, and gardens",
                 dangerLevel = "Low",
@@ -282,11 +350,11 @@ class InsectRepository(
             )
             10008L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_atlas_moth}",
+                imageUri = "android.resource://$packageName/${R.drawable.img_basic_sabre_wasp}",
                 commonName = "The Sabre Wasp",
                 scientificName = "Rhyssa persuasoria",
                 confidence = 96,
-                description = "The sabre wasp (Rhyssa persuasoria) is one of the largest ichneumon wasps in Europe. The female has an exceptionally long ovipositor, resembling a sabre, used to lay eggs on larvae inside wood.",
+                description = "The sabre wasp (Rhyssa persuasoria) is one of the largest and most impressive species of ichneumonid wasps in Europe. The females possess an exceptionally long, needle-like ovipositor (which resembles a sabre or stinger) that can be longer than their actual body.\n\nDespite its menacing appearance, this structure is not a stinger and cannot harm humans. Instead, the female wasp uses it to drill deep into solid tree trunks to deposit eggs directly onto the larvae of wood-boring horntail wasps or beetles hidden inside.\n\nThey have an incredibly sensitive sense of smell, allowing them to detect the vibrations and scent of host larvae through inches of solid wood, making them crucial regulators of forest timber pests.",
                 characteristicsJson = JSONArray(listOf("Extremely long ovipositor", "Parasitic behavior", "Harmless to humans")).toString(),
                 habitat = "Coniferous forests and woodlands",
                 dangerLevel = "Low",
@@ -299,7 +367,7 @@ class InsectRepository(
                 commonName = "Honey Bee",
                 scientificName = "Apis mellifera",
                 confidence = 98,
-                description = "The western honey bee or European honey bee (Apis mellifera) is the most common of the 7-12 species of honey bees worldwide. They are highly social insects living in colonies.",
+                description = "The western honey bee (Apis mellifera) is a highly social insect species globally valued for its agricultural importance. They live in large, permanent colonies comprising a single reproductive queen, thousands of sterile female workers, and male drones. They are famous for their ability to construct wax combs and produce sweet honey from flower nectar.\n\nHoney bees are among the most critical pollinators on Earth, responsible for fertilizing one-third of the food crops consumed by humans. They communicate the location of rich flower patches to hive-mates using an extraordinary 'waggle dance' that conveys distance and direction relative to the sun.\n\nWhile workers possess a venomous stinger to defend the hive, they are generally gentle and will only sting as a last resort, as the stinger's barbs pull out of their bodies, causing them to die shortly after stinging.",
                 characteristicsJson = JSONArray(listOf("Social insect", "Produces honey", "Important pollinator")).toString(),
                 habitat = "Gardens, woodlands, orchards, and meadows",
                 dangerLevel = "Low",
@@ -308,11 +376,11 @@ class InsectRepository(
             )
             10010L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_red_beetle}",
+                imageUri = "android.resource://$packageName/${R.drawable.img_basic_red_ladybug}",
                 commonName = "Red Ladybug",
                 scientificName = "Harmonia axyridis",
                 confidence = 95,
-                description = "The Asian ladybeetle (Harmonia axyridis) is a large coccinellid beetle. It is one of the most variable species in the world, with an exceptionally wide range of color forms.",
+                description = "The Asian ladybeetle (Harmonia axyridis), commonly known as the red ladybug or harlequin ladybird, is a highly variable beetle species native to eastern Asia. It is famous for its extreme color variations, ranging from pale yellow to bright red, and containing anywhere from zero to over twenty black spots.\n\nThese ladybugs are voracious predators of soft-bodied garden pests like aphids and scale insects, making them highly beneficial for natural agriculture. However, in late autumn, they can become a household nuisance as they gather in massive numbers on sunny exterior walls and find pathways inside homes to hibernate.\n\nWhen threatened, they can bite slightly and release a smelly yellow fluid (reflex bleeding) that can stain fabrics and cause allergic reactions in some people.",
                 characteristicsJson = JSONArray(listOf("Voracious predator of aphids", "Variable coloration", "Can aggregate in large numbers")).toString(),
                 habitat = "Agricultural fields, gardens, and forests",
                 dangerLevel = "Low",
@@ -322,158 +390,262 @@ class InsectRepository(
             // Articles Mapping
             20001L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_honey_bee}",
-                commonName = "What? Now ticks can fly?!",
-                scientificName = "Fun Bug Facts",
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_tick}",
+                commonName = "Deer Tick",
+                scientificName = "Ixodes scapularis",
                 confidence = 100,
-                description = "Recent entomological studies have debunked the myth that ticks are completely ground-bound. While they don't possess wings, they can use wind currents or electrostatic forces to glide over short distances.",
-                characteristicsJson = JSONArray(listOf("No wings", "Electrostatic gliding", "Wind assistance")).toString(),
-                habitat = "Tall grass, shrubs, and wind currents",
-                dangerLevel = "Info",
-                dangerDescription = "Informational article. Always verify tick bites with a physician.",
+                description = "The deer tick (Ixodes scapularis), also known as the black-legged tick, is a hard-bodied tick native to North America. Ticks are small, parasitic arachnids that feed on the blood of birds and mammals, including humans, to survive and reproduce.\n\nTicks do not jump or fly. Instead, they climb to the tips of grasses and shrubs and wait with their front legs extended—a behavior called 'questing'—until a suitable host brushes past, allowing them to latch on.\n\nDeer ticks are highly notorious because they are the primary vector for Borrelia burgdorferi, the bacterium that causes Lyme disease in humans and pets. Their bites are usually painless, so checking for ticks after outdoor activities in wooded areas is highly recommended.",
+                characteristicsJson = JSONArray(listOf("Blood-feeding parasite", "Eight-legged arachnid", "Vector of Lyme disease")).toString(),
+                habitat = "Deciduous forests, tall grasses, brushy areas, and leaf litter",
+                dangerLevel = "High",
+                dangerDescription = "Highly dangerous vector for Lyme disease, Anaplasmosis, and Babesiosis through its bites.",
                 timestamp = System.currentTimeMillis()
             )
             20002L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_red_beetle}",
-                commonName = "Where Do Termites Hide?",
-                scientificName = "Fun Bug Facts",
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_termite}",
+                commonName = "Eastern Subterranean Termite",
+                scientificName = "Reticulitermes flavipes",
                 confidence = 100,
-                description = "Termites are masters of stealth. They build underground colonies, nests inside walls, or deep inside decaying wood, making them extremely hard to detect until structural damage is done.",
-                characteristicsJson = JSONArray(listOf("Underground nests", "Stealthy behavior", "Cellulose eaters")).toString(),
-                habitat = "Decaying wood, structural foundations",
-                dangerLevel = "Info",
-                dangerDescription = "Informational guide about termite nesting habits.",
+                description = "The Eastern subterranean termite is the most common and widely distributed termite in North America. They are highly social, wood-destroying insects that feed on cellulose and build extensive underground tunnels.\n\nSubterranean termites live in massive colonies underground, comprising a king, queen, soldiers, and workers. Because they require moisture to survive, they construct protective mud tubes (mud shelter tunnels) along foundation walls to travel between the soil and wood sources above ground.\n\nWhile they play a vital ecological role in breaking down dead trees in forests, they are extremely destructive to homes, causing billions of dollars in structural damage annually by chewing through structural timber, drywall, and wooden framing.",
+                characteristicsJson = JSONArray(listOf("Social colony insects", "Feeds on cellulose/wood", "Builds mud shelter tubes")).toString(),
+                habitat = "Soil, damp wood, tree stumps, and house foundations",
+                dangerLevel = "Medium",
+                dangerDescription = "Harmless to humans physically, but causes severe and costly structural damage to wood.",
                 timestamp = System.currentTimeMillis()
             )
             20003L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_green_beetle}",
-                commonName = "What Do Pill Bugs Eat?",
-                scientificName = "Fun Bug Facts",
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_pill_bug}",
+                commonName = "Pill Bug",
+                scientificName = "Armadillidium vulgare",
                 confidence = 100,
-                description = "Pill bugs (also known as roly-polies) are actually terrestrial isopods, not insects! They decompose dead plant matter, recycling vital nutrients back into the soil.",
-                characteristicsJson = JSONArray(listOf("Terrestrial crustacean", "Decomposers", "Roll into a ball")).toString(),
-                habitat = "Moist soil, organic leaf litter",
-                dangerLevel = "Info",
-                dangerDescription = "Informational guide about pill bug diet and ecosystems.",
+                description = "Also known as roly-polies, pill bugs are terrestrial isopods (a type of crustacean, not actual insects). They are famous for their ability to roll into a tight ball when threatened. They are decomposers that eat organic leaf litter.\n\nPill bugs require a moist environment to survive because they breathe through gill-like structures on their undersides. They are primarily nocturnal and feed on decaying leaves, wood, and organic garden debris, playing an essential role in recycling nutrients back into the soil.\n\nBecause they do not bite, sting, or carry diseases, they are completely harmless to humans and are frequently studied in classrooms as a friendly introduction to ecology.",
+                characteristicsJson = JSONArray(listOf("Terrestrial crustacean", "Rolls into a ball", "Ecosystem decomposer")).toString(),
+                habitat = "Moist organic soils, under stones, rotting wood, and leaf piles",
+                dangerLevel = "Low",
+                dangerDescription = "Completely harmless to humans and pets, beneficial for soil health.",
                 timestamp = System.currentTimeMillis()
             )
             20004L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_atlas_moth}",
-                commonName = "How to Prevent Unwanted Kitchen Pests",
-                scientificName = "Pest Control",
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_kitchen_pest}",
+                commonName = "German Cockroach",
+                scientificName = "Blattella germanica",
                 confidence = 100,
-                description = "Prevention is key. Keep food sealed in airtight containers, sweep crumbs daily, keep sinks dry, and seal any cracks under doors or windows.",
-                characteristicsJson = JSONArray(listOf("Food hygiene", "Seal entry points", "Airtight storage")).toString(),
-                habitat = "Kitchens, pantries, food storage areas",
-                dangerLevel = "Info",
-                dangerDescription = "Actionable strategies for home pest prevention.",
+                description = "The German cockroach is a small, highly resilient species of cockroach. It is a major global household pest that reproduces rapidly and is closely associated with human habitats, especially food storage areas.\n\nThey have a flat, light-brown body with two dark parallel stripes running down their pronotum. Being nocturnal, they hide in dark, warm, and humid crevices during the day, coming out at night to search for food scraps, grease, and moisture.\n\nGerman cockroaches are a serious health hazard. They carry bacteria like Salmonella on their bodies, contaminate food, and release proteins in their droppings and outer skins that can trigger severe allergies or asthma attacks in children.",
+                characteristicsJson = JSONArray(listOf("Flat, light-brown body", "Nocturnal activity", "Fast running ability")).toString(),
+                habitat = "Kitchens, bathrooms, pantries, and warm crevices",
+                dangerLevel = "Medium",
+                dangerDescription = "Can contaminate food with bacteria and trigger allergies or asthma through droppings.",
                 timestamp = System.currentTimeMillis()
             )
             20005L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_honey_bee}",
-                commonName = "How to Get Rid of Boxelder Bugs",
-                scientificName = "Pest Control",
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_boxelder_bug}",
+                commonName = "Boxelder Bug",
+                scientificName = "Boisea trivittata",
                 confidence = 100,
-                description = "Use soapy water sprays, vacuum any indoor bugs directly, and apply natural deterrents like diatomaceous earth around entryways.",
-                characteristicsJson = JSONArray(listOf("Soapy water spray", "Physical removal", "Diatomaceous earth")).toString(),
-                habitat = "Windows, entryways, sunny walls",
-                dangerLevel = "Info",
-                dangerDescription = "Safe and organic ways to manage Boxelder bug infestations.",
+                description = "Boxelder bugs are true bugs native to North America, easily identified by their black bodies with bright orange-red markings. They feed on seeds of boxelder, maple, and ash trees, and congregate on sunny walls in autumn.\n\nThey feed by using their specialized piercing-sucking mouthparts to puncture seeds and soft plant tissue, drawing out vital nutrients. While they can feed on boxelder and maple seeds, they rarely cause significant damage to the trees themselves.\n\nIn autumn, they look for warm crevices to hibernate, often entering homes through cracks around windows and doors. While they do not bite or carry diseases, their sheer numbers can be a nuisance, and they release a foul odor when crushed.",
+                characteristicsJson = JSONArray(listOf("Black with red accents", "Piercing-sucking mouth", "Aggregates for warmth")).toString(),
+                habitat = "Boxelder and maple trees, sunny building walls, and indoor spaces",
+                dangerLevel = "Low",
+                dangerDescription = "Harmless to humans, though their droppings can stain fabrics and they emit an odor when crushed.",
                 timestamp = System.currentTimeMillis()
             )
             20006L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_red_beetle}",
-                commonName = "How to Get Rid of Mice",
-                scientificName = "Pest Control",
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_mouse}",
+                commonName = "House Mouse",
+                scientificName = "Mus musculus",
                 confidence = 100,
-                description = "Keep food sources closed, set humane traps, plug holes with steel wool (which mice cannot chew through), and use natural repellents like peppermint oil.",
-                characteristicsJson = JSONArray(listOf("Steel wool plugs", "Humane traps", "Peppermint oil scent")).toString(),
-                habitat = "Basements, attics, wall crevices",
-                dangerLevel = "Info",
-                dangerDescription = "Effective home mouse control guide.",
+                description = "The house mouse is a small rodent characterized by a pointed snout, large rounded ears, and a long scaly tail. It is a highly adaptable mammal that lives in close association with humans, feeding on grains and food scraps.\n\nHouse mice are nocturnal and possess an incredible sense of smell, hearing, and touch. They are highly reproductive, with a single female capable of producing up to 10 litters of 5-6 pups every year, allowing infestations to grow rapidly.\n\nInside buildings, they chew through drywall, cardboard, and electrical wiring to build nests, which presents a significant fire hazard. They also contaminate pantry items with their droppings and urine, potentially spreading pathogens.",
+                characteristicsJson = JSONArray(listOf("Pointed snout, scaly tail", "Nocturnal rodent", "Highly reproductive")).toString(),
+                habitat = "Homes, garages, pantries, barns, and grassy fields",
+                dangerLevel = "Medium",
+                dangerDescription = "Can chew electric wires (fire hazard), destroy drywall, and carry diseases like Salmonella.",
                 timestamp = System.currentTimeMillis()
             )
             20007L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_green_beetle}",
-                commonName = "How to Treat a Spider Bite",
-                scientificName = "Bug Bite Help",
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_spider_bite}",
+                commonName = "Black Widow Spider",
+                scientificName = "Latrodectus mactans",
                 confidence = 100,
-                description = "Wash the bite with soap and water, apply a cold compress to reduce swelling, keep the area elevated, and seek medical attention if symptoms worsen.",
-                characteristicsJson = JSONArray(listOf("Wash immediately", "Cold compress", "Monitor symptoms")).toString(),
-                habitat = "First aid, home care",
-                dangerLevel = "Info",
-                dangerDescription = "First-aid guidance for spider bites.",
+                description = "The black widow is a highly venomous spider. The female is easily recognized by its shiny black body and a distinctive red hourglass marking on the underside of its abdomen, producing extremely strong webs.\n\nBlack widows construct irregular, tangled webs made of exceptionally strong silk to catch insects. They are shy, solitary creatures that prefer dark, undisturbed locations like woodpiles, cluttered garages, and crawl spaces.\n\nWhile their bites are rare and only occur if they are pressed or threatened, their neurotoxic venom is extremely potent. A bite causes severe localized pain, muscle cramps, and nausea, and requires immediate medical observation.",
+                characteristicsJson = JSONArray(listOf("Shiny black body", "Red hourglass shape", "Strong, irregular web")).toString(),
+                habitat = "Dark, sheltered, undisturbed spaces like woodpiles, garages, and crawl spaces",
+                dangerLevel = "High",
+                dangerDescription = "Neurotoxic venom from bites causes severe pain, muscle cramps, and requires prompt medical care.",
                 timestamp = System.currentTimeMillis()
             )
             20008L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_atlas_moth}",
-                commonName = "Tips for Treating Insect Stings",
-                scientificName = "Bug Bite Help",
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_wasp_sting}",
+                commonName = "Common Wasp",
+                scientificName = "Vespula vulgaris",
                 confidence = 100,
-                description = "Remove the stinger immediately using a flat edge, apply ice, take antihistamines if needed, and watch closely for signs of severe allergic reactions (anaphylaxis).",
-                characteristicsJson = JSONArray(listOf("Stinger removal", "Apply ice pack", "Allergy watch")).toString(),
-                habitat = "First aid, emergency care",
-                dangerLevel = "Info",
-                dangerDescription = "Critical advice for managing bee and wasp stings.",
+                description = "The common wasp is a social wasp species found across the Northern Hemisphere. They live in large colonies with nests made of chewed wood pulp, and they are active predators of garden pest larvae.\n\nWorkers construct large paper-like nests using chewed wood pulp mixed with their saliva, often hidden in tree cavities, wall voids, or underground tunnels. Wasps play an important ecological role as predators of agricultural pests like caterpillars and flies.\n\nHowever, they can be highly aggressive when defending their nests. Unlike honey bees, wasps can sting repeatedly without dying, and their stings are painful and can trigger severe allergic reactions (anaphylaxis) in sensitive individuals.",
+                characteristicsJson = JSONArray(listOf("Yellow and black stripes", "Social nest builders", "Repeated stinging capacity")).toString(),
+                habitat = "Woodlands, gardens, wall voids, and underground cavities",
+                dangerLevel = "High",
+                dangerDescription = "Highly aggressive when defending nests, stings are painful and can trigger severe anaphylactic shock.",
                 timestamp = System.currentTimeMillis()
             )
             20009L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_honey_bee}",
-                commonName = "Flea Bites",
-                scientificName = "Bug Bite Help",
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_flea}",
+                commonName = "Cat Flea",
+                scientificName = "Ctenocephalides felis",
                 confidence = 100,
-                description = "Flea bites usually appear in clusters of small red bumps, typically around ankles. Wash the area, avoid scratching to prevent infection, and treat your pets immediately.",
-                characteristicsJson = JSONArray(listOf("Red bumps clusters", "Avoid scratching", "Treat pets")).toString(),
-                habitat = "Ankles, legs, pet nesting areas",
-                dangerLevel = "Info",
-                dangerDescription = "Guidance on treating flea bites and pet hygiene.",
+                description = "The cat flea is a small, wingless, flattened parasite of cats, dogs, and humans. It is famous for its incredible jumping ability and feeds exclusively on the blood of its hosts to survive and lay eggs.\n\nThey have a laterally flattened body covered in backwards-pointing spines, which allows them to move swiftly through animal fur. They can jump up to 30 cm vertically to find a host.\n\nFlea bites usually appear in clusters of small red bumps around ankles and legs, causing intense itching. Flea infestations on pets can lead to skin irritation, hair loss, and potentially transmit tapeworms or other diseases.",
+                characteristicsJson = JSONArray(listOf("Wingless blood-feeder", "Lateral flat body", "Exceptional jumper")).toString(),
+                habitat = "Pet fur, upholstery, carpets, and animal bedding",
+                dangerLevel = "Medium",
+                dangerDescription = "Bites cause intense itching, skin irritation, dermatitis, and can transmit tapeworms.",
                 timestamp = System.currentTimeMillis()
             )
             20010L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_red_beetle}",
-                commonName = "Creating an Insect Collection",
-                scientificName = "Remarkable Collection",
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_insect_collection}",
+                commonName = "Stag Beetle",
+                scientificName = "Lucanus cervus",
                 confidence = 100,
-                description = "Learn the proper techniques for collecting, preserving, and mounting insects for scientific study or personal hobby. Respect nature and only collect ethically.",
-                characteristicsJson = JSONArray(listOf("Ethical collection", "Mounting pins", "Labeling data")).toString(),
-                habitat = "Science labs, natural history",
-                dangerLevel = "Info",
-                dangerDescription = "Tutorial on ethical and professional bug collection.",
+                description = "The stag beetle is one of the largest beetles in Europe. Males are famous for their giant antler-like mandibles, which they use to wrestle rivals during the mating season on tree trunks.\n\nThey spend the majority of their lives (up to 3-7 years) underground as large C-shaped grubs, feeding on decaying wood from old oak tree stumps. The adults emerge for only a few weeks in summer to mate and lay eggs.\n\nDespite their fearsome appearance, stag beetles are completely harmless to humans. The male's large mandibles are relatively weak and cannot cause serious pinches, while the female's smaller mandibles are stronger but are only used for chewing wood.",
+                characteristicsJson = JSONArray(listOf("Antler-like mandibles", "Large dark chitin body", "Slow flight in dusk")).toString(),
+                habitat = "Decaying oak forests, parks, and tree hollows",
+                dangerLevel = "Low",
+                dangerDescription = "Completely harmless. The large mandibles are weak and cannot pinch humans hard.",
                 timestamp = System.currentTimeMillis()
             )
             20011L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_green_beetle}",
-                commonName = "The John Landy Butterfly Collection",
-                scientificName = "Remarkable Collection",
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_butterfly_collection}",
+                commonName = "Monarch Butterfly",
+                scientificName = "Danaus plexippus",
                 confidence = 100,
-                description = "A world-renowned collection showcasing thousands of rare and colorful butterflies from all continents, demonstrating the incredible diversity of Lepidoptera.",
-                characteristicsJson = JSONArray(listOf("Butterfly diversity", "Global specimens", "Historical collection")).toString(),
-                habitat = "Museums, botanical archives",
-                dangerLevel = "Info",
-                dangerDescription = "Overview of one of the world's most famous collections.",
+                description = "The monarch butterfly is a milkweed butterfly famous for its orange-black warning coloration and its spectacular long-distance annual migration across North America. Its caterpillars feed solely on milkweed.\n\nThe bright orange and black wing patterns serve as warning coloration to birds and other predators, indicating that the butterfly is highly toxic because its caterpillars feed on milkweed plants containing cardiac glycosides.\n\nEach autumn, millions of monarch butterflies travel thousands of miles from Canada and the United States to wintering sites in central Mexico, displaying one of the most incredible migration journeys in the natural world.",
+                characteristicsJson = JSONArray(listOf("Orange-black wings", "Long-distance migration", "Milkweed diet toxicity")).toString(),
+                habitat = "Fields, meadows, gardens, and milkweed patches",
+                dangerLevel = "Low",
+                dangerDescription = "Completely harmless to humans, only toxic to birds and predators if ingested.",
                 timestamp = System.currentTimeMillis()
             )
             20012L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_atlas_moth}",
-                commonName = "The Scott Sisters Collection",
-                scientificName = "Remarkable Collection",
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_insect_collection}",
+                commonName = "Atlas Moth",
+                scientificName = "Attacus atlas",
                 confidence = 100,
-                description = "Historical biological illustrations and collections from the 19th century in Australia, detailing the life cycle of butterflies and moths with scientific precision.",
-                characteristicsJson = JSONArray(listOf("Scientific illustrations", "19th century history", "Moths life cycles")).toString(),
-                habitat = "Art galleries, natural archives",
-                dangerLevel = "Info",
-                dangerDescription = "Historical tribute to early women of science and art.",
+                description = "The Atlas moth is one of the largest lepidopterans in the world, with a wingspan reaching up to 25–30 cm. Native to the forests of Southeast Asia, adults have no mouthparts and live only for a few days to mate.\n\nTheir large wings are a beautiful reddish-brown color with triangular transparent windows and a wing tip pattern that closely resembles a cobra head to scare off avian predators. They spend their short adult life of 1-2 weeks solely searching for a mate.\n\nThey are completely harmless and gentle creatures. In Taiwan, their large paper-like cocoons are sometimes repurposed as small wallets or pocket cases.",
+                characteristicsJson = JSONArray(listOf("Giant wingspan", "Cobra head wing tip pattern", "Short adult life")).toString(),
+                habitat = "Tropical and subtropical dry forests of Southeast Asia",
+                dangerLevel = "Low",
+                dangerDescription = "Completely harmless and gentle giant moth.",
+                timestamp = System.currentTimeMillis()
+            )
+            20013L -> InsectEntity(
+                id = id,
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_dragonfly}",
+                commonName = "Emperor Dragonfly",
+                scientificName = "Anax imperator",
+                confidence = 100,
+                description = "The emperor dragonfly (Anax imperator) is one of the largest and most powerful dragonfly species in Europe. It has a striking bright blue abdomen (in males) or green abdomen (in females) and an apple-green thorax, making it easily recognizable as it patrols over ponds, lakes, and canals.\n\nThey are exceptional aerial predators, capable of flying forwards, backwards, sideways, and hovering in mid-air to capture other flying insects like flies, midges, and mosquitoes. They have massive compound eyes consisting of nearly 30,000 individual lenses, giving them almost 360-degree vision to spot prey and rivals.\n\nThey are highly territorial and will vigorously defend their hunting territories from other dragonflies, patrolling tirelessly without landing. They are completely harmless to humans as they do not sting and only bite if handled roughly.",
+                characteristicsJson = JSONArray(listOf("Bright blue/green body", "Exceptional flying skills", "Territorial predator")).toString(),
+                habitat = "Lakes, ponds, marshes, and slow-moving rivers",
+                dangerLevel = "Low",
+                dangerDescription = "Completely harmless to humans, beneficial as they control mosquito populations.",
+                timestamp = System.currentTimeMillis()
+            )
+            20014L -> InsectEntity(
+                id = id,
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_firefly}",
+                commonName = "Eastern Firefly",
+                scientificName = "Photinus pyralis",
+                confidence = 100,
+                description = "The common eastern firefly (Photinus pyralis) is a winged beetle species famous for its bioluminescent courtship displays at dusk. They have a dark brown, elongated body with yellow-orange margins on their pronotum, and are commonly seen lighting up meadows and lawns during warm summer evenings.\n\nTheir soft greenish-yellow glow is produced by a highly efficient chemical reaction called bioluminescence in their lower abdomen, where luciferin is oxidized in the presence of the enzyme luciferase. Males fly close to the ground, flashing a distinct 'J-shape' pattern to attract flightless females waiting in the grass.\n\nThey are completely non-toxic and harmless to humans, although their tissues contain lucibufagins, a chemical compound that makes them extremely bitter and distasteful to predators like birds and spiders.",
+                characteristicsJson = JSONArray(listOf("Bioluminescent glowing", "Summer courtship flash", "Beneficial garden beetle")).toString(),
+                habitat = "Meadows, grasslands, gardens, and forest edges",
+                dangerLevel = "Low",
+                dangerDescription = "Completely harmless to humans, bringing magical summer nights without any danger.",
+                timestamp = System.currentTimeMillis()
+            )
+            20015L -> InsectEntity(
+                id = id,
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_bed_bug}",
+                commonName = "Common Bed Bug",
+                scientificName = "Cimex lectularius",
+                confidence = 100,
+                description = "The common bed bug (Cimex lectularius) is a small, flat, wingless parasitic insect that feeds exclusively on the blood of warm-blooded animals, primarily humans. They have an oval-shaped, reddish-brown body that swells and turns bright red after a blood meal, and they are notorious household pests.\n\nBeing nocturnal and highly cryptic, they hide in narrow crevices like mattress seams, box springs, and headboard cracks during the day. They locate their sleeping hosts by sensing body heat and carbon dioxide emissions, biting exposed skin to draw blood during the night.\n\nWhile bed bug bites cause intensely itchy red welts and can lead to secondary skin infections or insomnia, they are not known to transmit any pathogens or infectious diseases to humans, unlike mosquitoes or fleas.",
+                characteristicsJson = JSONArray(listOf("Flat reddish-brown body", "Nocturnal parasite", "Hides in mattress seams")).toString(),
+                habitat = "Bedrooms, hotels, upholstery, and dark structural crevices",
+                dangerLevel = "Medium",
+                dangerDescription = "Bites cause severe itching, allergic skin reactions, and sleep disturbance, but do not transmit diseases.",
+                timestamp = System.currentTimeMillis()
+            )
+            20016L -> InsectEntity(
+                id = id,
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_house_fly}",
+                commonName = "House Fly",
+                scientificName = "Musca domestica",
+                confidence = 100,
+                description = "The common house fly (Musca domestica) is a cosmopolitan insect found in close association with humans worldwide. They are characterized by a grey thorax with four dark longitudinal stripes, large reddish compound eyes, and a single pair of membranous wings.\n\nBecause they do not have biting mouthparts, they feed on organic liquids, decaying matter, and food scraps by secreting saliva to dissolve solid food before sucking it up. They are prolific breeders, with a single female laying up to 500 eggs in decaying organic matter, completing their lifecycle in just a few days.\n\nHouse flies are significant vectors for disease. They carry pathogens like E. coli, Salmonella, and cholera on their hairy legs and bodies, contaminating food surfaces and utensils and posing a serious hygiene risk.",
+                characteristicsJson = JSONArray(listOf("Grey striped thorax", "Sponging mouthparts", "Prolific disease vector")).toString(),
+                habitat = "Homes, garbage dumps, farms, and food handling areas",
+                dangerLevel = "Medium",
+                dangerDescription = "Carries and spreads serious foodborne pathogens on domestic surfaces and food.",
+                timestamp = System.currentTimeMillis()
+            )
+            20017L -> InsectEntity(
+                id = id,
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_mosquito}",
+                commonName = "Yellow Fever Mosquito",
+                scientificName = "Aedes aegypti",
+                confidence = 100,
+                description = "The yellow fever mosquito (Aedes aegypti) is a small, dark mosquito species easily identified by white lyre-shaped markings on its thorax and white bands on its legs. Native to tropical regions, it has spread globally and is a primary vector for viral diseases.\n\nUnlike most mosquitoes, they are primarily daytime feeders, active during morning and late afternoon. Female mosquitoes require blood meals to obtain proteins needed for egg development, laying their eggs in clean standing water in artificial containers near human dwellings.\n\nThey are highly dangerous to human health. Their bites can transmit severe viral infections including dengue fever, zika virus, chikungunya, and yellow fever, making them one of the most significant disease vectors in warm climates.",
+                characteristicsJson = JSONArray(listOf("White leg bands", "Daytime biting behavior", "Breeds in standing water")).toString(),
+                habitat = "Urban areas, gardens, inside houses, and near standing water",
+                dangerLevel = "High",
+                dangerDescription = "Extremely dangerous vector for Dengue, Zika, and Yellow Fever viruses through blood-feeding bites.",
+                timestamp = System.currentTimeMillis()
+            )
+            20018L -> InsectEntity(
+                id = id,
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_centipede}",
+                commonName = "Giant Centipede",
+                scientificName = "Scolopendra subspinipes",
+                confidence = 100,
+                description = "The giant centipede (Scolopendra subspinipes) is a large, predatory myriapod native to tropical and subtropical regions. It can reach lengths of up to 20 cm or more, with a glossy reddish-brown body, bright yellow legs, and a pair of modified legs (forcipules) near the head that act as venomous claws.\n\nThey are aggressive nocturnal hunters that feed on a wide variety of prey, including insects, spiders, snails, and even small vertebrates like mice and frogs. They use their strong claws to hold prey and inject a potent cocktail of venom to paralyze it.\n\nTheir venom causes severe pain, swelling, and localized tissue inflammation in humans, and can occasionally cause systemic symptoms like fever. While centipede bites are rarely fatal, they are extremely painful and require careful wound cleaning and medical monitoring.",
+                characteristicsJson = JSONArray(listOf("Large segmented body", "Aggressive nocturnal hunter", "Venomous front claws")).toString(),
+                habitat = "Damp leaf litter, rotting logs, soil, and tropical forests",
+                dangerLevel = "High",
+                dangerDescription = "Bites are extremely painful, injecting venom that causes swelling, inflammation, and requires disinfection.",
+                timestamp = System.currentTimeMillis()
+            )
+            20019L -> InsectEntity(
+                id = id,
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_luna_moth}",
+                commonName = "Luna Moth",
+                scientificName = "Actias luna",
+                confidence = 100,
+                description = "The luna moth (Actias luna) is one of the most beautiful and iconic moths in North America. It is easily recognized by its large, lime-green wings, brownish-purple wing margins, prominent eyespots on each wing, and long, sweeping tails on its hindwings.\n\nLike other members of the giant silkmoth family, adult luna moths do not possess mouthparts or a digestive tract. They emerge from their cocoons solely to find a mate and reproduce, relying on energy reserves stored during their caterpillar stage, and living for only about a week.\n\nThey are completely harmless and gentle insects that are active only at night. Their unique hindwing tails are believed to spin and distort the echolocation signals of predatory bats, helping the moths escape detection in the dark.",
+                characteristicsJson = JSONArray(listOf("Lime-green wings", "Long hindwing tails", "Adults do not feed")).toString(),
+                habitat = "Deciduous forests, woodlands, and near lights at night",
+                dangerLevel = "Low",
+                dangerDescription = "Completely harmless to humans, a beautiful and gentle nocturnal visitor.",
+                timestamp = System.currentTimeMillis()
+            )
+            20020L -> InsectEntity(
+                id = id,
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_orchid_mantis}",
+                commonName = "Orchid Mantis",
+                scientificName = "Hymenopus coronatus",
+                confidence = 100,
+                description = "The orchid mantis (Hymenopus coronatus) is a beautiful and highly specialized praying mantis species native to the tropical rainforests of Southeast Asia. It is famous for its extraordinary camouflage, resembling a white and pink orchid flower to hide from predators and trap prey.\n\nTheir legs are modified to look like delicate flower petals, and their body color matches orchid flowers perfectly, displaying shades of pink, white, and yellow. They practice aggressive mimicry, sitting quietly on flowers until an insect pollinator comes close, then striking with lightning speed.\n\nThey are harmless to humans and are highly prized by insect collectors and enthusiasts around the world for their beautiful and unique appearance, serving as a classic example of evolutionary adaptation.",
+                characteristicsJson = JSONArray(listOf("Flower petal camouflage", "Aggressive mimicry hunter", "White and pink coloration")).toString(),
+                habitat = "Tropical rainforest flowers, particularly orchids and frangipani",
+                dangerLevel = "Low",
+                dangerDescription = "Completely harmless to humans, beneficial predator that controls garden pests.",
                 timestamp = System.currentTimeMillis()
             )
             else -> throw IllegalArgumentException("Unknown static ID: $id")
