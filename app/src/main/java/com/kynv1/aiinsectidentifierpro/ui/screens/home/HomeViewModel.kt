@@ -12,6 +12,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+import android.app.Activity
+import com.kynv1.aiinsectidentifierpro.data.billing.BillingManager
+
 data class HomeUiState(
     val mostCommonInsects: List<InsectShort> = emptyList(),
     val gardenInsects: List<InsectShort> = emptyList(),
@@ -25,7 +28,8 @@ data class HomeUiState(
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: InsectRepository
+    private val repository: InsectRepository,
+    private val billingManager: BillingManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -33,6 +37,15 @@ class HomeViewModel @Inject constructor(
 
     init {
         loadInsects()
+        observeBillingState()
+    }
+
+    private fun observeBillingState() {
+        viewModelScope.launch {
+            billingManager.isPremium.collect { isPremium ->
+                _uiState.value = _uiState.value.copy(isPremium = isPremium)
+            }
+        }
     }
 
     private fun loadInsects() {
@@ -60,7 +73,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun purchasePremium() {
-        _uiState.value = _uiState.value.copy(isPremium = true)
+    fun purchasePremium(activity: Activity, productId: String) {
+        billingManager.launchBillingFlow(activity, productId)
     }
 }

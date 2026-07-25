@@ -457,6 +457,9 @@ fun AppNavHost(
                 },
                 onNavigateToSettings = {
                     navController.navigate(Screen.Settings.route)
+                },
+                onNavigateToPaywall = {
+                    navController.navigate(Screen.Paywall.route)
                 }
             )
         }

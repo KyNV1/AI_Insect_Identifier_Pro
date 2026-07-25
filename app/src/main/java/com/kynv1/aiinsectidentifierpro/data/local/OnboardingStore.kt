@@ -14,7 +14,7 @@ class OnboardingStore(context: Context) {
         return prefs.getBoolean(KEY_ONBOARDING_COMPLETED, false)
     }
 
-    fun setOnboardingCompleted(completed: Boolean) {
+    fun setOnboardingCompleted(completed: Boolean) {    
         prefs.edit().putBoolean(KEY_ONBOARDING_COMPLETED, completed).apply()
     }
 

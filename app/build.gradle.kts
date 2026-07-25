@@ -61,6 +61,9 @@ dependencies {
     // Gemini AI SDK
     implementation(libs.google.generativeai)
 
+    // Google Play Billing
+    implementation(libs.play.billing)
+
     // Hilt DI
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

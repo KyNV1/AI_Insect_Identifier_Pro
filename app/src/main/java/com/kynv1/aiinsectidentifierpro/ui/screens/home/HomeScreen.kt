@@ -71,6 +71,7 @@ fun HomeScreen(
     onNavigateToDetail: (Long) -> Unit,
     onNavigateToAssistance: () -> Unit,
     onNavigateToSettings: () -> Unit,
+    onNavigateToPaywall: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -79,7 +80,7 @@ fun HomeScreen(
         onNavigateToScan = onNavigateToScan,
         onNavigateToSoundScan = onNavigateToSoundScan,
         onNavigateToDetail = onNavigateToDetail,
-        onGetPremiumClick = { viewModel.purchasePremium() },
+        onGetPremiumClick = onNavigateToPaywall,
         onNavigateToAssistance = onNavigateToAssistance,
         onNavigateToSettings = onNavigateToSettings,
         modifier = modifier

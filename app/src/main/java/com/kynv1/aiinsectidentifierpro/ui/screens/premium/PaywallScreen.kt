@@ -54,6 +54,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import android.app.Activity
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -79,6 +81,14 @@ fun PaywallScreen(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+    val uiState by homeViewModel.uiState.collectAsState()
+
+    LaunchedEffect(key1 = uiState.isPremium) {
+        if (uiState.isPremium) {
+            onNavigateToHome()
+        }
+    }
+
     var selectedOption by remember { mutableIntStateOf(1) }
 
     val imageList = listOf(
@@ -228,9 +238,16 @@ fun PaywallScreen(
                                 )
                             )
                             .clickable {
-                                homeViewModel.purchasePremium()
-                                Toast.makeText(context, "Premium Active! Thank you!", Toast.LENGTH_LONG).show()
-                                onNavigateToHome()
+                                val activity = context as? Activity
+                                if (activity != null) {
+                                    val productId = when (selectedOption) {
+                                        0 -> "premium_weekly"
+                                        1 -> "premium_yearly"
+                                        2 -> "premium_monthly"
+                                        else -> "premium_yearly"
+                                    }
+                                    homeViewModel.purchasePremium(activity, productId)
+                                }
                             },
                         contentAlignment = Alignment.Center
                     ) {
