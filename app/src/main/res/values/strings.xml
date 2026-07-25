@@ -38,13 +38,16 @@
     <string name="history_item_confidence_format">%1$s  •  Confidence: %2$d%%</string>
 
     <!-- Scan Screen Strings -->
-    <string name="scan_title">INSECT IDENTIFIER</string>
-    <string name="scan_subtitle">Take or select an insect photo to identify with AI</string>
+    <string name="scan_title">AI Insect Identifier</string>
+    <string name="scan_subtitle">Identify insects instantly with AI</string>
     <string name="scan_empty_title">No image selected</string>
     <string name="scan_empty_desc">Tap to take a photo or select an image from your device.</string>
+    <string name="scan_instruction_title">Scan an insect</string>
+    <string name="scan_instruction_desc">Take a photo or choose one from Gallery</string>
     <string name="scan_btn_take_photo">Take Photo</string>
     <string name="scan_btn_gallery">Gallery</string>
     <string name="scan_btn_identify">IDENTIFY NOW</string>
+    <string name="scan_btn_select_photo_first">Select a photo first</string>
     <string name="scan_loading_title">AI is analyzing image...</string>
     <string name="scan_loading_desc">Gemini 1.5 Flash model is identifying the insect, please wait a moment.</string>
     <string name="scan_error_title">Identification Error</string>
@@ -62,10 +65,10 @@
     <string name="splash_loading_text">Getting ready…</string>
 
     <!-- Home Screen Strings -->
-    <string name="home_title">Bug Finder</string>
+    <string name="home_title">AI Insect Finder</string>
     <string name="home_subtitle">Scan and identify species</string>
     <string name="home_premium_title">Try Premium</string>
-    <string name="home_premium_desc">Identify any insect species with a snap</string>
+    <string name="home_premium_desc">Unlimited Scans • AI Assistant\nIdentify insects instantly</string>
     <string name="home_premium_btn">Get It Now</string>
     <string name="home_photo_id">Camera\nIdentification</string>
     <string name="home_sound_id">Acoustic ID</string>
@@ -117,15 +120,21 @@
     <string name="paywall_discount_badge">SAVE 85%</string>
 
     <!-- Assistance Screen Strings -->
-    <string name="assistance_title">Assistance</string>
+    <string name="assistance_title">AI Assistant</string>
     <string name="assistance_start_chatting">Click and start chatting:</string>
-    <string name="assistance_message_placeholder">Message</string>
+    <string name="assistance_message_placeholder">Ask anything about insects...</string>
     <string name="assistance_thinking">AI is thinking…</string>
     <string name="assistance_q1">How many different kinds of insects are there?</string>
     <string name="assistance_q2">How do insects grow?</string>
     <string name="assistance_q3">Why do butterflies and other insects fly from flower to flower?</string>
     <string name="assistance_q4">What is the largest insect on Earth?</string>
     <string name="assistance_q5">What\'s the difference between an insect and a spider?</string>
+    <string name="assistance_hi">Hi! 👋</string>
+    <string name="assistance_intro">I\'m your AI Insect Assistant.</string>
+    <string name="assistance_help_today">How can I help you today?</string>
+    <string name="assistance_popular_questions">Popular Questions</string>
+    <string name="assistance_or">or</string>
+    <string name="assistance_ask_own_question">Or ask your own question below 👇</string>
 
     <!-- Settings Screen Strings -->
     <string name="settings_title">Settings</string>

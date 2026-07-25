@@ -1,15 +1,29 @@
 package com.kynv1.aiinsectidentifierpro.ui.screens.assistance
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,7 +31,6 @@ import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
@@ -27,11 +40,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.Send
-import androidx.compose.material.icons.filled.Lightbulb
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,11 +55,14 @@ import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kynv1.aiinsectidentifierpro.R
@@ -76,6 +90,42 @@ fun AssistanceScreen(
     } else {
         0.dp
     }
+    val beeTransition = rememberInfiniteTransition(label = "bee")
+    val beeOffsetY by beeTransition.animateFloat(
+        initialValue = -6f,
+        targetValue = 6f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1500, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "bee_offset"
+    )
+    val beeRotation by beeTransition.animateFloat(
+        initialValue = -4f,
+        targetValue = 4f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(2000, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "bee_rotation"
+    )
+    val beeScale by beeTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = keyframes {
+                durationMillis = 3500
+                1.0f at 0
+                1.0f at 3000
+                1.1f at 3100
+                0.92f at 3200
+                1.1f at 3300
+                1.0f at 3500
+            },
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "bee_scale"
+    )
 
     val quickQuestions = listOf(
         stringResource(id = R.string.assistance_q1),
@@ -83,8 +133,6 @@ fun AssistanceScreen(
         stringResource(id = R.string.assistance_q3),
     )
 
-    // Scroll only when a new message is added. Keyboard insets animate frame-by-frame,
-    // so using them as a key here makes the chat list visibly jump.
     LaunchedEffect(uiState.messages.size) {
         if (uiState.messages.isNotEmpty()) {
             withFrameNanos { }
@@ -153,40 +201,164 @@ fun AssistanceScreen(
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = Dimens.dp_16)
+                                .padding(vertical = Dimens.dp_16),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .size(100.dp)
+                                    .graphicsLayer(
+                                        translationY = beeOffsetY,
+                                        rotationZ = beeRotation,
+                                        scaleX = beeScale,
+                                        scaleY = beeScale
+                                    )
+                                    .background(Color.White, CircleShape)
+                                    .border(BorderStroke(1.dp, LightGreyBorder), CircleShape)
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.ic_assistance_bee),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(72.dp)
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(Dimens.dp_16))
                             Text(
-                                text = stringResource(id = R.string.assistance_start_chatting),
-                                fontSize = Dimens.sp_18,
+                                text = stringResource(id = R.string.assistance_hi),
+                                fontSize = Dimens.sp_20,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.Black,
-                                modifier = Modifier.padding(bottom = Dimens.dp_16)
+                                textAlign = TextAlign.Center
                             )
+                            Spacer(modifier = Modifier.height(Dimens.dp_4))
+                            Text(
+                                text = stringResource(id = R.string.assistance_intro),
+                                fontSize = Dimens.sp_16,
+                                fontWeight = FontWeight.SemiBold,
+                                color = ActiveGreen,
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(Dimens.dp_4))
+                            Text(
+                                text = stringResource(id = R.string.assistance_help_today),
+                                fontSize = Dimens.sp_14,
+                                color = Color.Gray,
+                                textAlign = TextAlign.Center
+                            )
+                            
+                            Spacer(modifier = Modifier.height(Dimens.dp_24))
+                            
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(1.dp)
+                                    .background(LightGreyBorder.copy(alpha = 0.5f))
+                            )
+                            
+                            Spacer(modifier = Modifier.height(Dimens.dp_24))
+                            
+                            Text(
+                                text = stringResource(id = R.string.assistance_popular_questions),
+                                fontSize = Dimens.sp_14,
+                                fontWeight = FontWeight.SemiBold,
+                                color = Color.Gray,
+                                modifier = Modifier.align(Alignment.Start)
+                            )
+                            
+                            Spacer(modifier = Modifier.height(Dimens.dp_12))
 
-                            quickQuestions.forEach { question ->
+                            val emojis = listOf("💡", "🌿", "🦋")
+                            quickQuestions.forEachIndexed { idx, question ->
+                                val emoji = emojis.getOrElse(idx) { "❓" }
+                                val itemInteractionSource = remember { MutableInteractionSource() }
+                                val itemPressed by itemInteractionSource.collectIsPressedAsState()
+                                val itemScale by animateFloatAsState(
+                                    targetValue = if (itemPressed) 0.98f else 1f,
+                                    label = "press_scale"
+                                )
+                                val itemElevation by animateDpAsState(
+                                    targetValue = if (itemPressed) 4.dp else 1.dp,
+                                    label = "press_elevation"
+                                )
                                 Box(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(vertical = Dimens.dp_6)
+                                        .graphicsLayer(scaleX = itemScale, scaleY = itemScale)
+                                        .shadow(
+                                            elevation = itemElevation,
+                                            shape = RoundedCornerShape(Dimens.dp_20),
+                                            clip = false
+                                        )
                                         .background(Color.White, RoundedCornerShape(Dimens.dp_20))
                                         .border(
                                             width = Dimens.dp_1,
                                             color = LightGreyBorder,
                                             shape = RoundedCornerShape(Dimens.dp_20)
                                         )
-                                        .clickable {
-                                            viewModel.sendMessage(question)
-                                        }
-                                        .padding(horizontal = Dimens.dp_16, vertical = Dimens.dp_12)
+                                        .clickable(
+                                            interactionSource = itemInteractionSource,
+                                            indication = LocalIndication.current,
+                                            onClick = { viewModel.sendMessage(question) }
+                                        )
+                                        .padding(
+                                            start = Dimens.dp_16,
+                                            end = Dimens.dp_8,
+                                            top = Dimens.dp_8,
+                                            bottom = Dimens.dp_8
+                                        )
                                 ) {
-                                    Text(
-                                        text = question,
-                                        fontSize = Dimens.sp_14,
-                                        color = Color.DarkGray,
-                                        lineHeight = 18.sp
-                                    )
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        Text(text = emoji, fontSize = 16.sp)
+                                        Spacer(modifier = Modifier.width(Dimens.dp_12))
+                                        Text(
+                                            text = question,
+                                            fontSize = Dimens.sp_14,
+                                            color = Color.DarkGray,
+                                            lineHeight = 18.sp,
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                        Spacer(modifier = Modifier.width(Dimens.dp_8))
+                                        Icon(
+                                            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+                                            contentDescription = null,
+                                            tint = ActiveGreen,
+                                            modifier = Modifier.size(22.dp)
+                                        )
+                                    }
                                 }
                             }
+                            
+                            Spacer(modifier = Modifier.height(Dimens.dp_24))
+                            
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(1.dp)
+                                    .background(LightGreyBorder.copy(alpha = 0.5f))
+                            )
+                            
+                            Spacer(modifier = Modifier.height(Dimens.dp_16))
+                            
+                            Text(
+                                text = stringResource(id = R.string.assistance_or),
+                                fontSize = Dimens.sp_12,
+                                color = Color.Gray,
+                                fontWeight = FontWeight.Medium
+                            )
+                            
+                            Spacer(modifier = Modifier.height(Dimens.dp_4))
+                            
+                            Text(
+                                text = stringResource(id = R.string.assistance_ask_own_question),
+                                fontSize = Dimens.sp_14,
+                                color = Color.DarkGray,
+                                fontWeight = FontWeight.SemiBold
+                            )
                         }
                     }
                 } else {
@@ -253,14 +425,6 @@ fun AssistanceInputBar(
                 .padding(horizontal = Dimens.dp_16),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Default.Lightbulb,
-                contentDescription = "AI Hint",
-                tint = ActiveGreen,
-                modifier = Modifier.size(Dimens.dp_20)
-            )
-            Spacer(modifier = Modifier.width(Dimens.dp_10))
-
             Box(
                 modifier = Modifier.weight(1f),
                 contentAlignment = Alignment.CenterStart

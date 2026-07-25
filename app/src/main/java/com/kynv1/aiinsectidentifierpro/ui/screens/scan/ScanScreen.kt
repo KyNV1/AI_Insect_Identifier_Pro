@@ -4,26 +4,66 @@ import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -33,21 +73,25 @@ import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
 import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
-import com.kynv1.aiinsectidentifierpro.ui.theme.ButtonGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.CardBackground
-import com.kynv1.aiinsectidentifierpro.ui.theme.CardBorder
-import com.kynv1.aiinsectidentifierpro.ui.theme.DarkBackground
-import com.kynv1.aiinsectidentifierpro.ui.theme.DarkButtonGreen
-import com.kynv1.aiinsectidentifierpro.ui.theme.DarkForestGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.DarkForestGreenText
 import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
-import com.kynv1.aiinsectidentifierpro.ui.theme.DisabledButtonGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.NatureDarkGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.NatureGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.NatureLightGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.TextCharcoal
+import com.kynv1.aiinsectidentifierpro.ui.theme.TextDarkGrey
 import java.io.File
+import androidx.compose.foundation.LocalIndication
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.shape.CircleShape
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScanScreen(
     viewModel: ScanViewModel,
     onNavigateToDetail: (Long) -> Unit,
+    onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -85,6 +129,28 @@ fun ScanScreen(
         return FileProvider.getUriForFile(context, authority, tempFile)
     }
 
+    val infiniteTransition = rememberInfiniteTransition(label = "viewfinder")
+    val viewfinderScale by infiniteTransition.animateFloat(
+        initialValue = 0.95f,
+        targetValue = 1.05f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1200, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "viewfinder_scale"
+    )
+
+    val bgTransition = rememberInfiniteTransition(label = "bg_zoom")
+    val bgScale by bgTransition.animateFloat(
+        initialValue = 0.98f,
+        targetValue = 1.03f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(8000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "bg_scale"
+    )
+
     LaunchedEffect(uiState) {
         if (uiState is ScanUiState.Success) {
             val insectId = (uiState as ScanUiState.Success).insectId
@@ -96,52 +162,94 @@ fun ScanScreen(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(DarkForestGreen, DarkBackground)
-                )
-            )
-            .padding(Dimens.dp_16)
     ) {
+        Image(
+            painter = painterResource(id = R.drawable.bg_scan_insect_butterfly),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxSize()
+                .graphicsLayer(scaleX = bgScale, scaleY = bgScale)
+        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.25f))
+        )
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .statusBarsPadding(),
+                .statusBarsPadding()
+                .padding(Dimens.dp_16),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(top = Dimens.dp_16)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = Dimens.dp_16),
+                contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = stringResource(id = R.string.scan_title),
-                    color = ActiveGreen,
-                    fontSize = Dimens.sp_24,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 2.sp
-                )
-                Text(
-                    text = stringResource(id = R.string.scan_subtitle),
-                    color = Color.Gray,
-                    fontSize = Dimens.sp_13,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(
-                        top = Dimens.dp_4,
-                        start = Dimens.dp_16,
-                        end = Dimens.dp_16
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(start = Dimens.dp_8)
+                        .size(Dimens.dp_36)
+                        .background(Color.White.copy(alpha = 0.25f), CircleShape)
+                        .clip(CircleShape)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = LocalIndication.current
+                        ) { onNavigateBack() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_back_left),
+                        contentDescription = stringResource(id = R.string.detail_btn_back),
+                        tint = Color.White,
+                        modifier = Modifier.size(Dimens.dp_18)
                     )
-                )
+                }
+
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.scan_title),
+                        color = DarkForestGreenText,
+                        fontSize = Dimens.sp_20,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 1.sp
+                    )
+                    Spacer(modifier = Modifier.height(Dimens.dp_2))
+                    Text(
+                        text = stringResource(id = R.string.scan_subtitle),
+                        color = TextCharcoal,
+                        fontSize = Dimens.sp_12,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = Dimens.dp_16)
+                    )
+                }
             }
 
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(Dimens.ImagePreviewHeight)
-                    .padding(vertical = Dimens.dp_24),
+                    .padding(vertical = Dimens.dp_24)
+                    .clip(RoundedCornerShape(Dimens.dp_24))
+                    .clickable {
+                        if (selectedImageUri == null) {
+                            val uri = createTempImageUri()
+                            tempPhotoUri = uri
+                            takePictureLauncher.launch(uri)
+                        }
+                    },
                 shape = RoundedCornerShape(Dimens.dp_24),
-                colors = CardDefaults.cardColors(containerColor = CardBackground),
-                border = BorderStroke(Dimens.dp_1, CardBorder)
+                colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.2f)),
+                border = BorderStroke(Dimens.dp_1, Color.White.copy(alpha = 0.35f))
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -162,23 +270,51 @@ fun ScanScreen(
                             verticalArrangement = Arrangement.Center,
                             modifier = Modifier.padding(Dimens.dp_24)
                         ) {
-                            Icon(
-                                imageVector = Icons.Default.CameraAlt,
-                                contentDescription = null,
-                                tint = ActiveGreen,
-                                modifier = Modifier.size(Dimens.dp_64)
-                            )
-                            Spacer(modifier = Modifier.height(Dimens.dp_16))
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .size(Dimens.dp_160)
+                                    .graphicsLayer(scaleX = viewfinderScale, scaleY = viewfinderScale)
+                                    .drawBehind {
+                                        val strokeWidth = 3.dp.toPx()
+                                        val l = 20.dp.toPx()
+                                        val color = NatureGreen
+                                        
+                                        // Top-Left
+                                        drawLine(color, Offset(0f, 0f), Offset(l, 0f), strokeWidth)
+                                        drawLine(color, Offset(0f, 0f), Offset(0f, l), strokeWidth)
+                                        
+                                        // Top-Right
+                                        drawLine(color, Offset(size.width, 0f), Offset(size.width - l, 0f), strokeWidth)
+                                        drawLine(color, Offset(size.width, 0f), Offset(size.width, l), strokeWidth)
+                                        
+                                        // Bottom-Left
+                                        drawLine(color, Offset(0f, size.height), Offset(l, size.height), strokeWidth)
+                                        drawLine(color, Offset(0f, size.height), Offset(0f, size.height - l), strokeWidth)
+                                        
+                                        // Bottom-Right
+                                        drawLine(color, Offset(size.width, size.height), Offset(size.width - l, size.height), strokeWidth)
+                                        drawLine(color, Offset(size.width, size.height), Offset(size.width, size.height - l), strokeWidth)
+                                    }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.CameraAlt,
+                                    contentDescription = null,
+                                    tint = DarkForestGreenText,
+                                    modifier = Modifier.size(Dimens.dp_56)
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(Dimens.dp_20))
                             Text(
-                                text = stringResource(id = R.string.scan_empty_title),
-                                color = Color.LightGray,
+                                text = stringResource(id = R.string.scan_instruction_title),
+                                color = DarkForestGreenText,
                                 fontSize = Dimens.sp_16,
-                                fontWeight = FontWeight.Medium
+                                fontWeight = FontWeight.Bold
                             )
                             Spacer(modifier = Modifier.height(Dimens.dp_8))
                             Text(
-                                text = stringResource(id = R.string.scan_empty_desc),
-                                color = Color.Gray,
+                                text = stringResource(id = R.string.scan_instruction_desc),
+                                color = TextDarkGrey,
                                 fontSize = Dimens.sp_12,
                                 textAlign = TextAlign.Center
                             )
@@ -204,14 +340,21 @@ fun ScanScreen(
                             takePictureLauncher.launch(uri)
                         },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = ButtonGreen,
+                            containerColor = Color.Transparent,
                             contentColor = Color.White
                         ),
                         shape = RoundedCornerShape(Dimens.dp_16),
+                        contentPadding = PaddingValues(),
                         modifier = Modifier
                             .weight(1f)
                             .height(Dimens.dp_56)
                             .padding(end = Dimens.dp_8)
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    colors = listOf(NatureDarkGreen, NatureLightGreen)
+                                ),
+                                shape = RoundedCornerShape(Dimens.dp_16)
+                            )
                     ) {
                         Icon(imageVector = Icons.Default.CameraAlt, contentDescription = null)
                         Spacer(modifier = Modifier.width(Dimens.dp_8))
@@ -224,7 +367,7 @@ fun ScanScreen(
                     Button(
                         onClick = { pickImageLauncher.launch("image/*") },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = DarkButtonGreen,
+                            containerColor = Color.White.copy(alpha = 0.15f),
                             contentColor = Color.White
                         ),
                         shape = RoundedCornerShape(Dimens.dp_16),
@@ -232,7 +375,7 @@ fun ScanScreen(
                             .weight(1f)
                             .height(Dimens.dp_56)
                             .padding(start = Dimens.dp_8),
-                        border = BorderStroke(Dimens.dp_1, ActiveGreen)
+                        border = BorderStroke(Dimens.dp_1, Color.White.copy(alpha = 0.4f))
                     ) {
                         Icon(imageVector = Icons.Default.Image, contentDescription = null)
                         Spacer(modifier = Modifier.width(Dimens.dp_8))
@@ -249,10 +392,10 @@ fun ScanScreen(
                     onClick = { viewModel.identifyInsect(context) },
                     enabled = selectedImageUri != null && uiState !is ScanUiState.Loading,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = ActiveGreen,
-                        contentColor = Color.Black,
-                        disabledContainerColor = DisabledButtonGreen,
-                        disabledContentColor = Color.DarkGray
+                        containerColor = NatureGreen,
+                        contentColor = Color.White,
+                        disabledContainerColor = Color.White.copy(alpha = 0.3f),
+                        disabledContentColor = DarkForestGreenText.copy(alpha = 0.4f)
                     ),
                     shape = RoundedCornerShape(Dimens.dp_16),
                     modifier = Modifier
@@ -262,7 +405,11 @@ fun ScanScreen(
                     Icon(imageVector = Icons.Default.PlayArrow, contentDescription = null)
                     Spacer(modifier = Modifier.width(Dimens.dp_8))
                     Text(
-                        text = stringResource(id = R.string.scan_btn_identify),
+                        text = if (selectedImageUri != null) {
+                            stringResource(id = R.string.scan_btn_identify)
+                        } else {
+                            stringResource(id = R.string.scan_btn_select_photo_first)
+                        },
                         fontWeight = FontWeight.Bold,
                         fontSize = Dimens.sp_16
                     )

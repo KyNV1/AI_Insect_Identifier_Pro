@@ -70,6 +70,13 @@ import com.kynv1.aiinsectidentifierpro.ui.theme.DarkForestGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
 import com.kynv1.aiinsectidentifierpro.ui.theme.NatureGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.StarGold
+import com.kynv1.aiinsectidentifierpro.ui.theme.PremiumBgLight
+import com.kynv1.aiinsectidentifierpro.ui.theme.GoldAmber
+import com.kynv1.aiinsectidentifierpro.ui.theme.PremiumBorderLight
+import com.kynv1.aiinsectidentifierpro.ui.theme.PremiumBgGoldCard
+import com.kynv1.aiinsectidentifierpro.ui.theme.PremiumBgGreenCard
+import com.kynv1.aiinsectidentifierpro.ui.theme.AlertRed
+import com.kynv1.aiinsectidentifierpro.ui.theme.GoldYellow
 import kotlinx.coroutines.delay
 
 @Composable
@@ -348,7 +355,7 @@ fun BenefitItem(
 @Composable
 fun TestimonialView(modifier: Modifier = Modifier) {
     Card(
-        colors = CardDefaults.cardColors(containerColor = Color(0xFFF7FAF7)),
+        colors = CardDefaults.cardColors(containerColor = PremiumBgLight),
         shape = RoundedCornerShape(Dimens.dp_16),
         modifier = modifier.fillMaxWidth()
     ) {
@@ -409,14 +416,14 @@ fun VerticalPlanCard(
     onClick: () -> Unit
 ) {
     val borderColor = if (isSelected) {
-        if (isHighlighted) Color(0xFFFFB300) else NatureGreen
+        if (isHighlighted) GoldAmber else NatureGreen
     } else {
-        Color(0xFFE5EBE6)
+        PremiumBorderLight
     }
 
     val borderWidth = if (isSelected) Dimens.dp_2 else Dimens.dp_1
     val backgroundColor = if (isSelected) {
-        if (isHighlighted) Color(0xFFFFFDF3) else Color(0xFFF1F8E9)
+        if (isHighlighted) PremiumBgGoldCard else PremiumBgGreenCard
     } else {
         Color.White
     }
@@ -452,7 +459,7 @@ fun VerticalPlanCard(
                     if (isHighlighted && valueText != null) {
                         Box(
                             modifier = Modifier
-                                .background(Color(0xFFE53935), RoundedCornerShape(Dimens.dp_4))
+                                .background(AlertRed, RoundedCornerShape(Dimens.dp_4))
                                 .padding(horizontal = Dimens.dp_6, vertical = Dimens.dp_2)
                         ) {
                             Text(
@@ -488,7 +495,7 @@ fun VerticalPlanCard(
                     Spacer(modifier = Modifier.height(Dimens.dp_2))
                     Box(
                         modifier = Modifier
-                            .background(Color(0xFFFFCA28), RoundedCornerShape(Dimens.dp_4))
+                            .background(GoldYellow, RoundedCornerShape(Dimens.dp_4))
                             .padding(horizontal = Dimens.dp_6, vertical = Dimens.dp_2)
                     ) {
                         Text(

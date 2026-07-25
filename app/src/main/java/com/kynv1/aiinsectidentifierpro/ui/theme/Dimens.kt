@@ -16,6 +16,7 @@ object Dimens {
     val dp_12 = 12.dp
     val dp_14 = 14.dp
     val dp_16 = 16.dp
+    val dp_18 = 18.dp
     val dp_20 = 20.dp
     val dp_24 = 24.dp
     val dp_28 = 28.dp
@@ -42,7 +43,7 @@ object Dimens {
 
     val ImageSizeExtraLarge = 260.dp
     val dp_72 = 72.dp
-    val ImagePreviewHeight = 350.dp
+    val ImagePreviewHeight = 300.dp
 
 
     // Text Sizes (sp)

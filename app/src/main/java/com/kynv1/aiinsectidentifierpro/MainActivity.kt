@@ -481,6 +481,9 @@ fun AppNavHost(
                 viewModel = scanViewModel,
                 onNavigateToDetail = { id ->
                     navController.navigate(Screen.Detail.createRoute(id))
+                },
+                onNavigateBack = {
+                    navController.popBackStack()
                 }
             )
         }
