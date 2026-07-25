@@ -28,7 +28,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
-import androidx.compose.material.icons.filled.Hearing
+import androidx.compose.material.icons.filled.Mic
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -141,7 +141,7 @@ fun HomeScreenContent(
                     title = stringResource(id = R.string.home_sound_id),
                     icon = {
                         Icon(
-                            imageVector = Icons.Default.Hearing,
+                            imageVector = Icons.Default.Mic,
                             contentDescription = null,
                             tint = WarningOrange,
                             modifier = Modifier.size(Dimens.dp_28)
@@ -193,45 +193,6 @@ fun HomeScreenContent(
             )
 
             Spacer(modifier = Modifier.height(Dimens.dp_24))
-
-            HomeSectionList(
-                title = stringResource(id = R.string.home_pest_control_title),
-                subtitle = stringResource(id = R.string.home_pest_control_desc),
-                items = uiState.pestControlArticles,
-                itemId = { it.id },
-                itemName = { it.commonName },
-                itemScientificName = { it.scientificName },
-                itemImageResId = { it.imageResId },
-                onItemClick = onNavigateToDetail
-            )
-
-            Spacer(modifier = Modifier.height(Dimens.dp_24))
-
-            HomeSectionList(
-                title = stringResource(id = R.string.home_bug_bite_title),
-                subtitle = stringResource(id = R.string.home_bug_bite_desc),
-                items = uiState.bugBiteArticles,
-                itemId = { it.id },
-                itemName = { it.commonName },
-                itemScientificName = { it.scientificName },
-                itemImageResId = { it.imageResId },
-                onItemClick = onNavigateToDetail
-            )
-
-            Spacer(modifier = Modifier.height(Dimens.dp_24))
-
-            HomeSectionList(
-                title = stringResource(id = R.string.home_remarkable_coll_title),
-                subtitle = stringResource(id = R.string.home_remarkable_coll_desc),
-                items = uiState.remarkableCollArticles,
-                itemId = { it.id },
-                itemName = { it.commonName },
-                itemScientificName = { it.scientificName },
-                itemImageResId = { it.imageResId },
-                onItemClick = onNavigateToDetail
-            )
-
-            Spacer(modifier = Modifier.height(Dimens.dp_24))
         }
 
         Box(
@@ -246,11 +207,27 @@ fun HomeScreenContent(
                 .padding(Dimens.dp_8),
             contentAlignment = Alignment.Center
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_assistance_bee),
-                contentDescription = "AI Assistance",
-                modifier = Modifier.fillMaxSize()
-            )
+            Box(modifier = Modifier.fillMaxSize()) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_assistance_bee),
+                    contentDescription = "AI Assistance",
+                    modifier = Modifier.fillMaxSize()
+                )
+                
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .background(ActiveGreen, RoundedCornerShape(4.dp))
+                        .padding(horizontal = 4.dp, vertical = 1.dp)
+                ) {
+                    Text(
+                        text = "AI",
+                        color = Color.White,
+                        fontSize = 8.sp,
+                        fontWeight = FontWeight.ExtraBold
+                    )
+                }
+            }
         }
     }
 }

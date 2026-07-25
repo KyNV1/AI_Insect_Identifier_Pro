@@ -62,7 +62,7 @@
     <string name="splash_loading_text">Getting ready…</string>
 
     <!-- Home Screen Strings -->
-    <string name="home_title">Bug Finder</string>
+    <string name="home_title">AI Insect Finder</string>
     <string name="home_subtitle">Scan and identify species</string>
     <string name="home_premium_title">Try Premium</string>
     <string name="home_premium_desc">Identify any insect species with a snap</string>
@@ -117,9 +117,9 @@
     <string name="paywall_discount_badge">SAVE 85%</string>
 
     <!-- Assistance Screen Strings -->
-    <string name="assistance_title">Assistance</string>
+    <string name="assistance_title">AI Assistant</string>
     <string name="assistance_start_chatting">Click and start chatting:</string>
-    <string name="assistance_message_placeholder">Message</string>
+    <string name="assistance_message_placeholder">Ask about insects…</string>
     <string name="assistance_thinking">AI is thinking…</string>
     <string name="assistance_q1">How many different kinds of insects are there?</string>
     <string name="assistance_q2">How do insects grow?</string>

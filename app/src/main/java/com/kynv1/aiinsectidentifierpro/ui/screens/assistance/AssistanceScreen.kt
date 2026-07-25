@@ -1,7 +1,10 @@
 package com.kynv1.aiinsectidentifierpro.ui.screens.assistance
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -153,15 +156,66 @@ fun AssistanceScreen(
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(vertical = Dimens.dp_16)
+                                .padding(vertical = Dimens.dp_16),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier
+                                    .size(80.dp)
+                                    .background(Color.White, CircleShape)
+                                    .border(BorderStroke(1.dp, LightGreyBorder), CircleShape)
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.ic_assistance_bee),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(56.dp)
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(Dimens.dp_16))
                             Text(
-                                text = stringResource(id = R.string.assistance_start_chatting),
-                                fontSize = Dimens.sp_18,
+                                text = "Hi!",
+                                fontSize = Dimens.sp_20,
                                 fontWeight = FontWeight.Bold,
                                 color = Color.Black,
-                                modifier = Modifier.padding(bottom = Dimens.dp_16)
+                                textAlign = TextAlign.Center
                             )
+                            Spacer(modifier = Modifier.height(Dimens.dp_4))
+                            Text(
+                                text = "I'm your AI Insect Assistant.",
+                                fontSize = Dimens.sp_16,
+                                fontWeight = FontWeight.SemiBold,
+                                color = ActiveGreen,
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(Dimens.dp_4))
+                            Text(
+                                text = "Ask me anything about insects.",
+                                fontSize = Dimens.sp_14,
+                                color = Color.Gray,
+                                textAlign = TextAlign.Center
+                            )
+                            
+                            Spacer(modifier = Modifier.height(Dimens.dp_24))
+                            
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(1.dp)
+                                    .background(LightGreyBorder.copy(alpha = 0.5f))
+                            )
+                            
+                            Spacer(modifier = Modifier.height(Dimens.dp_24))
+                            
+                            Text(
+                                text = "Popular Questions",
+                                fontSize = Dimens.sp_14,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.DarkGray,
+                                modifier = Modifier.align(Alignment.Start)
+                            )
+                            
+                            Spacer(modifier = Modifier.height(Dimens.dp_12))
 
                             quickQuestions.forEach { question ->
                                 Box(
