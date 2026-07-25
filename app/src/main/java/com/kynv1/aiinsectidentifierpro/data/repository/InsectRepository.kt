@@ -119,6 +119,20 @@ class InsectRepository(
                 imageResId = R.drawable.img_article_pill_bug,
                 category = "Fun Bug Facts"
             ),
+            HomeArticle(
+                id = 20013L,
+                commonName = "Emperor Dragonfly",
+                scientificName = "Anax imperator",
+                imageResId = R.drawable.img_article_dragonfly,
+                category = "Fun Bug Facts"
+            ),
+            HomeArticle(
+                id = 20014L,
+                commonName = "Eastern Firefly",
+                scientificName = "Photinus pyralis",
+                imageResId = R.drawable.img_article_firefly,
+                category = "Fun Bug Facts"
+            ),
 
             // Pest Control
             HomeArticle(
@@ -140,6 +154,20 @@ class InsectRepository(
                 commonName = "House Mouse",
                 scientificName = "Mus musculus",
                 imageResId = R.drawable.img_article_mouse,
+                category = "Pest Control"
+            ),
+            HomeArticle(
+                id = 20015L,
+                commonName = "Common Bed Bug",
+                scientificName = "Cimex lectularius",
+                imageResId = R.drawable.img_article_bed_bug,
+                category = "Pest Control"
+            ),
+            HomeArticle(
+                id = 20016L,
+                commonName = "House Fly",
+                scientificName = "Musca domestica",
+                imageResId = R.drawable.img_article_house_fly,
                 category = "Pest Control"
             ),
 
@@ -165,6 +193,20 @@ class InsectRepository(
                 imageResId = R.drawable.img_article_flea,
                 category = "Bug Bite Help"
             ),
+            HomeArticle(
+                id = 20017L,
+                commonName = "Yellow Fever Mosquito",
+                scientificName = "Aedes aegypti",
+                imageResId = R.drawable.img_article_mosquito,
+                category = "Bug Bite Help"
+            ),
+            HomeArticle(
+                id = 20018L,
+                commonName = "Giant Centipede",
+                scientificName = "Scolopendra subspinipes",
+                imageResId = R.drawable.img_article_centipede,
+                category = "Bug Bite Help"
+            ),
 
             // Remarkable Collection
             HomeArticle(
@@ -187,12 +229,26 @@ class InsectRepository(
                 scientificName = "Attacus atlas",
                 imageResId = R.drawable.img_article_insect_collection,
                 category = "Remarkable Collection"
+            ),
+            HomeArticle(
+                id = 20019L,
+                commonName = "Luna Moth",
+                scientificName = "Actias luna",
+                imageResId = R.drawable.img_article_luna_moth,
+                category = "Remarkable Collection"
+            ),
+            HomeArticle(
+                id = 20020L,
+                commonName = "Orchid Mantis",
+                scientificName = "Hymenopus coronatus",
+                imageResId = R.drawable.img_article_orchid_mantis,
+                category = "Remarkable Collection"
             )
         )
     }
 
     suspend fun getInsectById(id: Long): InsectEntity? {
-        if (id in 10001L..10010L || id in 20001L..20012L) {
+        if (id in 10001L..10010L || id in 20001L..20020L) {
             return getStaticInsectEntity(id)
         }
         return insectDao.getInsectById(id)
@@ -486,6 +542,110 @@ class InsectRepository(
                 habitat = "Tropical and subtropical dry forests of Southeast Asia",
                 dangerLevel = "Low",
                 dangerDescription = "Completely harmless and gentle giant moth.",
+                timestamp = System.currentTimeMillis()
+            )
+            20013L -> InsectEntity(
+                id = id,
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_dragonfly}",
+                commonName = "Emperor Dragonfly",
+                scientificName = "Anax imperator",
+                confidence = 100,
+                description = "The emperor dragonfly (Anax imperator) is one of the largest and most powerful dragonfly species in Europe. It has a striking bright blue abdomen (in males) or green abdomen (in females) and an apple-green thorax, making it easily recognizable as it patrols over ponds, lakes, and canals.\n\nThey are exceptional aerial predators, capable of flying forwards, backwards, sideways, and hovering in mid-air to capture other flying insects like flies, midges, and mosquitoes. They have massive compound eyes consisting of nearly 30,000 individual lenses, giving them almost 360-degree vision to spot prey and rivals.\n\nThey are highly territorial and will vigorously defend their hunting territories from other dragonflies, patrolling tirelessly without landing. They are completely harmless to humans as they do not sting and only bite if handled roughly.",
+                characteristicsJson = JSONArray(listOf("Bright blue/green body", "Exceptional flying skills", "Territorial predator")).toString(),
+                habitat = "Lakes, ponds, marshes, and slow-moving rivers",
+                dangerLevel = "Low",
+                dangerDescription = "Completely harmless to humans, beneficial as they control mosquito populations.",
+                timestamp = System.currentTimeMillis()
+            )
+            20014L -> InsectEntity(
+                id = id,
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_firefly}",
+                commonName = "Eastern Firefly",
+                scientificName = "Photinus pyralis",
+                confidence = 100,
+                description = "The common eastern firefly (Photinus pyralis) is a winged beetle species famous for its bioluminescent courtship displays at dusk. They have a dark brown, elongated body with yellow-orange margins on their pronotum, and are commonly seen lighting up meadows and lawns during warm summer evenings.\n\nTheir soft greenish-yellow glow is produced by a highly efficient chemical reaction called bioluminescence in their lower abdomen, where luciferin is oxidized in the presence of the enzyme luciferase. Males fly close to the ground, flashing a distinct 'J-shape' pattern to attract flightless females waiting in the grass.\n\nThey are completely non-toxic and harmless to humans, although their tissues contain lucibufagins, a chemical compound that makes them extremely bitter and distasteful to predators like birds and spiders.",
+                characteristicsJson = JSONArray(listOf("Bioluminescent glowing", "Summer courtship flash", "Beneficial garden beetle")).toString(),
+                habitat = "Meadows, grasslands, gardens, and forest edges",
+                dangerLevel = "Low",
+                dangerDescription = "Completely harmless to humans, bringing magical summer nights without any danger.",
+                timestamp = System.currentTimeMillis()
+            )
+            20015L -> InsectEntity(
+                id = id,
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_bed_bug}",
+                commonName = "Common Bed Bug",
+                scientificName = "Cimex lectularius",
+                confidence = 100,
+                description = "The common bed bug (Cimex lectularius) is a small, flat, wingless parasitic insect that feeds exclusively on the blood of warm-blooded animals, primarily humans. They have an oval-shaped, reddish-brown body that swells and turns bright red after a blood meal, and they are notorious household pests.\n\nBeing nocturnal and highly cryptic, they hide in narrow crevices like mattress seams, box springs, and headboard cracks during the day. They locate their sleeping hosts by sensing body heat and carbon dioxide emissions, biting exposed skin to draw blood during the night.\n\nWhile bed bug bites cause intensely itchy red welts and can lead to secondary skin infections or insomnia, they are not known to transmit any pathogens or infectious diseases to humans, unlike mosquitoes or fleas.",
+                characteristicsJson = JSONArray(listOf("Flat reddish-brown body", "Nocturnal parasite", "Hides in mattress seams")).toString(),
+                habitat = "Bedrooms, hotels, upholstery, and dark structural crevices",
+                dangerLevel = "Medium",
+                dangerDescription = "Bites cause severe itching, allergic skin reactions, and sleep disturbance, but do not transmit diseases.",
+                timestamp = System.currentTimeMillis()
+            )
+            20016L -> InsectEntity(
+                id = id,
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_house_fly}",
+                commonName = "House Fly",
+                scientificName = "Musca domestica",
+                confidence = 100,
+                description = "The common house fly (Musca domestica) is a cosmopolitan insect found in close association with humans worldwide. They are characterized by a grey thorax with four dark longitudinal stripes, large reddish compound eyes, and a single pair of membranous wings.\n\nBecause they do not have biting mouthparts, they feed on organic liquids, decaying matter, and food scraps by secreting saliva to dissolve solid food before sucking it up. They are prolific breeders, with a single female laying up to 500 eggs in decaying organic matter, completing their lifecycle in just a few days.\n\nHouse flies are significant vectors for disease. They carry pathogens like E. coli, Salmonella, and cholera on their hairy legs and bodies, contaminating food surfaces and utensils and posing a serious hygiene risk.",
+                characteristicsJson = JSONArray(listOf("Grey striped thorax", "Sponging mouthparts", "Prolific disease vector")).toString(),
+                habitat = "Homes, garbage dumps, farms, and food handling areas",
+                dangerLevel = "Medium",
+                dangerDescription = "Carries and spreads serious foodborne pathogens on domestic surfaces and food.",
+                timestamp = System.currentTimeMillis()
+            )
+            20017L -> InsectEntity(
+                id = id,
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_mosquito}",
+                commonName = "Yellow Fever Mosquito",
+                scientificName = "Aedes aegypti",
+                confidence = 100,
+                description = "The yellow fever mosquito (Aedes aegypti) is a small, dark mosquito species easily identified by white lyre-shaped markings on its thorax and white bands on its legs. Native to tropical regions, it has spread globally and is a primary vector for viral diseases.\n\nUnlike most mosquitoes, they are primarily daytime feeders, active during morning and late afternoon. Female mosquitoes require blood meals to obtain proteins needed for egg development, laying their eggs in clean standing water in artificial containers near human dwellings.\n\nThey are highly dangerous to human health. Their bites can transmit severe viral infections including dengue fever, zika virus, chikungunya, and yellow fever, making them one of the most significant disease vectors in warm climates.",
+                characteristicsJson = JSONArray(listOf("White leg bands", "Daytime biting behavior", "Breeds in standing water")).toString(),
+                habitat = "Urban areas, gardens, inside houses, and near standing water",
+                dangerLevel = "High",
+                dangerDescription = "Extremely dangerous vector for Dengue, Zika, and Yellow Fever viruses through blood-feeding bites.",
+                timestamp = System.currentTimeMillis()
+            )
+            20018L -> InsectEntity(
+                id = id,
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_centipede}",
+                commonName = "Giant Centipede",
+                scientificName = "Scolopendra subspinipes",
+                confidence = 100,
+                description = "The giant centipede (Scolopendra subspinipes) is a large, predatory myriapod native to tropical and subtropical regions. It can reach lengths of up to 20 cm or more, with a glossy reddish-brown body, bright yellow legs, and a pair of modified legs (forcipules) near the head that act as venomous claws.\n\nThey are aggressive nocturnal hunters that feed on a wide variety of prey, including insects, spiders, snails, and even small vertebrates like mice and frogs. They use their strong claws to hold prey and inject a potent cocktail of venom to paralyze it.\n\nTheir venom causes severe pain, swelling, and localized tissue inflammation in humans, and can occasionally cause systemic symptoms like fever. While centipede bites are rarely fatal, they are extremely painful and require careful wound cleaning and medical monitoring.",
+                characteristicsJson = JSONArray(listOf("Large segmented body", "Aggressive nocturnal hunter", "Venomous front claws")).toString(),
+                habitat = "Damp leaf litter, rotting logs, soil, and tropical forests",
+                dangerLevel = "High",
+                dangerDescription = "Bites are extremely painful, injecting venom that causes swelling, inflammation, and requires disinfection.",
+                timestamp = System.currentTimeMillis()
+            )
+            20019L -> InsectEntity(
+                id = id,
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_luna_moth}",
+                commonName = "Luna Moth",
+                scientificName = "Actias luna",
+                confidence = 100,
+                description = "The luna moth (Actias luna) is one of the most beautiful and iconic moths in North America. It is easily recognized by its large, lime-green wings, brownish-purple wing margins, prominent eyespots on each wing, and long, sweeping tails on its hindwings.\n\nLike other members of the giant silkmoth family, adult luna moths do not possess mouthparts or a digestive tract. They emerge from their cocoons solely to find a mate and reproduce, relying on energy reserves stored during their caterpillar stage, and living for only about a week.\n\nThey are completely harmless and gentle insects that are active only at night. Their unique hindwing tails are believed to spin and distort the echolocation signals of predatory bats, helping the moths escape detection in the dark.",
+                characteristicsJson = JSONArray(listOf("Lime-green wings", "Long hindwing tails", "Adults do not feed")).toString(),
+                habitat = "Deciduous forests, woodlands, and near lights at night",
+                dangerLevel = "Low",
+                dangerDescription = "Completely harmless to humans, a beautiful and gentle nocturnal visitor.",
+                timestamp = System.currentTimeMillis()
+            )
+            20020L -> InsectEntity(
+                id = id,
+                imageUri = "android.resource://$packageName/${R.drawable.img_article_orchid_mantis}",
+                commonName = "Orchid Mantis",
+                scientificName = "Hymenopus coronatus",
+                confidence = 100,
+                description = "The orchid mantis (Hymenopus coronatus) is a beautiful and highly specialized praying mantis species native to the tropical rainforests of Southeast Asia. It is famous for its extraordinary camouflage, resembling a white and pink orchid flower to hide from predators and trap prey.\n\nTheir legs are modified to look like delicate flower petals, and their body color matches orchid flowers perfectly, displaying shades of pink, white, and yellow. They practice aggressive mimicry, sitting quietly on flowers until an insect pollinator comes close, then striking with lightning speed.\n\nThey are harmless to humans and are highly prized by insect collectors and enthusiasts around the world for their beautiful and unique appearance, serving as a classic example of evolutionary adaptation.",
+                characteristicsJson = JSONArray(listOf("Flower petal camouflage", "Aggressive mimicry hunter", "White and pink coloration")).toString(),
+                habitat = "Tropical rainforest flowers, particularly orchids and frangipani",
+                dangerLevel = "Low",
+                dangerDescription = "Completely harmless to humans, beneficial predator that controls garden pests.",
                 timestamp = System.currentTimeMillis()
             )
             else -> throw IllegalArgumentException("Unknown static ID: $id")

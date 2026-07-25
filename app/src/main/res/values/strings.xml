@@ -64,9 +64,9 @@
     <!-- Home Screen Strings -->
     <string name="home_title">Bug Finder</string>
     <string name="home_subtitle">Scan and identify species</string>
-    <string name="home_premium_title">Unlock Pro Tier</string>
-    <string name="home_premium_desc">Scan unlimited bugs with premium precision</string>
-    <string name="home_premium_btn">Unlock Pro</string>
+    <string name="home_premium_title">Try Premium</string>
+    <string name="home_premium_desc">Identify any insect species with a snap</string>
+    <string name="home_premium_btn">Get It Now</string>
     <string name="home_photo_id">Camera\nIdentification</string>
     <string name="home_sound_id">Acoustic ID</string>
     <string name="home_most_common_title">Common Bugs</string>
@@ -75,12 +75,12 @@
     <string name="home_garden_insect_desc">Discover species that thrive in gardens and yards</string>
     <string name="home_fun_facts_title">Amazing Bug Facts</string>
     <string name="home_fun_facts_desc">Fascinating secrets of the insect world</string>
-    <string name="home_pest_control_title">Bug Prevention</string>
-    <string name="home_pest_control_desc">Eco-friendly tips to protect your home and yard</string>
+    <string name="home_pest_control_title">Pest Control</string>
+    <string name="home_pest_control_desc">Keep your home bug-free</string>
     <string name="home_bug_bite_title">Bite Care Guide</string>
     <string name="home_bug_bite_desc">Essential tips to identify and treat insect bites</string>
-    <string name="home_remarkable_coll_title">Curated Collections</string>
-    <string name="home_remarkable_coll_desc">Admire rare and extraordinary specimens worldwide</string>
+    <string name="home_remarkable_coll_title">Remarkable Collection</string>
+    <string name="home_remarkable_coll_desc">Explore famous butterfly and insect collections</string>
     <string name="home_tab_home">Home</string>
     <string name="home_tab_collections">Collections</string>
 
@@ -101,14 +101,14 @@
     <string name="paywall_benefit_3">Direct answers from our AI bug specialist</string>
     <string name="paywall_testimonial_quote">"Extremely accurate! Helped me identify every garden bug I found in seconds. Recommended! ❤️"</string>
     <string name="paywall_weekly">Weekly</string>
-    <string name="paywall_weekly_price">92.000 ₫</string>
+    <string name="paywall_weekly_price">$2.99</string>
     <string name="paywall_weekly_sub">renews weekly</string>
     <string name="paywall_yearly">Yearly</string>
-    <string name="paywall_yearly_price">929.000 ₫</string>
-    <string name="paywall_yearly_sub">17.865 ₫/week</string>
+    <string name="paywall_yearly_price">$19.99</string>
+    <string name="paywall_yearly_sub">$0.38/week</string>
     <string name="paywall_monthly">Monthly</string>
-    <string name="paywall_monthly_price">229.000 ₫</string>
-    <string name="paywall_monthly_sub">57.250 ₫/week</string>
+    <string name="paywall_monthly_price">$5.99</string>
+    <string name="paywall_monthly_sub">$1.49/week</string>
     <string name="paywall_continue">GET STARTED</string>
     <string name="paywall_disclaimer">By starting your subscription, you agree to allow billing to your Google Play account according to the chosen package. Cancel anytime via settings. Subscriptions automatically renew unless auto-renewal is deactivated at least 24 hours before the current billing period expires. Renewal charges will be applied within 24 hours prior to the period\'s end.</string>
     <string name="paywall_term_of_service">Terms of Use</string>

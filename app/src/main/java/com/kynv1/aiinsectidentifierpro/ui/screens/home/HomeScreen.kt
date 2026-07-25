@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -297,50 +298,41 @@ fun PremiumBanner(
 ) {
     Card(
         shape = RoundedCornerShape(Dimens.dp_16),
-        border = BorderStroke(Dimens.dp_1, Color(0xFF81C784).copy(alpha = 0.5f)),
+        border = BorderStroke(Dimens.dp_1, Color(0xFF81C784).copy(alpha = 0.3f)),
+        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = Dimens.dp_16, vertical = Dimens.dp_8),
-        colors = CardDefaults.cardColors(containerColor = Color.Transparent)
+            .padding(horizontal = Dimens.dp_16, vertical = Dimens.dp_8)
+            .height(115.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .background(
-                    brush = Brush.linearGradient(
-                        colors = listOf(
-                            Color(0xFF66BB6A),
-                            Color(0xFF4DB6AC)
-                        )
-                    )
-                )
-                .padding(Dimens.dp_16)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+        Box(modifier = Modifier.fillMaxSize()) {
+            Image(
+                painter = painterResource(id = R.drawable.img_premium_banner_bg),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize()
+            )
+
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(Dimens.dp_16)
+                    .width(180.dp),
+                verticalArrangement = Arrangement.SpaceBetween
             ) {
-                Column(modifier = Modifier.weight(1f)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = null,
-                            tint = Color.Yellow,
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(modifier = Modifier.width(Dimens.dp_4))
-                        Text(
-                            text = stringResource(id = R.string.home_premium_title),
-                            color = Color.White,
-                            fontSize = Dimens.sp_16,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(Dimens.dp_4))
+                Column {
+                    Text(
+                        text = stringResource(id = R.string.home_premium_title),
+                        color = Color.White,
+                        fontSize = Dimens.sp_18,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = stringResource(id = R.string.home_premium_desc),
                         color = Color.White.copy(alpha = 0.9f),
-                        fontSize = Dimens.sp_12
+                        fontSize = Dimens.sp_11,
+                        lineHeight = 14.sp
                     )
                 }
 
@@ -353,12 +345,13 @@ fun PremiumBanner(
                     ),
                     contentPadding = PaddingValues(
                         horizontal = Dimens.dp_16,
-                        vertical = Dimens.dp_6
-                    )
+                        vertical = 0.dp
+                    ),
+                    modifier = Modifier.height(26.dp)
                 ) {
                     Text(
                         text = stringResource(id = R.string.home_premium_btn),
-                        fontSize = Dimens.sp_12,
+                        fontSize = Dimens.sp_11,
                         fontWeight = FontWeight.Bold
                     )
                 }
