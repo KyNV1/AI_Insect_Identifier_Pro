@@ -4,7 +4,6 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,7 +22,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -47,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.kynv1.aiinsectidentifierpro.R
+import com.kynv1.aiinsectidentifierpro.common.CommonTopBar
 import com.kynv1.aiinsectidentifierpro.data.model.InsectInfo
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
@@ -73,38 +71,10 @@ fun DetailScreen(
             .fillMaxSize()
             .background(LightMilkBackground)
     ) {
-        // Custom TopBar Box
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(Dimens.dp_56)
-                .background(LightMilkBackground),
-            contentAlignment = Alignment.Center
-        ) {
-            Box(
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(start = Dimens.dp_8)
-                    .size(Dimens.dp_48)
-                    .clickable(
-                        interactionSource = remember { MutableInteractionSource() },
-                        indication = null
-                    ) { onBack() },
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_back_left),
-                    contentDescription = stringResource(id = R.string.detail_btn_back),
-                    tint = Color.Black
-                )
-            }
-            Text(
-                text = stringResource(id = R.string.detail_title),
-                fontSize = Dimens.sp_18,
-                fontWeight = FontWeight.Bold,
-                color = Color.Black
-            )
-        }
+        CommonTopBar(
+            title = stringResource(id = R.string.detail_title),
+            onBack = onBack
+        )
 
         Box(
             modifier = Modifier
@@ -193,7 +163,7 @@ private fun TaxonomyDetailsCard(
     modifier: Modifier = Modifier
 ) {
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(Dimens.dp_24),
         border = BorderStroke(Dimens.dp_1, LightCardBorder),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         modifier = modifier
@@ -235,7 +205,7 @@ private fun TaxonomyDetailsCard(
 
             HorizontalDivider(
                 color = LightCardBorder,
-                thickness = 1.dp
+                thickness = Dimens.dp_1
             )
 
             // Row 2: Độ tin cậy (Confidence)
@@ -254,11 +224,11 @@ private fun TaxonomyDetailsCard(
                 )
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    horizontalArrangement = Arrangement.spacedBy(Dimens.dp_4)
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(8.dp)
+                            .size(Dimens.dp_8)
                             .background(ActiveGreen, CircleShape)
                     )
                     Text(
@@ -304,10 +274,9 @@ private fun TaxonomyDetailsCard(
 
             HorizontalDivider(
                 color = LightCardBorder,
-                thickness = 1.dp
+                thickness = Dimens.dp_1
             )
 
-            // Row 4: Môi trường sống (Habitat)
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -318,7 +287,7 @@ private fun TaxonomyDetailsCard(
                     color = Color.Gray,
                     fontSize = Dimens.sp_14,
                     fontWeight = FontWeight.Medium,
-                    modifier = Modifier.padding(bottom = 4.dp)
+                    modifier = Modifier.padding(bottom = Dimens.dp_4)
                 )
                 Text(
                     text = info.habitat,
@@ -338,7 +307,7 @@ private fun DescriptionCard(
     var isExpanded by remember { mutableStateOf(false) }
 
     Card(
-        shape = RoundedCornerShape(24.dp),
+        shape = RoundedCornerShape(Dimens.dp_24),
         border = BorderStroke(Dimens.dp_1, LightCardBorder),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         modifier = modifier
@@ -364,7 +333,7 @@ private fun DescriptionCard(
                 overflow = TextOverflow.Ellipsis
             )
             if (description.length > 150) {
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(Dimens.dp_8))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
@@ -376,7 +345,7 @@ private fun DescriptionCard(
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier
                             .clickable { isExpanded = !isExpanded }
-                            .padding(vertical = 4.dp, horizontal = 8.dp)
+                            .padding(vertical = Dimens.dp_4, horizontal = Dimens.dp_8)
                     )
                 }
             }

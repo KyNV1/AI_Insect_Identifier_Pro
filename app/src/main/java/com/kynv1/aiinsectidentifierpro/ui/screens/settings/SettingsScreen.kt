@@ -54,6 +54,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.kynv1.aiinsectidentifierpro.common.noRippleClick
+import com.kynv1.aiinsectidentifierpro.common.CommonTopBar
 import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.ui.screens.home.PremiumBanner
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
@@ -79,7 +81,10 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .background(LightMilkBackground)
         ) {
-            SettingsTopBar(onBack = onBack)
+            CommonTopBar(
+                title = stringResource(id = R.string.settings_title),
+                onBack = onBack
+            )
             SettingsContent(
                 onNavigateToPaywall = onNavigateToPaywall,
                 onRateUsClick = { showRateDialog = true },
@@ -117,38 +122,6 @@ fun SettingsScreen(
                 }
             )
         }
-    }
-}
-
-@Composable
-private fun SettingsTopBar(onBack: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(Dimens.dp_56)
-            .background(LightMilkBackground),
-        contentAlignment = Alignment.Center
-    ) {
-        Box(
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-                .padding(start = Dimens.dp_8)
-                .size(Dimens.dp_48)
-                .noRippleClick { onBack() },
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_back_left),
-                contentDescription = stringResource(R.string.detail_btn_back),
-                tint = Color.Black
-            )
-        }
-        Text(
-            text = stringResource(R.string.settings_title),
-            fontSize = Dimens.sp_18,
-            fontWeight = FontWeight.Bold,
-            color = Color.Black
-        )
     }
 }
 
@@ -408,13 +381,6 @@ fun SettingsRowItem(
         )
     }
 }
-
-private fun Modifier.noRippleClick(enabled: Boolean = true, onClick: () -> Unit) = this.clickable(
-    interactionSource = MutableInteractionSource(),
-    indication = null,
-    enabled = enabled,
-    onClick = onClick
-)
 
 @Preview(showBackground = true)
 @Composable

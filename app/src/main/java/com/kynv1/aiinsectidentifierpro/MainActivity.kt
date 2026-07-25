@@ -500,7 +500,13 @@ fun AppNavHost(
                 viewModel = historyViewModel,
                 onNavigateToDetail = { id ->
                     navController.navigate(Screen.Detail.createRoute(id))
-                }
+                },
+                onNavigateToScan = {
+                    navController.navigate(Screen.Scan.route)
+                },
+                onNavigateToAssistance = {
+                    navController.navigate(Screen.Assistance.route)
+                },
             )
         }
         composable(

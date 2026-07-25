@@ -26,6 +26,8 @@
     <string name="detail_danger_medium">Warning</string>
     <string name="detail_danger_low">Low</string>
     <string name="detail_description_header">Description</string>
+    <string name="detail_read_more">Read More</string>
+    <string name="detail_read_less">Read Less</string>
     <string name="detail_characteristics_header">Characteristics</string>
     <string name="detail_habitat_header">Habitat</string>
     <string name="detail_safety_warning_header">Safety Warning</string>
@@ -36,6 +38,12 @@
     <string name="history_empty_desc">Your scanned insect species will appear here for easy review later.</string>
     <string name="history_btn_delete_desc">Delete item</string>
     <string name="history_item_confidence_format">%1$s  •  Confidence: %2$d%%</string>
+
+    <!-- Collection Screen Strings -->
+    <string name="collection_title">Collection</string>
+    <string name="collection_empty_title">No insects saved yet</string>
+    <string name="collection_empty_desc">Scan insects to build your collection.</string>
+    <string name="collection_btn_add">Scan Insect</string>
 
     <!-- Scan Screen Strings -->
     <string name="scan_title">AI Insect Identifier</string>
