@@ -24,35 +24,35 @@ class InsectRepository(
                 id = 10001L,
                 commonName = "Ash-black Slug",
                 scientificName = "Limax cinereoniger",
-                imageResId = R.drawable.img_onboarding_green_beetle,
+                imageResId = R.drawable.img_basic_ash_black_slug,
                 category = "Most Common"
             ),
             InsectShort(
                 id = 10002L,
                 commonName = "Black Oil Beetle",
                 scientificName = "Meloe proscarabaeus",
-                imageResId = R.drawable.img_onboarding_red_beetle,
+                imageResId = R.drawable.img_basic_black_oil_beetle,
                 category = "Most Common"
             ),
             InsectShort(
                 id = 10003L,
                 commonName = "Broom-tip Moth",
                 scientificName = "Chesias rufata",
-                imageResId = R.drawable.img_onboarding_atlas_moth,
+                imageResId = R.drawable.img_basic_broom_tip_moth,
                 category = "Most Common"
             ),
             InsectShort(
                 id = 10004L,
                 commonName = "Buffish Mining Bee",
                 scientificName = "Andrena fulva",
-                imageResId = R.drawable.img_onboarding_honey_bee,
+                imageResId = R.drawable.img_basic_buffish_mining_bee,
                 category = "Most Common"
             ),
             InsectShort(
                 id = 10005L,
                 commonName = "Common Wasp",
                 scientificName = "Vespula vulgaris",
-                imageResId = R.drawable.img_onboarding_honey_bee,
+                imageResId = R.drawable.img_basic_common_wasp,
                 category = "Most Common"
             ),
 
@@ -61,21 +61,21 @@ class InsectRepository(
                 id = 10006L,
                 commonName = "Brown-lipped Snail",
                 scientificName = "Cepaea nemoralis",
-                imageResId = R.drawable.img_onboarding_green_beetle,
+                imageResId = R.drawable.img_basic_brown_lipped_snail,
                 category = "Garden Insect"
             ),
             InsectShort(
                 id = 10007L,
                 commonName = "Black and red froghopper",
                 scientificName = "Cercopis vulnerata",
-                imageResId = R.drawable.img_onboarding_red_beetle,
+                imageResId = R.drawable.img_basic_black_red_froghopper,
                 category = "Garden Insect"
             ),
             InsectShort(
                 id = 10008L,
                 commonName = "The Sabre Wasp",
                 scientificName = "Rhyssa persuasoria",
-                imageResId = R.drawable.img_onboarding_atlas_moth,
+                imageResId = R.drawable.img_basic_sabre_wasp,
                 category = "Garden Insect"
             ),
             InsectShort(
@@ -89,7 +89,7 @@ class InsectRepository(
                 id = 10010L,
                 commonName = "Red Ladybug",
                 scientificName = "Harmonia axyridis",
-                imageResId = R.drawable.img_onboarding_red_beetle,
+                imageResId = R.drawable.img_basic_red_ladybug,
                 category = "Garden Insect"
             )
         )
@@ -100,19 +100,22 @@ class InsectRepository(
             // Fun Bug Facts
             HomeArticle(
                 id = 20001L,
-                title = "What? Now ticks can fly?!",
+                commonName = "Deer Tick",
+                scientificName = "Ixodes scapularis",
                 imageResId = R.drawable.img_article_tick,
                 category = "Fun Bug Facts"
             ),
             HomeArticle(
                 id = 20002L,
-                title = "Where Do Termites Hide?",
+                commonName = "Eastern Subterranean Termite",
+                scientificName = "Reticulitermes flavipes",
                 imageResId = R.drawable.img_article_termite,
                 category = "Fun Bug Facts"
             ),
             HomeArticle(
                 id = 20003L,
-                title = "What Do Pill Bugs Eat?",
+                commonName = "Pill Bug",
+                scientificName = "Armadillidium vulgare",
                 imageResId = R.drawable.img_article_pill_bug,
                 category = "Fun Bug Facts"
             ),
@@ -120,19 +123,22 @@ class InsectRepository(
             // Pest Control
             HomeArticle(
                 id = 20004L,
-                title = "How to Prevent Unwanted Kitchen Pests",
+                commonName = "German Cockroach",
+                scientificName = "Blattella germanica",
                 imageResId = R.drawable.img_article_kitchen_pest,
                 category = "Pest Control"
             ),
             HomeArticle(
                 id = 20005L,
-                title = "How to Get Rid of Boxelder Bugs",
+                commonName = "Boxelder Bug",
+                scientificName = "Boisea trivittata",
                 imageResId = R.drawable.img_article_boxelder_bug,
                 category = "Pest Control"
             ),
             HomeArticle(
                 id = 20006L,
-                title = "How to Get Rid of Mice",
+                commonName = "House Mouse",
+                scientificName = "Mus musculus",
                 imageResId = R.drawable.img_article_mouse,
                 category = "Pest Control"
             ),
@@ -140,19 +146,22 @@ class InsectRepository(
             // Bug Bite Help
             HomeArticle(
                 id = 20007L,
-                title = "How to Treat a Spider Bite",
+                commonName = "Black Widow Spider",
+                scientificName = "Latrodectus mactans",
                 imageResId = R.drawable.img_article_spider_bite,
                 category = "Bug Bite Help"
             ),
             HomeArticle(
                 id = 20008L,
-                title = "Tips for Treating Insect Stings",
+                commonName = "Common Wasp",
+                scientificName = "Vespula vulgaris",
                 imageResId = R.drawable.img_article_wasp_sting,
                 category = "Bug Bite Help"
             ),
             HomeArticle(
                 id = 20009L,
-                title = "Flea Bites",
+                commonName = "Cat Flea",
+                scientificName = "Ctenocephalides felis",
                 imageResId = R.drawable.img_article_flea,
                 category = "Bug Bite Help"
             ),
@@ -160,19 +169,22 @@ class InsectRepository(
             // Remarkable Collection
             HomeArticle(
                 id = 20010L,
-                title = "Creating an Insect Collection",
+                commonName = "Stag Beetle",
+                scientificName = "Lucanus cervus",
                 imageResId = R.drawable.img_article_insect_collection,
                 category = "Remarkable Collection"
             ),
             HomeArticle(
                 id = 20011L,
-                title = "The John Landy Butterfly Collection",
+                commonName = "Monarch Butterfly",
+                scientificName = "Danaus plexippus",
                 imageResId = R.drawable.img_article_butterfly_collection,
                 category = "Remarkable Collection"
             ),
             HomeArticle(
                 id = 20012L,
-                title = "The Scott Sisters Collection",
+                commonName = "Atlas Moth",
+                scientificName = "Attacus atlas",
                 imageResId = R.drawable.img_article_insect_collection,
                 category = "Remarkable Collection"
             )
@@ -191,7 +203,7 @@ class InsectRepository(
         return when (id) {
             10001L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_green_beetle}",
+                imageUri = "android.resource://$packageName/${R.drawable.img_basic_ash_black_slug}",
                 commonName = "Ash-black Slug",
                 scientificName = "Limax cinereoniger",
                 confidence = 97,
@@ -204,7 +216,7 @@ class InsectRepository(
             )
             10002L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_red_beetle}",
+                imageUri = "android.resource://$packageName/${R.drawable.img_basic_black_oil_beetle}",
                 commonName = "Black Oil Beetle",
                 scientificName = "Meloe proscarabaeus",
                 confidence = 94,
@@ -217,7 +229,7 @@ class InsectRepository(
             )
             10003L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_atlas_moth}",
+                imageUri = "android.resource://$packageName/${R.drawable.img_basic_broom_tip_moth}",
                 commonName = "Broom-tip Moth",
                 scientificName = "Chesias rufata",
                 confidence = 96,
@@ -230,7 +242,7 @@ class InsectRepository(
             )
             10004L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_honey_bee}",
+                imageUri = "android.resource://$packageName/${R.drawable.img_basic_buffish_mining_bee}",
                 commonName = "Buffish Mining Bee",
                 scientificName = "Andrena fulva",
                 confidence = 95,
@@ -243,7 +255,7 @@ class InsectRepository(
             )
             10005L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_honey_bee}",
+                imageUri = "android.resource://$packageName/${R.drawable.img_basic_common_wasp}",
                 commonName = "Common Wasp",
                 scientificName = "Vespula vulgaris",
                 confidence = 98,
@@ -256,7 +268,7 @@ class InsectRepository(
             )
             10006L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_green_beetle}",
+                imageUri = "android.resource://$packageName/${R.drawable.img_basic_brown_lipped_snail}",
                 commonName = "Brown-lipped Snail",
                 scientificName = "Cepaea nemoralis",
                 confidence = 93,
@@ -269,7 +281,7 @@ class InsectRepository(
             )
             10007L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_red_beetle}",
+                imageUri = "android.resource://$packageName/${R.drawable.img_basic_black_red_froghopper}",
                 commonName = "Black and red froghopper",
                 scientificName = "Cercopis vulnerata",
                 confidence = 95,
@@ -282,7 +294,7 @@ class InsectRepository(
             )
             10008L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_atlas_moth}",
+                imageUri = "android.resource://$packageName/${R.drawable.img_basic_sabre_wasp}",
                 commonName = "The Sabre Wasp",
                 scientificName = "Rhyssa persuasoria",
                 confidence = 96,
@@ -308,7 +320,7 @@ class InsectRepository(
             )
             10010L -> InsectEntity(
                 id = id,
-                imageUri = "android.resource://$packageName/${R.drawable.img_onboarding_red_beetle}",
+                imageUri = "android.resource://$packageName/${R.drawable.img_basic_red_ladybug}",
                 commonName = "Red Ladybug",
                 scientificName = "Harmonia axyridis",
                 confidence = 95,

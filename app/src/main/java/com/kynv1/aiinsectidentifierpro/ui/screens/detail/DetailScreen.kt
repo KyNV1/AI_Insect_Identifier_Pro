@@ -1,5 +1,6 @@
 package com.kynv1.aiinsectidentifierpro.ui.screens.detail
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,14 +20,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Text
@@ -34,7 +32,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,6 +45,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -340,12 +341,15 @@ private fun DescriptionCard(
     description: String,
     modifier: Modifier = Modifier
 ) {
+    var isExpanded by remember { mutableStateOf(false) }
+
     Card(
         shape = RoundedCornerShape(24.dp),
         border = BorderStroke(Dimens.dp_1, LightCardBorder),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         modifier = modifier
             .fillMaxWidth()
+            .animateContentSize()
     ) {
         Column(
             modifier = Modifier.padding(Dimens.dp_20)
@@ -361,8 +365,27 @@ private fun DescriptionCard(
                 text = description,
                 color = Color.DarkGray,
                 fontSize = Dimens.sp_14,
-                lineHeight = 22.sp
+                lineHeight = 22.sp,
+                maxLines = if (isExpanded) Int.MAX_VALUE else 4,
+                overflow = TextOverflow.Ellipsis
             )
+            if (description.length > 150) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Text(
+                        text = if (isExpanded) "Read Less" else "Read More",
+                        color = ActiveGreen,
+                        fontSize = Dimens.sp_14,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .clickable { isExpanded = !isExpanded }
+                            .padding(vertical = 4.dp, horizontal = 8.dp)
+                    )
+                }
+            }
         }
     }
 }

@@ -1,29 +1,31 @@
-# Kế hoạch mở rộng phần Mô tả (Description) chi tiết chuẩn Pro cho các loài vật
+# Kế hoạch đồng bộ hóa hình ảnh chính xác 100% với tên loài vật
 
-Tài liệu này chi tiết kế hoạch viết lại phần mô tả (Description) của toàn bộ 22 loài vật trong cơ sở dữ liệu mẫu để đạt độ dài chuẩn, giàu thông tin (từ 120-200 từ mỗi con), chia làm các đoạn rõ ràng mô tả về: đặc điểm hình thể, tập tính sinh hoạt/thức ăn, và mối quan hệ với con người.
+Tài liệu này chi tiết kế hoạch sửa đổi lỗi nghiêm trọng trong cơ sở dữ liệu mẫu: Hình ảnh hiển thị bị lệch hoàn toàn so với tên và mô tả loài vật (ví dụ: Tên là Sên trần nhưng ảnh lại hiển thị Bọ cánh cứng màu xanh).
 
 ---
 
 ## 🛠️ Giải pháp đề xuất
 
-### 1. Viết lại phần Description cho nhóm côn trùng quét mẫu (ID `10001` - `10010`)
-Mở rộng mô tả khoa học cho các loài côn trùng cơ bản:
-- **Ash-black Slug (Sên trần):** Thêm thông tin về kích thước khổng lồ của nó (lớn nhất thế giới), cách thở bằng phổi và vai trò phân hủy sinh học trong rừng cổ thụ.
-- **Black Oil Beetle (Bọ dầu đen):** Thêm cơ chế tự vệ tiết ra cantharidin gây rộp da độc đáo và vòng đời ký sinh phức tạp trên ấu trùng ong đất.
-- **Broom-tip Moth (Bướm đêm):** Thêm tập tính ngụy trang trên cành cây đậu chổi và vòng đời sinh trưởng ban đêm.
-- ... Cập nhật tương tự cho các loài còn lại.
+### 1. Tạo mới 9 hình ảnh chính xác cho nhóm côn trùng quét cơ bản
+Sử dụng công cụ tạo hình ảnh để tạo các hình ảnh côn trùng thực tế chính xác và lưu vào `res/drawable`:
+- `img_basic_ash_black_slug.png` (Hình ảnh con Sên trần màu xám đen thực tế)
+- `img_basic_black_oil_beetle.png` (Hình ảnh con Bọ dầu màu đen bóng)
+- `img_basic_broom_tip_moth.png` (Hình ảnh con Bướm đêm Broom-tip ngụy trang)
+- `img_basic_buffish_mining_bee.png` (Hình ảnh con Ong đất lông màu cam vàng)
+- `img_basic_common_wasp.png` (Hình ảnh con Ong vò vẽ sọc vàng đen)
+- `img_basic_brown_lipped_snail.png` (Hình ảnh con Ốc sên grove sọc viền nâu)
+- `img_basic_black_red_froghopper.png` (Hình ảnh con Froghopper sọc đen đỏ)
+- `img_basic_sabre_wasp.png` (Hình ảnh con Ong Sabre với ống đẻ trứng dài)
+- `img_basic_red_ladybug.png` (Hình ảnh con Bọ rùa màu đỏ chấm đen thực tế)
 
-### 2. Viết lại phần Description cho nhóm bài viết trang chủ (ID `20001` - `20012`)
-Mở rộng chi tiết sinh học tương ứng cho các con vật thuộc bài viết:
-- **Deer Tick (Ve bét - `20001L`):** Viết sâu về cách chúng bám vào vật chủ (questing), vòng đời hút máu qua các giai đoạn, và các bệnh truyền nhiễm nguy hiểm như Lyme.
-- **House Mouse (Chuột nhà - `20006L`):** Viết về khả năng thích nghi cực cao với con người, tập tính gặm nhấm mài răng liên tục gây chập điện, và cách chúng sinh sản nhanh chóng.
-- **Common Wasp (Ong vò vẽ - `20008L`):** Viết về cấu trúc tổ giấy xã hội lên đến 10.000 con, tập tính ăn thịt kiểm soát sâu bệnh và hành vi hung dữ đốt nhiều lần khi tự vệ.
-- ... Cập nhật cho toàn bộ 12 con vật.
+### 2. Cập nhật ánh xạ hình ảnh trong `InsectRepository.kt`
+Thay đổi đường dẫn hình ảnh của các thực thể từ ID `10001L` đến `10010L` từ ảnh onboarding mẫu cũ sang các tệp ảnh chính xác mới được tạo này.
 
 ---
 
 ## 📅 Các bước thực hiện cụ thể
 
-1.  **Bước 1:** Chuẩn bị nội dung mô tả tiếng Anh chi tiết, chuyên nghiệp cho tất cả 22 loài vật.
-2.  **Bước 2:** Cập nhật tệp [**`InsectRepository.kt`**](file:///d:/chplay/AIInsectIdentifierPro/app/src/main/java/com/kynv1/aiinsectidentifierpro/data/repository/InsectRepository.kt) thay thế các đoạn mô tả ngắn bằng nội dung mở rộng.
-3.  **Bước 3:** Chạy biên dịch kiểm tra dự án và nghiệm thu giao diện hiển thị văn bản cuộn đẹp mắt.
+1.  **Bước 1:** Tạo 9 hình ảnh chuẩn xác bằng công cụ tạo ảnh.
+2.  **Bước 2:** Copy và đổi tên các ảnh vào thư mục `app/src/main/res/drawable/`.
+3.  **Bước 3:** Cập nhật ánh xạ tài nguyên hình ảnh trong [**`InsectRepository.kt`**](file:///d:/chplay/AIInsectIdentifierPro/app/src/main/java/com/kynv1/aiinsectidentifierpro/data/repository/InsectRepository.kt).
+4.  **Bước 4:** Biên dịch kiểm tra dự án.

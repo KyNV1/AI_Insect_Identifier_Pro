@@ -51,6 +51,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -575,7 +576,7 @@ fun ArticleListItem(
         Column(modifier = Modifier.fillMaxWidth()) {
             Image(
                 painter = painterResource(id = article.imageResId),
-                contentDescription = article.title,
+                contentDescription = article.commonName,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(110.dp)
@@ -594,12 +595,21 @@ fun ArticleListItem(
                     .padding(Dimens.dp_8)
             ) {
                 Text(
-                    text = article.title,
+                    text = article.commonName,
                     color = Color.Black,
                     fontSize = Dimens.sp_14,
                     fontWeight = FontWeight.Bold,
-                    maxLines = 2,
-                    minLines = 2
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = article.scientificName,
+                    color = ActiveGreen,
+                    fontSize = Dimens.sp_12,
+                    fontStyle = FontStyle.Italic,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }
