@@ -23,6 +23,9 @@ val ButtonGreen = Color(0xFF2E7D32)
 val DarkButtonGreen = Color(0xFF1B5E20)
 val DisabledButtonGreen = Color(0xFF1E3528)
 
+val NeonGreen = Color(0xFF76FF03)
+val DarkForestGreenText = Color(0xFF1B3022)
+
 val WarningOrange = Color(0xFFFF9800)
 val DangerRedBackground = Color(0xFF241414)
 val DangerRedBorder = Color(0xFF5E2020)

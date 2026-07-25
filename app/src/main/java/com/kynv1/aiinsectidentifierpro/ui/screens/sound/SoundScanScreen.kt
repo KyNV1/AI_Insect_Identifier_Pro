@@ -17,12 +17,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.NatureGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.NeonGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.DarkForestGreenText
 import com.kynv1.aiinsectidentifierpro.ui.theme.AccentLime
 import com.kynv1.aiinsectidentifierpro.ui.theme.CardBackground
 import com.kynv1.aiinsectidentifierpro.ui.theme.CardBorder
@@ -47,6 +55,17 @@ fun SoundScanScreen(
 ) {
     var scanState by remember { mutableStateOf<SoundScanState>(SoundScanState.Listening) }
     var secondsLeft by remember { mutableIntStateOf(5) }
+
+    val bgTransition = rememberInfiniteTransition(label = "bg_zoom")
+    val bgScale by bgTransition.animateFloat(
+        initialValue = 0.98f,
+        targetValue = 1.03f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(8000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "bg_scale"
+    )
 
     LaunchedEffect(Unit) {
         while (secondsLeft > 0) {
@@ -92,14 +111,24 @@ fun SoundScanScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(DarkForestGreen, DarkBackground)
-                    )
-                )
                 .padding(innerPadding),
             contentAlignment = Alignment.Center
         ) {
+            Image(
+                painter = painterResource(id = R.drawable.bg_scan_insect_butterfly),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .graphicsLayer(scaleX = bgScale, scaleY = bgScale)
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.12f))
+            )
+
             when (val state = scanState) {
                 is SoundScanState.Listening -> {
                     Column(
@@ -109,7 +138,7 @@ fun SoundScanScreen(
                     ) {
                         Text(
                             text = stringResource(id = R.string.sound_scan_subtitle),
-                            color = Color.White,
+                            color = DarkForestGreenText,
                             fontSize = Dimens.sp_22,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center
@@ -117,7 +146,7 @@ fun SoundScanScreen(
                         Spacer(modifier = Modifier.height(Dimens.dp_4))
                         Text(
                             text = stringResource(id = R.string.sound_scan_instruction),
-                            color = Color.White.copy(alpha = 0.6f),
+                            color = Color(0xFF333333),
                             fontSize = Dimens.sp_14,
                             textAlign = TextAlign.Center
                         )
@@ -127,15 +156,13 @@ fun SoundScanScreen(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier
                                 .size(120.dp)
-                                .background(
-                                    MediumForestGreen.copy(alpha = 0.3f),
-                                    shape = CircleShape
-                                )
+                                .background(Color.White.copy(alpha = 0.48f), shape = CircleShape)
+                                .border(BorderStroke(1.dp, Color.White.copy(alpha = 0.6f)), shape = CircleShape)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Hearing,
                                 contentDescription = null,
-                                tint = AccentLime,
+                                tint = NatureGreen,
                                 modifier = Modifier.size(Dimens.dp_64)
                             )
                         }
@@ -148,7 +175,7 @@ fun SoundScanScreen(
 
                         Text(
                             text = "0:0${secondsLeft}",
-                            color = AccentLime,
+                            color = NatureGreen,
                             fontSize = Dimens.sp_28,
                             fontWeight = FontWeight.Bold
                         )
@@ -162,13 +189,13 @@ fun SoundScanScreen(
                         modifier = Modifier.padding(Dimens.dp_16)
                     ) {
                         CircularProgressIndicator(
-                            color = AccentLime,
+                            color = NatureGreen,
                             modifier = Modifier.size(Dimens.dp_64)
                         )
                         Spacer(modifier = Modifier.height(Dimens.dp_24))
                         Text(
                             text = stringResource(id = R.string.sound_scan_loading),
-                            color = Color.White,
+                            color = DarkForestGreenText,
                             fontSize = Dimens.sp_18,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center
@@ -185,20 +212,20 @@ fun SoundScanScreen(
                         Box(
                             contentAlignment = Alignment.Center,
                             modifier = Modifier
-                                .size(Dimens.dp_64)
-                                .background(ActiveGreen.copy(alpha = 0.2f), shape = CircleShape)
+                                .size(Dimens.dp_64) 
+                                .background(NatureGreen.copy(alpha = 0.2f), shape = CircleShape)
                         ) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.VolumeUp,
                                 contentDescription = null,
-                                tint = ActiveGreen,
+                                tint = NatureGreen,
                                 modifier = Modifier.size(Dimens.dp_40)
                             )
                         }
                         Spacer(modifier = Modifier.height(Dimens.dp_24))
                         Text(
                             text = stringResource(id = R.string.sound_scan_success),
-                            color = ActiveGreen,
+                            color = NatureGreen,
                             fontSize = Dimens.sp_22,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center
@@ -207,8 +234,8 @@ fun SoundScanScreen(
 
                         Card(
                             shape = RoundedCornerShape(Dimens.dp_16),
-                            border = BorderStroke(Dimens.dp_1, CardBorder),
-                            colors = CardDefaults.cardColors(containerColor = CardBackground),
+                            border = BorderStroke(Dimens.dp_1, Color.White.copy(alpha = 0.6f)),
+                            colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.48f)),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = Dimens.dp_16)
@@ -221,7 +248,7 @@ fun SoundScanScreen(
                             ) {
                                 Text(
                                     text = state.insectName,
-                                    color = Color.White,
+                                    color = DarkForestGreenText,
                                     fontSize = Dimens.sp_18,
                                     fontWeight = FontWeight.Bold,
                                     textAlign = TextAlign.Center
@@ -232,7 +259,7 @@ fun SoundScanScreen(
                                         id = R.string.sound_scan_confidence_format,
                                         state.confidence
                                     ),
-                                    color = AccentLime,
+                                    color = NatureGreen,
                                     fontSize = Dimens.sp_14,
                                     fontWeight = FontWeight.Medium
                                 )
@@ -240,7 +267,10 @@ fun SoundScanScreen(
 
                                 Button(
                                     onClick = { onNavigateToDetail(state.id) },
-                                    colors = ButtonDefaults.buttonColors(containerColor = ActiveGreen),
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = NatureGreen,
+                                        contentColor = Color.White
+                                    ),
                                     shape = RoundedCornerShape(Dimens.dp_50),
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
@@ -261,7 +291,7 @@ fun SoundScanScreen(
                         }) {
                             Text(
                                 text = "Scan Again",
-                                color = Color.White.copy(alpha = 0.7f),
+                                color = Color(0xFF757575),
                                 fontSize = Dimens.sp_14
                             )
                         }

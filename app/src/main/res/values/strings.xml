@@ -38,8 +38,8 @@
     <string name="history_item_confidence_format">%1$s  •  Confidence: %2$d%%</string>
 
     <!-- Scan Screen Strings -->
-    <string name="scan_title">INSECT IDENTIFIER</string>
-    <string name="scan_subtitle">Take or select an insect photo to identify with AI</string>
+    <string name="scan_title">AI Insect Identifier</string>
+    <string name="scan_subtitle">Identify insects instantly with AI</string>
     <string name="scan_empty_title">No image selected</string>
     <string name="scan_empty_desc">Tap to take a photo or select an image from your device.</string>
     <string name="scan_btn_take_photo">Take Photo</string>
