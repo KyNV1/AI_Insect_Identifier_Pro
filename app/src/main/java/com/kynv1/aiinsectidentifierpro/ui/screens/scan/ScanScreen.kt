@@ -82,12 +82,16 @@ import com.kynv1.aiinsectidentifierpro.ui.theme.NatureLightGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.TextCharcoal
 import com.kynv1.aiinsectidentifierpro.ui.theme.TextDarkGrey
 import java.io.File
+import androidx.compose.foundation.LocalIndication
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.shape.CircleShape
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScanScreen(
     viewModel: ScanViewModel,
     onNavigateToDetail: (Long) -> Unit,
+    onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -171,7 +175,7 @@ fun ScanScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.12f))
+                .background(Color.Black.copy(alpha = 0.25f))
         )
 
         Column(
@@ -182,28 +186,52 @@ fun ScanScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(top = Dimens.dp_16)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = Dimens.dp_16),
+                contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = stringResource(id = R.string.scan_title),
-                    color = DarkForestGreenText,
-                    fontSize = Dimens.sp_24,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 2.sp
-                )
-                Text(
-                    text = stringResource(id = R.string.scan_subtitle),
-                    color = TextCharcoal,
-                    fontSize = Dimens.sp_13,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(
-                        top = Dimens.dp_4,
-                        start = Dimens.dp_16,
-                        end = Dimens.dp_16
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(start = Dimens.dp_8)
+                        .size(Dimens.dp_36)
+                        .background(Color.White.copy(alpha = 0.25f), CircleShape)
+                        .clip(CircleShape)
+                        .clickable(
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = LocalIndication.current
+                        ) { onNavigateBack() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_back_left),
+                        contentDescription = stringResource(id = R.string.detail_btn_back),
+                        tint = Color.White,
+                        modifier = Modifier.size(Dimens.dp_18)
                     )
-                )
+                }
+
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.scan_title),
+                        color = DarkForestGreenText,
+                        fontSize = Dimens.sp_20,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 1.sp
+                    )
+                    Spacer(modifier = Modifier.height(Dimens.dp_2))
+                    Text(
+                        text = stringResource(id = R.string.scan_subtitle),
+                        color = TextCharcoal,
+                        fontSize = Dimens.sp_12,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = Dimens.dp_16)
+                    )
+                }
             }
 
             Card(
@@ -220,8 +248,8 @@ fun ScanScreen(
                         }
                     },
                 shape = RoundedCornerShape(Dimens.dp_24),
-                colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.55f)),
-                border = BorderStroke(Dimens.dp_1, Color.White.copy(alpha = 0.6f))
+                colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.2f)),
+                border = BorderStroke(Dimens.dp_1, Color.White.copy(alpha = 0.35f))
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -339,15 +367,15 @@ fun ScanScreen(
                     Button(
                         onClick = { pickImageLauncher.launch("image/*") },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color.White.copy(alpha = 0.6f),
-                            contentColor = ActiveGreen
+                            containerColor = Color.White.copy(alpha = 0.15f),
+                            contentColor = Color.White
                         ),
                         shape = RoundedCornerShape(Dimens.dp_16),
                         modifier = Modifier
                             .weight(1f)
                             .height(Dimens.dp_56)
                             .padding(start = Dimens.dp_8),
-                        border = BorderStroke(Dimens.dp_2, ActiveGreen)
+                        border = BorderStroke(Dimens.dp_1, Color.White.copy(alpha = 0.4f))
                     ) {
                         Icon(imageVector = Icons.Default.Image, contentDescription = null)
                         Spacer(modifier = Modifier.width(Dimens.dp_8))
@@ -380,7 +408,7 @@ fun ScanScreen(
                         text = if (selectedImageUri != null) {
                             stringResource(id = R.string.scan_btn_identify)
                         } else {
-                            "Select a photo first"
+                            stringResource(id = R.string.scan_btn_select_photo_first)
                         },
                         fontWeight = FontWeight.Bold,
                         fontSize = Dimens.sp_16

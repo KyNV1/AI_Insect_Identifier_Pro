@@ -47,6 +47,7 @@
     <string name="scan_btn_take_photo">Take Photo</string>
     <string name="scan_btn_gallery">Gallery</string>
     <string name="scan_btn_identify">IDENTIFY NOW</string>
+    <string name="scan_btn_select_photo_first">Select a photo first</string>
     <string name="scan_loading_title">AI is analyzing image...</string>
     <string name="scan_loading_desc">Gemini 1.5 Flash model is identifying the insect, please wait a moment.</string>
     <string name="scan_error_title">Identification Error</string>
