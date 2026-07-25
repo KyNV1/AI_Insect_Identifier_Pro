@@ -191,6 +191,7 @@ private fun SpecimenImageCard(
     }
 }
 
+
 @Composable
 private fun TaxonomyDetailsCard(
     info: InsectInfo,
