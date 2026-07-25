@@ -32,6 +32,8 @@ import com.kynv1.aiinsectidentifierpro.ui.theme.NatureGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.NeonGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.DarkForestGreenText
 import com.kynv1.aiinsectidentifierpro.ui.theme.AccentLime
+import com.kynv1.aiinsectidentifierpro.ui.theme.TextCharcoal
+import com.kynv1.aiinsectidentifierpro.ui.theme.TextMediumGrey
 import com.kynv1.aiinsectidentifierpro.ui.theme.CardBackground
 import com.kynv1.aiinsectidentifierpro.ui.theme.CardBorder
 import com.kynv1.aiinsectidentifierpro.ui.theme.DarkBackground
@@ -146,7 +148,7 @@ fun SoundScanScreen(
                         Spacer(modifier = Modifier.height(Dimens.dp_4))
                         Text(
                             text = stringResource(id = R.string.sound_scan_instruction),
-                            color = Color(0xFF333333),
+                            color = TextCharcoal,
                             fontSize = Dimens.sp_14,
                             textAlign = TextAlign.Center
                         )
@@ -291,7 +293,7 @@ fun SoundScanScreen(
                         }) {
                             Text(
                                 text = "Scan Again",
-                                color = Color(0xFF757575),
+                                color = TextMediumGrey,
                                 fontSize = Dimens.sp_14
                             )
                         }

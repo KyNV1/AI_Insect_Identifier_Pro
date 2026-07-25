@@ -41,6 +41,10 @@ import androidx.compose.foundation.Image
 import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.NatureGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.TextCharcoal
+import com.kynv1.aiinsectidentifierpro.ui.theme.TextDarkGrey
+import com.kynv1.aiinsectidentifierpro.ui.theme.NatureDarkGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.NatureLightGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.NeonGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.DarkForestGreenText
 import com.kynv1.aiinsectidentifierpro.ui.theme.ButtonGreen
@@ -165,7 +169,7 @@ fun ScanScreen(
                 )
                 Text(
                     text = stringResource(id = R.string.scan_subtitle),
-                    color = Color(0xFF333333),
+                    color = TextCharcoal,
                     fontSize = Dimens.sp_13,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(
@@ -256,7 +260,7 @@ fun ScanScreen(
                             Spacer(modifier = Modifier.height(Dimens.dp_8))
                             Text(
                                 text = "Take a photo or choose one from Gallery",
-                                color = Color(0xFF444444),
+                                color = TextDarkGrey,
                                 fontSize = Dimens.sp_12,
                                 textAlign = TextAlign.Center
                             )
@@ -293,7 +297,7 @@ fun ScanScreen(
                             .padding(end = Dimens.dp_8)
                             .background(
                                 brush = Brush.horizontalGradient(
-                                    colors = listOf(Color(0xFF558B2F), Color(0xFF7CB342))
+                                    colors = listOf(NatureDarkGreen, NatureLightGreen)
                                 ),
                                 shape = RoundedCornerShape(Dimens.dp_16)
                             )
@@ -310,14 +314,14 @@ fun ScanScreen(
                         onClick = { pickImageLauncher.launch("image/*") },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.White.copy(alpha = 0.6f),
-                            contentColor = Color(0xFF2E7D32)
+                            contentColor = ActiveGreen
                         ),
                         shape = RoundedCornerShape(Dimens.dp_16),
                         modifier = Modifier
                             .weight(1f)
                             .height(Dimens.dp_56)
                             .padding(start = Dimens.dp_8),
-                        border = BorderStroke(Dimens.dp_2, Color(0xFF2E7D32))
+                        border = BorderStroke(Dimens.dp_2, ActiveGreen)
                     ) {
                         Icon(imageVector = Icons.Default.Image, contentDescription = null)
                         Spacer(modifier = Modifier.width(Dimens.dp_8))
