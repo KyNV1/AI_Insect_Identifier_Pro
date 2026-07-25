@@ -8,7 +8,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,8 +24,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.SuggestionChip
-import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -52,9 +49,6 @@ import coil.compose.AsyncImage
 import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.data.model.InsectInfo
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
-import com.kynv1.aiinsectidentifierpro.ui.theme.ChipBackgroundGreen
-import com.kynv1.aiinsectidentifierpro.ui.theme.ChipBorderGreen
-import com.kynv1.aiinsectidentifierpro.ui.theme.ChipTextGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
 import com.kynv1.aiinsectidentifierpro.ui.theme.LightCardBorder
 import com.kynv1.aiinsectidentifierpro.ui.theme.LightMilkBackground
@@ -387,72 +381,5 @@ private fun DescriptionCard(
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun CharacteristicsCard(
-    characteristics: List<String>,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        shape = RoundedCornerShape(24.dp),
-        border = BorderStroke(Dimens.dp_1, LightCardBorder),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        modifier = modifier
-            .fillMaxWidth()
-    ) {
-        Column(
-            modifier = Modifier.padding(Dimens.dp_20)
-        ) {
-            Text(
-                text = stringResource(id = R.string.detail_characteristics_header),
-                color = Color.Black,
-                fontSize = Dimens.sp_18,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = Dimens.dp_12)
-            )
-            FlowRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(Dimens.dp_8),
-                verticalArrangement = Arrangement.spacedBy(Dimens.dp_8)
-            ) {
-                characteristics.forEach { char ->
-                    SuggestionChip(
-                        onClick = { },
-                        label = {
-                            Text(
-                                text = char,
-                                fontSize = Dimens.sp_12,
-                                color = ChipTextGreen,
-                                fontWeight = FontWeight.Medium
-                            )
-                        },
-                        colors = SuggestionChipDefaults.suggestionChipColors(
-                            containerColor = ChipBackgroundGreen
-                        ),
-                        border = BorderStroke(Dimens.dp_1, ChipBorderGreen)
-                    )
-                }
-            }
-        }
-    }
-}
-
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun FlowRow(
-    modifier: Modifier = Modifier,
-    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
-    verticalArrangement: Arrangement.Vertical = Arrangement.Top,
-    content: @Composable () -> Unit
-) {
-    androidx.compose.foundation.layout.FlowRow(
-        modifier = modifier,
-        horizontalArrangement = horizontalArrangement,
-        verticalArrangement = verticalArrangement
-    ) {
-        content()
     }
 }

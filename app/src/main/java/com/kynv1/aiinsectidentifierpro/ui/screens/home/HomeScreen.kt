@@ -29,8 +29,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Hearing
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -44,7 +42,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -57,12 +54,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kynv1.aiinsectidentifierpro.R
-import com.kynv1.aiinsectidentifierpro.data.model.HomeArticle
-import com.kynv1.aiinsectidentifierpro.data.model.InsectShort
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
-import com.kynv1.aiinsectidentifierpro.ui.theme.LightMilkBackground
 import com.kynv1.aiinsectidentifierpro.ui.theme.LightCardBorder
+import com.kynv1.aiinsectidentifierpro.ui.theme.LightMilkBackground
 import com.kynv1.aiinsectidentifierpro.ui.theme.WarningOrange
 
 @Composable
@@ -103,28 +98,25 @@ fun HomeScreenContent(
     val scrollState = rememberScrollState()
 
     Box(modifier = modifier.fillMaxSize()) {
-         Column(
-             modifier = Modifier
-                 .fillMaxSize()
-                 .background(LightMilkBackground)
-                 .verticalScroll(scrollState)
-                 .padding(bottom = 80.dp)
-         ) {
-             // 1. Header
-             HomeHeader(onSettingsClick = onNavigateToSettings)
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(LightMilkBackground)
+                .verticalScroll(scrollState)
+                .padding(bottom = 80.dp)
+        ) {
+            HomeHeader(onSettingsClick = onNavigateToSettings)
 
-            // 2. Premium Banner
             if (!uiState.isPremium) {
                 PremiumBanner(
                     onGetPremiumClick = {
                         onGetPremiumClick()
-                        Toast.makeText(context, "Premium Actived! Thank you!", Toast.LENGTH_LONG)
+                        Toast.makeText(context, "Premium Activated! Thank you!", Toast.LENGTH_LONG)
                             .show()
                     }
                 )
             }
 
-            // 3. Identification Cards
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -163,62 +155,80 @@ fun HomeScreenContent(
 
             Spacer(modifier = Modifier.height(Dimens.dp_16))
 
-            // 4. Most Common List
-            InsectSectionList(
+            HomeSectionList(
                 title = stringResource(id = R.string.home_most_common_title),
                 subtitle = stringResource(id = R.string.home_most_common_desc),
-                insects = uiState.mostCommonInsects,
-                onInsectClick = onNavigateToDetail
+                items = uiState.mostCommonInsects,
+                itemId = { it.id },
+                itemName = { it.commonName },
+                itemScientificName = { it.scientificName },
+                itemImageResId = { it.imageResId },
+                onItemClick = onNavigateToDetail
             )
 
             Spacer(modifier = Modifier.height(Dimens.dp_24))
 
-            // 5. Garden Insect List
-            InsectSectionList(
+            HomeSectionList(
                 title = stringResource(id = R.string.home_garden_insect_title),
                 subtitle = stringResource(id = R.string.home_garden_insect_desc),
-                insects = uiState.gardenInsects,
-                onInsectClick = onNavigateToDetail
+                items = uiState.gardenInsects,
+                itemId = { it.id },
+                itemName = { it.commonName },
+                itemScientificName = { it.scientificName },
+                itemImageResId = { it.imageResId },
+                onItemClick = onNavigateToDetail
             )
 
             Spacer(modifier = Modifier.height(Dimens.dp_24))
 
-            // 6. Fun Bug Facts List
-            ArticleSectionList(
+            HomeSectionList(
                 title = stringResource(id = R.string.home_fun_facts_title),
                 subtitle = stringResource(id = R.string.home_fun_facts_desc),
-                articles = uiState.funFactsArticles,
-                onArticleClick = onNavigateToDetail
+                items = uiState.funFactsArticles,
+                itemId = { it.id },
+                itemName = { it.commonName },
+                itemScientificName = { it.scientificName },
+                itemImageResId = { it.imageResId },
+                onItemClick = onNavigateToDetail
             )
 
             Spacer(modifier = Modifier.height(Dimens.dp_24))
 
-            // 7. Pest Control List
-            ArticleSectionList(
+            HomeSectionList(
                 title = stringResource(id = R.string.home_pest_control_title),
                 subtitle = stringResource(id = R.string.home_pest_control_desc),
-                articles = uiState.pestControlArticles,
-                onArticleClick = onNavigateToDetail
+                items = uiState.pestControlArticles,
+                itemId = { it.id },
+                itemName = { it.commonName },
+                itemScientificName = { it.scientificName },
+                itemImageResId = { it.imageResId },
+                onItemClick = onNavigateToDetail
             )
 
             Spacer(modifier = Modifier.height(Dimens.dp_24))
 
-            // 8. Bug Bite Help List
-            ArticleSectionList(
+            HomeSectionList(
                 title = stringResource(id = R.string.home_bug_bite_title),
                 subtitle = stringResource(id = R.string.home_bug_bite_desc),
-                articles = uiState.bugBiteArticles,
-                onArticleClick = onNavigateToDetail
+                items = uiState.bugBiteArticles,
+                itemId = { it.id },
+                itemName = { it.commonName },
+                itemScientificName = { it.scientificName },
+                itemImageResId = { it.imageResId },
+                onItemClick = onNavigateToDetail
             )
 
             Spacer(modifier = Modifier.height(Dimens.dp_24))
 
-            // 9. Remarkable Collection List
-            ArticleSectionList(
+            HomeSectionList(
                 title = stringResource(id = R.string.home_remarkable_coll_title),
                 subtitle = stringResource(id = R.string.home_remarkable_coll_desc),
-                articles = uiState.remarkableCollArticles,
-                onArticleClick = onNavigateToDetail
+                items = uiState.remarkableCollArticles,
+                itemId = { it.id },
+                itemName = { it.commonName },
+                itemScientificName = { it.scientificName },
+                itemImageResId = { it.imageResId },
+                onItemClick = onNavigateToDetail
             )
 
             Spacer(modifier = Modifier.height(Dimens.dp_24))
@@ -416,11 +426,15 @@ fun IdentificationCard(
 }
 
 @Composable
-fun InsectSectionList(
+fun <T> HomeSectionList(
     title: String,
     subtitle: String,
-    insects: List<InsectShort>,
-    onInsectClick: (Long) -> Unit,
+    items: List<T>,
+    itemId: (T) -> Long,
+    itemName: (T) -> String,
+    itemScientificName: (T) -> String,
+    itemImageResId: (T) -> Int,
+    onItemClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
@@ -445,10 +459,12 @@ fun InsectSectionList(
             contentPadding = PaddingValues(horizontal = Dimens.dp_16),
             horizontalArrangement = Arrangement.spacedBy(Dimens.dp_16)
         ) {
-            items(insects) { insect ->
-                InsectListItem(
-                    insect = insect,
-                    onClick = { onInsectClick(insect.id) }
+            items(items) { item ->
+                HomeInsectCard(
+                    commonName = itemName(item),
+                    scientificName = itemScientificName(item),
+                    imageResId = itemImageResId(item),
+                    onClick = { onItemClick(itemId(item)) }
                 )
             }
         }
@@ -456,8 +472,10 @@ fun InsectSectionList(
 }
 
 @Composable
-fun InsectListItem(
-    insect: InsectShort,
+fun HomeInsectCard(
+    commonName: String,
+    scientificName: String,
+    imageResId: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -472,8 +490,8 @@ fun InsectListItem(
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
             Image(
-                painter = painterResource(id = insect.imageResId),
-                contentDescription = insect.commonName,
+                painter = painterResource(id = imageResId),
+                contentDescription = commonName,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(110.dp)
@@ -492,103 +510,7 @@ fun InsectListItem(
                     .padding(Dimens.dp_8)
             ) {
                 Text(
-                    text = insect.commonName,
-                    color = Color.Black,
-                    fontSize = Dimens.sp_14,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 1
-                )
-                Spacer(modifier = Modifier.height(2.dp))
-                Text(
-                    text = insect.scientificName,
-                    color = ActiveGreen,
-                    fontSize = Dimens.sp_12,
-                    fontStyle = FontStyle.Italic,
-                    maxLines = 1
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun ArticleSectionList(
-    title: String,
-    subtitle: String,
-    articles: List<HomeArticle>,
-    onArticleClick: (Long) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(modifier = modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(horizontal = Dimens.dp_16)) {
-            Text(
-                text = title,
-                color = Color.Black,
-                fontSize = Dimens.sp_18,
-                fontWeight = FontWeight.Bold
-            )
-            Spacer(modifier = Modifier.height(2.dp))
-            Text(
-                text = subtitle,
-                color = Color.Black.copy(alpha = 0.6f),
-                fontSize = Dimens.sp_12
-            )
-        }
-
-        Spacer(modifier = Modifier.height(Dimens.dp_16))
-
-        LazyRow(
-            contentPadding = PaddingValues(horizontal = Dimens.dp_16),
-            horizontalArrangement = Arrangement.spacedBy(Dimens.dp_16)
-        ) {
-            items(articles) { article ->
-                ArticleListItem(
-                    article = article,
-                    onClick = { onArticleClick(article.id) }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun ArticleListItem(
-    article: HomeArticle,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        shape = RoundedCornerShape(Dimens.dp_16),
-        border = BorderStroke(Dimens.dp_1, LightCardBorder),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
-        modifier = modifier
-            .width(140.dp)
-            .clip(RoundedCornerShape(Dimens.dp_16))
-            .clickable(onClick = onClick)
-    ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
-            Image(
-                painter = painterResource(id = article.imageResId),
-                contentDescription = article.commonName,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(110.dp)
-                    .clip(
-                        RoundedCornerShape(
-                            topStart = Dimens.dp_16.value.dp,
-                            topEnd = Dimens.dp_16.value.dp
-                        )
-                    ),
-                contentScale = ContentScale.Crop
-            )
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(Dimens.dp_8)
-            ) {
-                Text(
-                    text = article.commonName,
+                    text = commonName,
                     color = Color.Black,
                     fontSize = Dimens.sp_14,
                     fontWeight = FontWeight.Bold,
@@ -597,7 +519,7 @@ fun ArticleListItem(
                 )
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = article.scientificName,
+                    text = scientificName,
                     color = ActiveGreen,
                     fontSize = Dimens.sp_12,
                     fontStyle = FontStyle.Italic,
