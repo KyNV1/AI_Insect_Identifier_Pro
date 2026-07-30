@@ -55,8 +55,8 @@ dependencies {
     // Navigation & Image Loading
     implementation(libs.androidx.navigation.compose)
     implementation(libs.coil.compose)
-    implementation("androidx.compose.material:material-icons-core")
-    implementation("androidx.compose.material:material-icons-extended")
+    implementation(libs.androidx.compose.material.icons.core)
+    implementation(libs.androidx.compose.material.icons.extended)
 
     // Gemini AI SDK
     implementation(libs.google.generativeai)
@@ -65,7 +65,12 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
-    compileOnly("com.google.errorprone:error_prone_annotations:2.28.0")
+    // Google Mobile Ads SDK
+    implementation(libs.play.services.ads)
+    compileOnly(libs.error.prone.annotations)
+
+    // Logging
+    implementation(libs.timber)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
