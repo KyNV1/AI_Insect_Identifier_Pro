@@ -1,5 +1,6 @@
 package com.kynv1.aiinsectidentifierpro
 
+import android.app.Activity
 import android.graphics.Color.TRANSPARENT
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -47,6 +48,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -70,6 +72,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.google.android.gms.ads.MobileAds
+import com.kynv1.aiinsectidentifierpro.common.AdManager
 import com.kynv1.aiinsectidentifierpro.data.local.OnboardingStore
 import com.kynv1.aiinsectidentifierpro.ui.navigation.Screen
 import com.kynv1.aiinsectidentifierpro.ui.screens.assistance.AssistanceScreen
@@ -97,7 +101,6 @@ import com.kynv1.aiinsectidentifierpro.ui.theme.LightMilkBackground
 import com.kynv1.aiinsectidentifierpro.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import androidx.core.graphics.toColorInt
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -111,6 +114,9 @@ class MainActivity : ComponentActivity() {
             statusBarStyle = SystemBarStyle.dark(TRANSPARENT),
             navigationBarStyle = SystemBarStyle.dark(TRANSPARENT)
         )
+        MobileAds.initialize(this) {
+            AdManager.loadAd(this)
+        }
         setContent {
             AIInsectIdentifierProTheme {
                 MainAppScreen(onboardingStore)
@@ -181,7 +187,8 @@ fun MainAppScreen(onboardingStore: OnboardingStore) {
                     isAppearanceLightStatusBars = isLightScreen
                     isAppearanceLightNavigationBars = isLightScreen
                     hide(WindowInsetsCompat.Type.navigationBars())
-                    systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+                    systemBarsBehavior =
+                        WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
                 }
             }
         }
@@ -202,7 +209,9 @@ fun MainAppScreen(onboardingStore: OnboardingStore) {
             navController = navController,
             startDestination = startDestination,
             onboardingStore = onboardingStore,
-            modifier = Modifier.fillMaxSize().padding(innerPadding)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
         )
     }
 }
@@ -274,12 +283,18 @@ fun MainBottomBar(
                 .height(Dimens.dp_64)
                 .background(
                     color = Color.White,
-                    shape = CurvedBottomBarShape(cradleRadius = Dimens.dp_38, cornerRadius = bottomBarCornerRadius)
+                    shape = CurvedBottomBarShape(
+                        cradleRadius = Dimens.dp_38,
+                        cornerRadius = bottomBarCornerRadius
+                    )
                 )
                 .border(
                     width = Dimens.dp_1,
                     color = Color(0xFFE5EBE6),
-                    shape = CurvedBottomBarShape(cradleRadius = Dimens.dp_38, cornerRadius = bottomBarCornerRadius)
+                    shape = CurvedBottomBarShape(
+                        cradleRadius = Dimens.dp_38,
+                        cornerRadius = bottomBarCornerRadius
+                    )
                 )
                 .padding(horizontal = Dimens.dp_32),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -441,6 +456,7 @@ fun AppNavHost(
             popEnterTransition = { EnterTransition.None },
             popExitTransition = { ExitTransition.None }
         ) {
+            val context = LocalContext.current
             HomeScreen(
                 viewModel = homeViewModel,
                 onNavigateToScan = {
@@ -450,7 +466,19 @@ fun AppNavHost(
                     navController.navigate(Screen.SoundScan.route)
                 },
                 onNavigateToDetail = { id ->
-                    navController.navigate(Screen.Detail.createRoute(id))
+                    val isPremium = homeViewModel.uiState.value.isPremium
+                    if (isPremium) {
+                        navController.navigate(Screen.Detail.createRoute(id))
+                    } else {
+                        val activity = context as? Activity
+                        if (activity != null) {
+                            AdManager.showAd(activity) {
+                                navController.navigate(Screen.Detail.createRoute(id))
+                            }
+                        } else {
+                            navController.navigate(Screen.Detail.createRoute(id))
+                        }
+                    }
                 },
                 onNavigateToAssistance = {
                     navController.navigate(Screen.Assistance.route)
