@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.Hearing
 import androidx.compose.material3.*
@@ -31,21 +30,13 @@ import androidx.compose.foundation.LocalIndication
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kynv1.aiinsectidentifierpro.R
-import com.kynv1.aiinsectidentifierpro.common.CommonTopBar
-import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
-import com.kynv1.aiinsectidentifierpro.ui.theme.NatureGreen
-import com.kynv1.aiinsectidentifierpro.ui.theme.NeonGreen
-import com.kynv1.aiinsectidentifierpro.ui.theme.DarkForestGreenText
 import com.kynv1.aiinsectidentifierpro.ui.theme.AccentLime
+import com.kynv1.aiinsectidentifierpro.ui.theme.DarkBackground
+import com.kynv1.aiinsectidentifierpro.ui.theme.DarkForestGreenText
+import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
+import com.kynv1.aiinsectidentifierpro.ui.theme.NatureGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.TextCharcoal
 import com.kynv1.aiinsectidentifierpro.ui.theme.TextMediumGrey
-import com.kynv1.aiinsectidentifierpro.ui.theme.CardBackground
-import com.kynv1.aiinsectidentifierpro.ui.theme.CardBorder
-import com.kynv1.aiinsectidentifierpro.ui.theme.DarkBackground
-import com.kynv1.aiinsectidentifierpro.ui.theme.DarkForestGreen
-import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
-import com.kynv1.aiinsectidentifierpro.ui.theme.LightMilkBackground
-import com.kynv1.aiinsectidentifierpro.ui.theme.MediumForestGreen
 import kotlinx.coroutines.delay
 
 sealed interface SoundScanState {
@@ -188,13 +179,13 @@ fun SoundScanScreen(
                             Box(
                                 contentAlignment = Alignment.Center,
                                 modifier = Modifier
-                                    .size(120.dp)
+                                    .size(Dimens.dp_120)
                                     .background(
                                         Color.White.copy(alpha = 0.48f),
                                         shape = CircleShape
                                     )
                                     .border(
-                                        BorderStroke(1.dp, Color.White.copy(alpha = 0.6f)),
+                                        BorderStroke(Dimens.dp_1, Color.White.copy(alpha = 0.6f)),
                                         shape = CircleShape
                                     )
                             ) {
