@@ -23,14 +23,14 @@ class GeminiServiceClient {
         val apiKey = GeminiConfig.API_KEY
         if (apiKey.isBlank()) {
             return@withContext InsectInfo(
-                commonName = "Thiếu API Key",
+                commonName = "Missing API Key",
                 scientificName = "API_KEY_MISSING",
                 confidence = 0,
-                description = "Chưa cấu hình API Key. Vui lòng dán khóa Gemini API Key vào file GeminiConfig.kt.",
-                characteristics = listOf("Chưa cấu hình API Key"),
-                habitat = "Chưa xác định",
+                description = "API Key not configured. Please configure your Gemini API Key in GeminiConfig.kt.",
+                characteristics = listOf("API Key Missing"),
+                habitat = "Unknown",
                 dangerLevel = "Low",
-                dangerDescription = "Không có thông tin"
+                dangerDescription = "No information"
             )
         }
 
@@ -41,16 +41,17 @@ class GeminiServiceClient {
 
         val systemInstructionText = """
             You are an expert entomologist AI. Identify the insect or bug in the provided image.
+            You MUST respond ONLY in English. Do NOT use Vietnamese or any other language.
             You MUST respond ONLY with a JSON object matching this schema:
             {
-              "commonName": "Common name (e.g. Honey Bee, Monarch Butterfly, Fire Ant)",
-              "scientificName": "Scientific name",
+              "commonName": "English common name (e.g. House Mosquito, Honey Bee, Monarch Butterfly, Fire Ant)",
+              "scientificName": "Scientific binomial name (e.g. Culex pipiens)",
               "confidence": 95,
-              "description": "A brief description of the species, its key features",
-              "characteristics": ["Key feature 1", "Key feature 2", "Key feature 3"],
-              "habitat": "Natural habitat of the species",
+              "description": "A brief description in English of the species and its key features",
+              "characteristics": ["Key feature 1 in English", "Key feature 2 in English", "Key feature 3 in English"],
+              "habitat": "Natural habitat of the species in English",
               "dangerLevel": "Low" or "Medium" or "High",
-              "dangerDescription": "Description of the danger to humans or pets, warnings if venomous, bites or stings"
+              "dangerDescription": "Description of the danger to humans or pets in English"
             }
             Do not write any markdown code blocks, comments, or backticks wrapper, just return the raw JSON object.
         """.trimIndent()
@@ -69,7 +70,7 @@ class GeminiServiceClient {
                 val response = model.generateContent(
                     content {
                         image(bitmap)
-                        text("Identify this insect and return details in JSON format.")
+                        text("Identify this insect and return details in English JSON format.")
                     }
                 )
 
@@ -85,24 +86,24 @@ class GeminiServiceClient {
         }
 
         InsectInfo(
-            commonName = "Lỗi Gemini API",
+            commonName = "Gemini API Error",
             scientificName = "API_ERROR",
             confidence = 0,
-            description = "Không thể gọi Gemini API thực tế: $lastErrorMessage. Vui lòng kiểm tra lại API Key hoặc mạng.",
-            characteristics = listOf("Lỗi API thực tế", lastErrorMessage),
-            habitat = "Chưa xác định",
+            description = "Failed to query Gemini API: $lastErrorMessage. Please check your API Key or network connection.",
+            characteristics = listOf("API Error", lastErrorMessage),
+            habitat = "Unknown",
             dangerLevel = "Low",
-            dangerDescription = "Không có thông tin"
+            dangerDescription = "No information"
         )
     }
 
     suspend fun getChatResponse(prompt: String): String = withContext(Dispatchers.IO) {
         val apiKey = GeminiConfig.API_KEY
         if (apiKey.isBlank()) {
-            return@withContext "[Chưa dán API Key]\n\nVui lòng dán Gemini API Key vào file GeminiConfig.kt để sử dụng Chat AI thực tế."
+            return@withContext "[API Key Missing]\n\nPlease paste your Gemini API Key in GeminiConfig.kt to start live AI chat."
         }
 
-        val systemInstructionText = "You are an expert entomologist AI. Answer the user's questions about insects, spiders, bugs, or arthropods in a friendly, helpful, and highly detailed manner. Keep it concise but educational."
+        val systemInstructionText = "You are an expert entomologist AI. Answer the user's questions about insects, spiders, bugs, or arthropods in English in a friendly, helpful, concise, and highly detailed manner. Always respond strictly in English."
 
         var lastErrorMessage = ""
 
@@ -125,7 +126,7 @@ class GeminiServiceClient {
             }
         }
 
-        "[Lỗi kết nối Gemini API Thực Tế]\n\nChi tiết lỗi từ Google Cloud Server: $lastErrorMessage\n\nBạn hãy kiểm tra lại kết nối mạng hoặc API Key trong GeminiConfig.kt."
+        "[Gemini API Connection Error]\n\nDetails from Google Cloud Server: $lastErrorMessage\n\nPlease check your network connection or API Key in GeminiConfig.kt."
     }
 
     suspend fun getBiologicalInsightsByName(speciesName: String, confidence: Int): InsectInfo? = withContext(Dispatchers.IO) {
@@ -141,29 +142,23 @@ class GeminiServiceClient {
 
         val systemInstructionText = """
             You are an expert entomologist AI. The user identified an insect species named "$speciesName".
-            You MUST return a raw JSON object with 5 detailed answers covering:
-            1. Key characteristics
-            2. Seasonal occurrence
-            3. Toxicity / danger to humans
-            4. Day or night activity (diurnal/nocturnal)
-            5. Geographic distribution
-            
+            You MUST respond ONLY in English. Do NOT use Vietnamese.
             Respond ONLY with JSON matching this schema:
             {
               "commonName": "$speciesName",
               "scientificName": "Scientific binomial name",
               "confidence": $confidence,
-              "description": "Comprehensive biological summary of $speciesName",
+              "description": "Comprehensive biological summary in English of $speciesName",
               "characteristics": [
-                "Đặc điểm: [Detail 1]",
-                "Mùa xuất hiện: [Detail 2]",
-                "Độc tính: [Detail 3]",
-                "Tập tính hoạt động: [Detail 4 (Ban ngày / Ban đêm)]",
-                "Phân bố: [Detail 5]"
+                "Characteristics: [Detail 1 in English]",
+                "Seasonality: [Detail 2 in English]",
+                "Toxicity: [Detail 3 in English]",
+                "Activity: [Detail 4 (Diurnal / Nocturnal) in English]",
+                "Distribution: [Detail 5 in English]"
               ],
-              "habitat": "Habitat description",
+              "habitat": "Habitat description in English",
               "dangerLevel": "Low" or "Medium" or "High",
-              "dangerDescription": "Detailed safety advisory"
+              "dangerDescription": "Detailed safety advisory in English"
             }
             Do not include markdown code wrappers or backticks.
         """.trimIndent()
@@ -177,7 +172,7 @@ class GeminiServiceClient {
                     systemInstruction = content { text(systemInstructionText) }
                 )
 
-                val response = model.generateContent("Provide biological insights for $speciesName")
+                val response = model.generateContent("Provide biological insights in English for $speciesName")
                 val responseText = response.text
                 if (!responseText.isNullOrBlank()) {
                     val info = InsectInfo.fromJson(responseText)
@@ -208,24 +203,24 @@ class GeminiServiceClient {
 
         val systemInstructionText = """
             You are an expert entomologist AI specializing in bioacoustics and insect sound identification.
-            Listen to the provided audio recording carefully (buzzing, chirping, humming, or stridulation sounds).
-            Identify the exact insect species in the audio recording.
+            Listen to the provided audio recording carefully. Identify the exact insect species in English.
+            You MUST respond ONLY in English. Do NOT use Vietnamese or any non-English language.
             You MUST respond ONLY with a JSON object matching this schema:
             {
-              "commonName": "Common name (e.g. Honey Bee, Cicada, Cricket, Mosquito)",
-              "scientificName": "Scientific binomial name (e.g. Apis mellifera)",
+              "commonName": "English common name (e.g. House Mosquito, Honey Bee, Cicada, Cricket)",
+              "scientificName": "Scientific binomial name (e.g. Culex pipiens, Apis mellifera)",
               "confidence": 92,
-              "description": "Biological description of the species based on sound analysis",
+              "description": "Biological description of the species in English based on sound analysis",
               "characteristics": [
-                "Đặc điểm: Key physical & acoustic feature",
-                "Mùa xuất hiện: Active season",
-                "Độc tính: Toxicity / Bite & Sting advisory",
-                "Tập tính hoạt động: Activity timing (Ban ngày / Ban đêm)",
-                "Phân bố: Geographic distribution"
+                "Characteristics: Key physical & acoustic feature in English",
+                "Seasonality: Active season in English",
+                "Toxicity: Toxicity / Bite & Sting advisory in English",
+                "Activity: Activity timing (Diurnal / Nocturnal) in English",
+                "Distribution: Geographic distribution in English"
               ],
-              "habitat": "Habitat description",
-              "dangerLevel": "Low",
-              "dangerDescription": "Safety warning"
+              "habitat": "Habitat description in English",
+              "dangerLevel": "Low" or "Medium" or "High",
+              "dangerDescription": "Safety warning in English"
             }
             Do not include markdown wrappers or code blocks.
         """.trimIndent()
@@ -244,7 +239,7 @@ class GeminiServiceClient {
                 val response = model.generateContent(
                     content {
                         blob("audio/m4a", bytes)
-                        text("Listen to this audio recording and identify the insect species.")
+                        text("Listen to this audio recording and identify the insect species in English.")
                     }
                 )
 

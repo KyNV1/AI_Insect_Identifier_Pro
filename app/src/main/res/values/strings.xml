@@ -104,6 +104,7 @@
     <string name="sound_scan_instruction">Hold your phone close to the sound source.</string>
     <string name="sound_scan_confidence_format">Confidence Match: %1$d%%</string>
     <string name="sound_scan_btn_view_details">View Insect Details</string>
+    <string name="sound_scan_btn_scan_again">Scan Again</string>
 
     <!-- Paywall / Premium Upgrade Screen Strings -->
     <string name="paywall_upgrade_premium">UNLOCK ALL ACCESS</string>
