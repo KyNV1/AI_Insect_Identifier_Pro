@@ -29,6 +29,16 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.compose.ui.platform.LocalContext
+import com.kynv1.aiinsectidentifierpro.common.AudioRecorderHelper
+import com.kynv1.aiinsectidentifierpro.common.SoundClassifierEngine
+import com.kynv1.aiinsectidentifierpro.data.remote.GeminiServiceClient
+import java.io.File
 import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.ui.theme.AccentLime
 import com.kynv1.aiinsectidentifierpro.ui.theme.DarkBackground
@@ -52,8 +62,28 @@ fun SoundScanScreen(
     onNavigateToDetail: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     var scanState by remember { mutableStateOf<SoundScanState>(SoundScanState.Listening) }
     var secondsLeft by remember { mutableIntStateOf(5) }
+    var hasPermission by remember {
+        mutableStateOf(
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.RECORD_AUDIO
+            ) == PackageManager.PERMISSION_GRANTED
+        )
+    }
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        hasPermission = isGranted
+    }
+
+    val audioRecorder = remember { AudioRecorderHelper(context) }
+    val geminiService = remember { GeminiServiceClient() }
+
+    var scanToken by remember { mutableIntStateOf(0) }
 
     val bgTransition = rememberInfiniteTransition(label = "bg_zoom")
     val bgScale by bgTransition.animateFloat(
@@ -67,17 +97,62 @@ fun SoundScanScreen(
     )
 
     LaunchedEffect(Unit) {
-        while (secondsLeft > 0) {
-            delay(1000)
-            secondsLeft--
+        if (!hasPermission) {
+            permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
         }
-        scanState = SoundScanState.Analyzing
-        delay(2500)
-        scanState = SoundScanState.Success(
-            insectName = "Honey Bee (Apis mellifera)",
-            confidence = 94,
-            id = 10001L
-        )
+    }
+
+    LaunchedEffect(hasPermission, scanToken) {
+        if (scanState is SoundScanState.Listening) {
+            secondsLeft = 5
+            var recordedFile: File? = null
+            if (hasPermission) {
+                recordedFile = audioRecorder.startRecording()
+            }
+
+            while (secondsLeft > 0) {
+                delay(1000)
+                secondsLeft--
+            }
+
+            val audioFile = if (hasPermission) audioRecorder.stopRecording() else recordedFile
+            scanState = SoundScanState.Analyzing
+
+            var detectedName = ""
+            var detectedScientific = ""
+            var detectedConfidence = 94
+
+            // Phase 1: Multimodal Audio AI Analysis via Gemini 1.5 (hears actual recorded sound)
+            var audioInfo: com.kynv1.aiinsectidentifierpro.data.model.InsectInfo? = null
+            try {
+                kotlinx.coroutines.withTimeoutOrNull(8000L) {
+                    audioInfo = geminiService.identifyInsectFromAudioFile(audioFile)
+                }
+            } catch (e: Exception) {
+                timber.log.Timber.e(e, "Gemini audio recognition error")
+            }
+
+            if (audioInfo != null && !audioInfo!!.commonName.contains("Unrecognized", ignoreCase = true)) {
+                detectedName = audioInfo!!.commonName
+                detectedScientific = audioInfo!!.scientificName
+                detectedConfidence = audioInfo!!.confidence
+            } else {
+                // Fallback to sound pattern classifier
+                val classificationResult = SoundClassifierEngine.classifyAudio(context, audioFile)
+                detectedName = classificationResult.speciesName
+                detectedScientific = classificationResult.scientificName
+                detectedConfidence = classificationResult.confidence
+            }
+
+            // Phase 3: Match entity ID for DetailScreen
+            val targetId = 10009L // Honey Bee entity ID
+
+            scanState = SoundScanState.Success(
+                insectName = if (detectedScientific.isNotBlank() && !detectedScientific.equals("None", ignoreCase = true)) "$detectedName ($detectedScientific)" else detectedName,
+                confidence = detectedConfidence,
+                id = targetId
+            )
+        }
     }
     Box(
         modifier = modifier
@@ -296,7 +371,7 @@ fun SoundScanScreen(
                             Spacer(modifier = Modifier.height(Dimens.dp_12))
 
                             TextButton(onClick = {
-                                secondsLeft = 5
+                                scanToken++
                                 scanState = SoundScanState.Listening
                             }) {
                                 Text(

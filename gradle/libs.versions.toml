@@ -17,6 +17,8 @@ coil = "2.6.0"
 generativeai = "0.9.0"
 hilt = "2.60"
 hiltNavigationCompose = "1.2.0"
+tensorflowLiteSupport = "0.5.0"
+tensorflowLiteTaskAudio = "0.4.4"
 timber = "5.0.1"
 
 [libraries]
@@ -47,6 +49,8 @@ hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
+tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", version.ref = "tensorflowLiteSupport" }
+tensorflow-lite-task-audio = { module = "org.tensorflow:tensorflow-lite-task-audio", version.ref = "tensorflowLiteTaskAudio" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]

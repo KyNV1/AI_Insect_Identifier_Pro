@@ -72,6 +72,12 @@ dependencies {
     // Logging
     implementation(libs.timber)
 
+    // TensorFlow Lite Audio SDK (Excluded duplicate classes provided by Gemini LiteRT)
+    implementation(libs.tensorflow.lite.task.audio) {
+        exclude(group = "org.tensorflow", module = "tensorflow-lite-api")
+        exclude(group = "org.tensorflow", module = "tensorflow-lite-support")
+    }
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
