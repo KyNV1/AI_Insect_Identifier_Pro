@@ -103,7 +103,14 @@ class GeminiServiceClient {
             return@withContext "[API Key Missing]\n\nPlease paste your Gemini API Key in GeminiConfig.kt to start live AI chat."
         }
 
-        val systemInstructionText = "You are an expert entomologist AI. Answer the user's questions about insects, spiders, bugs, or arthropods in English in a friendly, helpful, concise, and highly detailed manner. Always respond strictly in English."
+        val systemInstructionText = """
+            You are an expert entomologist AI. Answer the user's questions about insects, spiders, bugs, or arthropods in English in a friendly, helpful, educational, and structured manner.
+            Always respond strictly in English.
+            FORMATTING RULES FOR MOBILE DISPLAY:
+            - Use clean paragraph spacing and clear bullet points (using bullet character '•').
+            - Do NOT use raw markdown horizontal dividers like '---'.
+            - Use bold asterisks (**keyword**) only for key biological terms and main section titles so they can be rendered cleanly on mobile screens.
+        """.trimIndent()
 
         var lastErrorMessage = ""
 

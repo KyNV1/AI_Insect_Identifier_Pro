@@ -61,8 +61,12 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kynv1.aiinsectidentifierpro.R
@@ -504,10 +508,10 @@ fun ChatBubble(message: Message) {
                 .padding(horizontal = Dimens.dp_16, vertical = Dimens.dp_12)
         ) {
             Text(
-                text = message.text,
+                text = parseMarkdownToAnnotatedString(message.text),
                 color = bubbleTextColor,
                 fontSize = Dimens.sp_14,
-                lineHeight = 18.sp
+                lineHeight = 20.sp
             )
         }
     }
@@ -548,6 +552,41 @@ fun TypingIndicator() {
                 fontSize = Dimens.sp_14,
                 fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
             )
+        }
+    }
+}
+
+private fun parseMarkdownToAnnotatedString(rawText: String): AnnotatedString {
+    val cleanedText = rawText
+        .lines()
+        .filter { line -> line.trim() != "---" && line.trim() != "***" }
+        .joinToString("\n")
+        .replace(Regex("^###\\s+", RegexOption.MULTILINE), "")
+        .replace(Regex("^##\\s+", RegexOption.MULTILINE), "")
+        .replace(Regex("^#\\s+", RegexOption.MULTILINE), "")
+
+    return buildAnnotatedString {
+        val boldRegex = Regex("\\*\\*(.*?)\\*\\*")
+        var lastIndex = 0
+
+        for (match in boldRegex.findAll(cleanedText)) {
+            val start = match.range.first
+            val end = match.range.last + 1
+            val innerText = match.groupValues[1]
+
+            if (start > lastIndex) {
+                append(cleanedText.substring(lastIndex, start))
+            }
+
+            withStyle(SpanStyle(fontWeight = FontWeight.Bold)) {
+                append(innerText)
+            }
+
+            lastIndex = end
+        }
+
+        if (lastIndex < cleanedText.length) {
+            append(cleanedText.substring(lastIndex))
         }
     }
 }
