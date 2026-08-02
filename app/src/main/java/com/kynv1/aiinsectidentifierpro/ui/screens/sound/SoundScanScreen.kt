@@ -174,7 +174,7 @@ fun SoundScanScreen(
 
                 val entity = InsectEntity.fromInsectInfo(
                     info,
-                    "android.resource://${context.packageName}/${R.drawable.bg_scan_insect_butterfly}"
+                    "android.resource://${context.packageName}/${R.drawable.img_sound_scan_acoustic_waves}"
                 )
                 targetId = repository.insertInsect(entity)
             } else {
