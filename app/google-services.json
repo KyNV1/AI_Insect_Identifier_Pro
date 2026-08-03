@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "52746155852",
+    "project_id": "ai-insect-identifier-pro",
+    "storage_bucket": "ai-insect-identifier-pro.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:52746155852:android:668f53a4e93e3ef50081e9",
+        "android_client_info": {
+          "package_name": "com.kynv1.aiinsectidentifierpro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1Mukl9n_e96PEuNDcnhgPzF5Qusrwcdo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

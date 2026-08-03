@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.kynv1.aiinsectidentifierpro" />
+                  <option name="mobileSdkAppId" value="1:52746155852:android:668f53a4e93e3ef50081e9" />
+                  <option name="projectId" value="ai-insect-identifier-pro" />
+                  <option name="projectNumber" value="52746155852" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

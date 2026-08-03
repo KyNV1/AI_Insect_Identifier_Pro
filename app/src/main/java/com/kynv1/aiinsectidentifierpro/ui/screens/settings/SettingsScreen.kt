@@ -90,12 +90,18 @@ fun SettingsScreen(
                 onRateUsClick = { showRateDialog = true },
                 onShareClick = {
                     val appName = context.getString(R.string.app_name)
-                    val shareText = "Download $appName app: https://play.google.com/store/apps/details?id=${context.packageName}"
+                    val shareText =
+                        "Download $appName app: https://play.google.com/store/apps/details?id=${context.packageName}"
                     val intent = Intent(Intent.ACTION_SEND).apply {
                         type = "text/plain"
                         putExtra(Intent.EXTRA_TEXT, shareText)
                     }
-                    context.startActivity(Intent.createChooser(intent, context.getString(R.string.settings_item_share)))
+                    context.startActivity(
+                        Intent.createChooser(
+                            intent,
+                            context.getString(R.string.settings_item_share)
+                        )
+                    )
                 },
                 onFeedbackClick = {
                     Toast.makeText(context, "Contact Support clicked", Toast.LENGTH_SHORT).show()
@@ -117,7 +123,11 @@ fun SettingsScreen(
                     if (rating >= 4) openPlayStore(context.packageName) { url ->
                         context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                     } else {
-                        Toast.makeText(context, context.getString(R.string.rate_dialog_toast_feedback), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.rate_dialog_toast_feedback),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             )
@@ -146,17 +156,37 @@ private fun SettingsContent(
         )
         Spacer(modifier = Modifier.height(Dimens.dp_24))
         SettingsSection(title = stringResource(R.string.settings_section_spread_word)) {
-            SettingsRowItem(R.drawable.ic_star, stringResource(R.string.settings_item_rate), onRateUsClick)
+            SettingsRowItem(
+                R.drawable.ic_star,
+                stringResource(R.string.settings_item_rate),
+                onRateUsClick
+            )
             HorizontalDivider(color = LightCardBorder, thickness = Dimens.dp_1)
-            SettingsRowItem(R.drawable.ic_share, stringResource(R.string.settings_item_share), onShareClick)
+            SettingsRowItem(
+                R.drawable.ic_share,
+                stringResource(R.string.settings_item_share),
+                onShareClick
+            )
             HorizontalDivider(color = LightCardBorder, thickness = Dimens.dp_1)
-            SettingsRowItem(R.drawable.ic_comment, stringResource(R.string.settings_item_feedback), onFeedbackClick)
+            SettingsRowItem(
+                R.drawable.ic_comment,
+                stringResource(R.string.settings_item_feedback),
+                onFeedbackClick
+            )
         }
         Spacer(modifier = Modifier.height(Dimens.dp_16))
         SettingsSection(title = stringResource(R.string.settings_section_legal)) {
-            SettingsRowItem(R.drawable.ic_description, stringResource(R.string.settings_item_agreement), onAgreementClick)
+            SettingsRowItem(
+                R.drawable.ic_description,
+                stringResource(R.string.settings_item_agreement),
+                onAgreementClick
+            )
             HorizontalDivider(color = LightCardBorder, thickness = Dimens.dp_1)
-            SettingsRowItem(R.drawable.ic_security, stringResource(R.string.settings_item_privacy), onPrivacyClick)
+            SettingsRowItem(
+                R.drawable.ic_security,
+                stringResource(R.string.settings_item_privacy),
+                onPrivacyClick
+            )
         }
     }
 }
