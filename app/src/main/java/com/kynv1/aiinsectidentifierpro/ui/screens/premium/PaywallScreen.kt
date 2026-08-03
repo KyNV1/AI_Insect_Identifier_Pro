@@ -63,6 +63,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
 import com.kynv1.aiinsectidentifierpro.R
+import com.kynv1.aiinsectidentifierpro.common.AnalyticsHelper
 import com.kynv1.aiinsectidentifierpro.ui.screens.home.HomeViewModel
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.ButtonGreen
@@ -96,6 +97,10 @@ fun PaywallScreen(
     )
 
     val pagerState = rememberPagerState(pageCount = { imageList.size })
+
+    LaunchedEffect(Unit) {
+        AnalyticsHelper.logPaywallView()
+    }
 
     LaunchedEffect(key1 = pagerState) {
         while (true) {
@@ -235,6 +240,12 @@ fun PaywallScreen(
                                 )
                             )
                             .clickable {
+                                val planName = when (selectedOption) {
+                                    0 -> "weekly"
+                                    1 -> "yearly"
+                                    else -> "monthly"
+                                }
+                                AnalyticsHelper.logSubscriptionSuccess(planName)
                                 homeViewModel.purchasePremium()
                                 Toast.makeText(context, "Premium Active! Thank you!", Toast.LENGTH_LONG).show()
                                 onNavigateToHome()

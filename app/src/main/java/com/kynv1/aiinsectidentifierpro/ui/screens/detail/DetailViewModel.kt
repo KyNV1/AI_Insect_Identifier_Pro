@@ -3,6 +3,7 @@ package com.kynv1.aiinsectidentifierpro.ui.screens.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kynv1.aiinsectidentifierpro.R
+import com.kynv1.aiinsectidentifierpro.common.AnalyticsHelper
 import com.kynv1.aiinsectidentifierpro.data.local.entity.InsectEntity
 import com.kynv1.aiinsectidentifierpro.data.repository.InsectRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,6 +32,7 @@ class DetailViewModel @Inject constructor(
             try {
                 val insect = repository.getInsectById(id)
                 if (insect != null) {
+                    AnalyticsHelper.logViewInsectDetail(insect.commonName)
                     _uiState.value = DetailUiState.Success(insect)
                 } else {
                     _uiState.value = DetailUiState.Error(R.string.error_insect_not_found)

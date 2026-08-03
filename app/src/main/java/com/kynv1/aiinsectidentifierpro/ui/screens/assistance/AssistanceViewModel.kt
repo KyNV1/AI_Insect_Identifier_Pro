@@ -2,6 +2,7 @@ package com.kynv1.aiinsectidentifierpro.ui.screens.assistance
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kynv1.aiinsectidentifierpro.common.AnalyticsHelper
 import com.kynv1.aiinsectidentifierpro.data.repository.InsectRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,6 +33,7 @@ class AssistanceViewModel @Inject constructor(
 
     fun sendMessage(text: String) {
         if (text.isBlank()) return
+        AnalyticsHelper.logAiChat(text)
 
         val userMessage = Message(
             id = System.nanoTime().toString(),

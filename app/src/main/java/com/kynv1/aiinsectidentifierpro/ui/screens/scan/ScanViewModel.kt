@@ -10,6 +10,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kynv1.aiinsectidentifierpro.R
+import com.kynv1.aiinsectidentifierpro.common.AnalyticsHelper
 import com.kynv1.aiinsectidentifierpro.data.local.entity.InsectEntity
 import com.kynv1.aiinsectidentifierpro.data.repository.InsectRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -66,12 +67,14 @@ class ScanViewModel @Inject constructor(
                 if (insectInfo != null) {
                     val entity = InsectEntity.fromInsectInfo(insectInfo, uri.toString())
                     val id = repository.insertInsect(entity)
+                    AnalyticsHelper.logPhotoScan(insectInfo.commonName, insectInfo.confidence)
                     _uiState.value = ScanUiState.Success(id)
                 } else {
                     _uiState.value = ScanUiState.Error(R.string.error_gemini_no_response)
                 }
             } catch (e: Exception) {
-                _uiState.value = ScanUiState.Error(R.string.error_occurred_format, e.localizedMessage)
+                _uiState.value =
+                    ScanUiState.Error(R.string.error_occurred_format, e.localizedMessage)
             }
         }
     }

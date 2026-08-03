@@ -64,8 +64,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.kynv1.aiinsectidentifierpro.R
+import com.kynv1.aiinsectidentifierpro.common.AnalyticsHelper
 import com.kynv1.aiinsectidentifierpro.common.AudioRecorderHelper
-import com.kynv1.aiinsectidentifierpro.common.SoundClassifierEngine
 import com.kynv1.aiinsectidentifierpro.data.local.InsectDatabase
 import com.kynv1.aiinsectidentifierpro.data.local.entity.InsectEntity
 import com.kynv1.aiinsectidentifierpro.data.remote.GeminiServiceClient
@@ -167,7 +167,14 @@ fun SoundScanScreen(
             var targetId = 10009L
 
             val info = audioInfo
-            if (info != null && !info.commonName.contains("Unrecognized", ignoreCase = true) && !info.commonName.contains("Lỗi", ignoreCase = true) && !info.commonName.contains("Thiếu", ignoreCase = true)) {
+            if (info != null && !info.commonName.contains(
+                    "Unrecognized",
+                    ignoreCase = true
+                ) && !info.commonName.contains(
+                    "Lỗi",
+                    ignoreCase = true
+                ) && !info.commonName.contains("Thiếu", ignoreCase = true)
+            ) {
                 detectedName = info.commonName
                 detectedScientific = info.scientificName
                 detectedConfidence = info.confidence
@@ -177,13 +184,18 @@ fun SoundScanScreen(
                     "android.resource://${context.packageName}/${R.drawable.img_sound_scan_acoustic_waves}"
                 )
                 targetId = repository.insertInsect(entity)
+                AnalyticsHelper.logAudioScan(detectedName, detectedConfidence)
             } else {
                 detectedName = context.getString(R.string.sound_scan_no_match)
                 detectedScientific = ""
                 detectedConfidence = 0
             }
 
-            val displayName = if (detectedScientific.isNotBlank() && !detectedScientific.equals("None", ignoreCase = true)) {
+            val displayName = if (detectedScientific.isNotBlank() && !detectedScientific.equals(
+                    "None",
+                    ignoreCase = true
+                )
+            ) {
                 "$detectedName ($detectedScientific)"
             } else {
                 detectedName
