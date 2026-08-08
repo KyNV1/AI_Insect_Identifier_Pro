@@ -66,7 +66,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setStyle(NotificationCompat.BigTextStyle().bigText(messageBody))
 
-        // Nếu có ảnh minh họa đính kèm ➔ Tải và hiển thị dạng Banner lớn (BigPictureStyle)
         if (!imageUrl.isNullOrBlank()) {
             val bitmap = getBitmapFromUrl(imageUrl)
             if (bitmap != null) {
