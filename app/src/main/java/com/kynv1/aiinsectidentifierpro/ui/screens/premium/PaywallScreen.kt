@@ -1,14 +1,12 @@
 package com.kynv1.aiinsectidentifierpro.ui.screens.premium
 
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,7 +18,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -32,13 +29,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.filled.BugReport
 import androidx.compose.material.icons.filled.LockOpen
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -59,25 +52,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.sp
 import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.common.AnalyticsHelper
 import com.kynv1.aiinsectidentifierpro.ui.screens.home.HomeViewModel
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
-import com.kynv1.aiinsectidentifierpro.ui.theme.ButtonGreen
-import com.kynv1.aiinsectidentifierpro.ui.theme.DarkForestGreen
-import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
-import com.kynv1.aiinsectidentifierpro.ui.theme.NatureGreen
-import com.kynv1.aiinsectidentifierpro.ui.theme.StarGold
-import com.kynv1.aiinsectidentifierpro.ui.theme.PremiumBgLight
-import com.kynv1.aiinsectidentifierpro.ui.theme.GoldAmber
-import com.kynv1.aiinsectidentifierpro.ui.theme.PremiumBorderLight
-import com.kynv1.aiinsectidentifierpro.ui.theme.PremiumBgGoldCard
-import com.kynv1.aiinsectidentifierpro.ui.theme.PremiumBgGreenCard
 import com.kynv1.aiinsectidentifierpro.ui.theme.AlertRed
+import com.kynv1.aiinsectidentifierpro.ui.theme.ButtonGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
+import com.kynv1.aiinsectidentifierpro.ui.theme.GoldAmber
 import com.kynv1.aiinsectidentifierpro.ui.theme.GoldYellow
+import com.kynv1.aiinsectidentifierpro.ui.theme.NatureGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.PremiumBgLight
+import com.kynv1.aiinsectidentifierpro.ui.theme.PremiumBorderLight
+import com.kynv1.aiinsectidentifierpro.ui.theme.StarGold
 import kotlinx.coroutines.delay
 
 @Composable
@@ -116,195 +105,213 @@ fun PaywallScreen(
             .background(Color.White)
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
+            modifier = Modifier.fillMaxSize()
         ) {
-            Box(
+            Column(
                 modifier = Modifier
+                    .weight(1f)
                     .fillMaxWidth()
-                    .height(Dimens.dp_280)
+                    .verticalScroll(rememberScrollState())
             ) {
-                HorizontalPager(
-                    state = pagerState,
-                    modifier = Modifier.fillMaxSize()
-                ) { page ->
-                    Image(
-                        painter = painterResource(id = imageList[page]),
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(Dimens.ImageSizeExtraLarge)
+                ) {
+                    HorizontalPager(
+                        state = pagerState,
+                        modifier = Modifier.fillMaxSize()
+                    ) { page ->
+                        Image(
+                            painter = painterResource(id = imageList[page]),
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
+
+                    ViewfinderBrackets(
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .size(Dimens.dp_120)
                     )
                 }
 
-                ViewfinderBrackets(
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .size(Dimens.dp_140)
-                )
-            }
-
-            Card(
-                colors = CardDefaults.cardColors(containerColor = Color.White),
-                shape = RoundedCornerShape(topStart = Dimens.dp_32, topEnd = Dimens.dp_32),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .offset(y = -Dimens.dp_24)
-            ) {
-                Column(
+                Card(
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                    shape = RoundedCornerShape(topStart = Dimens.dp_24, topEnd = Dimens.dp_24),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = Dimens.dp_20)
-                        .padding(top = Dimens.dp_24, bottom = Dimens.dp_32),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .offset(y = -Dimens.dp_16)
                 ) {
-                    Text(
-                        text = stringResource(id = R.string.paywall_upgrade_premium),
-                        color = DarkForestGreen,
-                        fontSize = Dimens.sp_22,
-                        fontWeight = FontWeight.ExtraBold,
-                        letterSpacing = 0.5.sp
-                    )
-
-                    Spacer(modifier = Modifier.height(Dimens.dp_16))
-
                     Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(Dimens.dp_10)
-                    ) {
-                        BenefitItem(
-                            icon = Icons.Default.LockOpen,
-                            text = stringResource(id = R.string.paywall_benefit_1)
-                        )
-                        BenefitItem(
-                            icon = Icons.Default.BugReport,
-                            text = stringResource(id = R.string.paywall_benefit_2)
-                        )
-                        BenefitItem(
-                            icon = Icons.AutoMirrored.Filled.Chat,
-                            text = stringResource(id = R.string.paywall_benefit_3)
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(Dimens.dp_16))
-
-                    TestimonialView()
-
-                    Spacer(modifier = Modifier.height(Dimens.dp_16))
-
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(Dimens.dp_10)
-                    ) {
-                        VerticalPlanCard(
-                            title = stringResource(id = R.string.paywall_weekly),
-                            price = stringResource(id = R.string.paywall_weekly_price),
-                            subtext = stringResource(id = R.string.paywall_weekly_sub),
-                            isSelected = selectedOption == 0,
-                            onClick = { selectedOption = 0 }
-                        )
-
-                        VerticalPlanCard(
-                            title = stringResource(id = R.string.paywall_yearly),
-                            price = stringResource(id = R.string.paywall_yearly_price),
-                            subtext = stringResource(id = R.string.paywall_yearly_sub),
-                            isSelected = selectedOption == 1,
-                            isHighlighted = true,
-                            badgeText = stringResource(id = R.string.paywall_discount_badge),
-                            valueText = stringResource(id = R.string.paywall_best_value),
-                            onClick = { selectedOption = 1 }
-                        )
-
-                        VerticalPlanCard(
-                            title = stringResource(id = R.string.paywall_monthly),
-                            price = stringResource(id = R.string.paywall_monthly_price),
-                            subtext = stringResource(id = R.string.paywall_monthly_sub),
-                            isSelected = selectedOption == 2,
-                            onClick = { selectedOption = 2 }
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(Dimens.dp_20))
-
-                    Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(Dimens.dp_56)
-                            .clip(CircleShape)
-                            .background(
-                                brush = Brush.horizontalGradient(
-                                    colors = listOf(
-                                        ButtonGreen,
-                                        NatureGreen
-                                    )
+                            .padding(horizontal = Dimens.dp_16)
+                            .padding(top = Dimens.dp_14, bottom = Dimens.dp_8),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.paywall_upgrade_premium),
+                            color = ActiveGreen,
+                            fontSize = Dimens.sp_22,
+                            fontWeight = FontWeight.ExtraBold,
+                            letterSpacing = 0.5.sp
+                        )
+
+                        Spacer(modifier = Modifier.height(Dimens.dp_10))
+
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.spacedBy(Dimens.dp_4)
+                        ) {
+                            BenefitItem(
+                                icon = Icons.Default.LockOpen,
+                                text = stringResource(id = R.string.paywall_benefit_1)
+                            )
+                            BenefitItem(
+                                icon = Icons.Default.BugReport,
+                                text = stringResource(id = R.string.paywall_benefit_2)
+                            )
+                            BenefitItem(
+                                icon = Icons.AutoMirrored.Filled.Chat,
+                                text = stringResource(id = R.string.paywall_benefit_3)
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(Dimens.dp_10))
+
+                        TestimonialView()
+
+                        Spacer(modifier = Modifier.height(Dimens.dp_12))
+
+                        // 3 Thẻ Giá Xếp Nằm Ngang Nối Tiếp Nhau (Side-by-side Horizontal Row)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(Dimens.dp_8),
+                            verticalAlignment = Alignment.Bottom
+                        ) {
+                            HorizontalPlanCard(
+                                title = stringResource(id = R.string.paywall_weekly),
+                                price = stringResource(id = R.string.paywall_weekly_price),
+                                subtext = stringResource(id = R.string.paywall_weekly_sub),
+                                isSelected = selectedOption == 0,
+                                modifier = Modifier.weight(1f),
+                                onClick = { selectedOption = 0 }
+                            )
+
+                            HorizontalPlanCard(
+                                title = stringResource(id = R.string.paywall_yearly),
+                                price = stringResource(id = R.string.paywall_yearly_price),
+                                subtext = stringResource(id = R.string.paywall_yearly_sub),
+                                isSelected = selectedOption == 1,
+                                isHighlighted = true,
+                                topBadgeText = stringResource(id = R.string.paywall_discount_badge),
+                                bestValueText = stringResource(id = R.string.paywall_best_value),
+                                modifier = Modifier.weight(1.08f),
+                                onClick = { selectedOption = 1 }
+                            )
+
+                            HorizontalPlanCard(
+                                title = stringResource(id = R.string.paywall_monthly),
+                                price = stringResource(id = R.string.paywall_monthly_price),
+                                subtext = stringResource(id = R.string.paywall_monthly_sub),
+                                isSelected = selectedOption == 2,
+                                modifier = Modifier.weight(1f),
+                                onClick = { selectedOption = 2 }
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.height(Dimens.dp_16))
+                    }
+                }
+            }
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(Color.White)
+                    .padding(horizontal = Dimens.dp_20)
+                    .padding(top = Dimens.dp_8, bottom = Dimens.dp_12)
+                    .navigationBarsPadding(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(Dimens.dp_56)
+                        .clip(CircleShape)
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(
+                                    ButtonGreen,
+                                    NatureGreen
                                 )
                             )
-                            .clickable {
-                                val planName = when (selectedOption) {
-                                    0 -> "weekly"
-                                    1 -> "yearly"
-                                    else -> "monthly"
-                                }
-                                AnalyticsHelper.logSubscriptionSuccess(planName)
-                                homeViewModel.purchasePremium()
-                                Toast.makeText(context, "Premium Active! Thank you!", Toast.LENGTH_LONG).show()
-                                onNavigateToHome()
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.paywall_continue).uppercase(),
-                            color = Color.White,
-                            fontSize = Dimens.sp_16,
-                            fontWeight = FontWeight.Bold
                         )
-                    }
-
-                    Spacer(modifier = Modifier.height(Dimens.dp_12))
-
+                        .clickable {
+                            val planName = when (selectedOption) {
+                                0 -> "weekly"
+                                1 -> "yearly"
+                                else -> "monthly"
+                            }
+                            AnalyticsHelper.logSubscriptionSuccess(planName)
+                            homeViewModel.purchasePremium()
+                            Toast.makeText(context, "Premium Active! Thank you!", Toast.LENGTH_LONG).show()
+                            onNavigateToHome()
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
                     Text(
-                        text = stringResource(id = R.string.paywall_disclaimer),
-                        color = Color.Gray,
-                        fontSize = Dimens.sp_13,
-                        lineHeight = Dimens.sp_14
+                        text = stringResource(id = R.string.paywall_continue).uppercase(),
+                        color = Color.White,
+                        fontSize = Dimens.sp_16,
+                        fontWeight = FontWeight.Bold
                     )
+                }
 
-                    Spacer(modifier = Modifier.height(Dimens.dp_10))
+                Spacer(modifier = Modifier.height(Dimens.dp_8))
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.paywall_term_of_service),
-                            color = Color.Gray,
-                            fontSize = Dimens.sp_11,
-                            textDecoration = TextDecoration.Underline,
-                            modifier = Modifier
-                                .clickable {
-                                    //TODO: Open Terms of Service
-                                }
-                                .padding(horizontal = Dimens.dp_8)
-                        )
-                        Text(
-                            text = "|",
-                            color = Color.Gray,
-                            fontSize = Dimens.sp_11
-                        )
-                        Text(
-                            text = stringResource(id = R.string.paywall_privacy_policy),
-                            color = Color.Gray,
-                            fontSize = Dimens.sp_11,
-                            textDecoration = TextDecoration.Underline,
-                            modifier = Modifier
-                                .clickable {
-                                    //TODO: Open Privacy Policy
-                                }
-                                .padding(horizontal = Dimens.dp_8)
-                        )
-                    }
+                Text(
+                    text = stringResource(id = R.string.paywall_disclaimer),
+                    color = Color.Gray,
+                    fontSize = Dimens.sp_12,
+                    lineHeight = Dimens.sp_14
+                )
 
-                    Spacer(modifier = Modifier.navigationBarsPadding())
+                Spacer(modifier = Modifier.height(Dimens.dp_6))
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.paywall_term_of_service),
+                        color = Color.Gray,
+                        fontSize = Dimens.sp_11,
+                        textDecoration = TextDecoration.Underline,
+                        modifier = Modifier
+                            .clickable {
+                                //TODO: Open Terms of Service
+                            }
+                            .padding(horizontal = Dimens.dp_8)
+                    )
+                    Text(
+                        text = "|",
+                        color = Color.Gray,
+                        fontSize = Dimens.sp_11
+                    )
+                    Text(
+                        text = stringResource(id = R.string.paywall_privacy_policy),
+                        color = Color.Gray,
+                        fontSize = Dimens.sp_11,
+                        textDecoration = TextDecoration.Underline,
+                        modifier = Modifier
+                            .clickable {
+                                //TODO: Open Privacy Policy
+                            }
+                            .padding(horizontal = Dimens.dp_8)
+                    )
                 }
             }
         }
@@ -415,15 +422,15 @@ fun TestimonialView(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun VerticalPlanCard(
+fun HorizontalPlanCard(
     title: String,
     price: String,
     subtext: String,
     isSelected: Boolean,
     modifier: Modifier = Modifier,
     isHighlighted: Boolean = false,
-    badgeText: String? = null,
-    valueText: String? = null,
+    topBadgeText: String? = null,
+    bestValueText: String? = null,
     onClick: () -> Unit
 ) {
     val borderColor = if (isSelected) {
@@ -431,92 +438,93 @@ fun VerticalPlanCard(
     } else {
         PremiumBorderLight
     }
-
     val borderWidth = if (isSelected) Dimens.dp_2 else Dimens.dp_1
-    val backgroundColor = if (isSelected) {
-        if (isHighlighted) PremiumBgGoldCard else PremiumBgGreenCard
-    } else {
-        Color.White
-    }
 
-    Box(
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(Dimens.dp_16))
-            .background(backgroundColor)
-            .border(borderWidth, borderColor, RoundedCornerShape(Dimens.dp_16))
-            .clickable { onClick() }
-            .padding(horizontal = Dimens.dp_16, vertical = Dimens.dp_14)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(
-                modifier = Modifier.weight(1f)
+        if (isHighlighted && topBadgeText != null) {
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(topStart = Dimens.dp_8, topEnd = Dimens.dp_8))
+                    .background(GoldYellow)
+                    .fillMaxWidth()
+                    .padding(vertical = Dimens.dp_2),
+                contentAlignment = Alignment.Center
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(Dimens.dp_6)
-                ) {
-                    Text(
-                        text = title,
-                        color = Color.Black,
-                        fontSize = Dimens.sp_14,
-                        fontWeight = FontWeight.Bold
-                    )
-
-                    if (isHighlighted && valueText != null) {
-                        Box(
-                            modifier = Modifier
-                                .background(AlertRed, RoundedCornerShape(Dimens.dp_4))
-                                .padding(horizontal = Dimens.dp_6, vertical = Dimens.dp_2)
-                        ) {
-                            Text(
-                                text = valueText.uppercase(),
-                                color = Color.White,
-                                fontSize = Dimens.sp_8,
-                                fontWeight = FontWeight.Black
-                            )
-                        }
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(Dimens.dp_4))
-
                 Text(
-                    text = subtext,
-                    color = Color.Gray,
-                    fontSize = Dimens.sp_11
+                    text = topBadgeText,
+                    color = Color.Black,
+                    fontSize = Dimens.sp_10,
+                    fontWeight = FontWeight.ExtraBold
                 )
             }
+        } else {
+            Spacer(modifier = Modifier.height(Dimens.dp_12))
+        }
 
-            Column(
-                horizontalAlignment = Alignment.End
-            ) {
-                Text(
-                    text = price,
-                    color = Color.Black,
-                    fontSize = Dimens.sp_16,
-                    fontWeight = FontWeight.Black
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(
+                    if (isHighlighted && topBadgeText != null)
+                        RoundedCornerShape(bottomStart = Dimens.dp_12, bottomEnd = Dimens.dp_12)
+                    else
+                        RoundedCornerShape(Dimens.dp_12)
                 )
-
-                if (isHighlighted && badgeText != null) {
-                    Spacer(modifier = Modifier.height(Dimens.dp_2))
+                .background(Color.White)
+                .border(
+                    borderWidth,
+                    borderColor,
+                    if (isHighlighted && topBadgeText != null)
+                        RoundedCornerShape(bottomStart = Dimens.dp_12, bottomEnd = Dimens.dp_12)
+                    else
+                        RoundedCornerShape(Dimens.dp_12)
+                )
+                .clickable { onClick() }
+                .padding(vertical = Dimens.dp_6, horizontal = Dimens.dp_4),
+            contentAlignment = Alignment.Center
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                if (isHighlighted && bestValueText != null) {
                     Box(
                         modifier = Modifier
-                            .background(GoldYellow, RoundedCornerShape(Dimens.dp_4))
-                            .padding(horizontal = Dimens.dp_6, vertical = Dimens.dp_2)
+                            .background(AlertRed, RoundedCornerShape(Dimens.dp_4))
+                            .padding(horizontal = Dimens.dp_4, vertical = Dimens.dp_1)
                     ) {
                         Text(
-                            text = badgeText,
-                            color = Color.Black,
+                            text = bestValueText,
+                            color = Color.White,
                             fontSize = Dimens.sp_8,
                             fontWeight = FontWeight.Bold
                         )
                     }
+                    Spacer(modifier = Modifier.height(Dimens.dp_2))
                 }
+
+                Text(
+                    text = title,
+                    color = Color.DarkGray,
+                    fontSize = Dimens.sp_11,
+                    fontWeight = FontWeight.SemiBold
+                )
+                Spacer(modifier = Modifier.height(Dimens.dp_2))
+                Text(
+                    text = price,
+                    color = Color.Black,
+                    fontSize = Dimens.sp_13,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.height(Dimens.dp_1))
+                Text(
+                    text = subtext,
+                    color = Color.Gray,
+                    fontSize = Dimens.sp_10
+                )
             }
         }
     }

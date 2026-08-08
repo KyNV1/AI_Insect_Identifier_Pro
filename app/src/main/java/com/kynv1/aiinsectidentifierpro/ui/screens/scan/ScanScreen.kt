@@ -15,8 +15,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +32,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
@@ -79,12 +82,7 @@ import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
 import com.kynv1.aiinsectidentifierpro.ui.theme.NatureDarkGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.NatureGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.NatureLightGreen
-import com.kynv1.aiinsectidentifierpro.ui.theme.TextCharcoal
-import com.kynv1.aiinsectidentifierpro.ui.theme.TextDarkGrey
 import java.io.File
-import androidx.compose.foundation.LocalIndication
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.shape.CircleShape
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -164,7 +162,7 @@ fun ScanScreen(
             .fillMaxSize()
     ) {
         Image(
-            painter = painterResource(id = R.drawable.bg_scan_insect_butterfly),
+            painter = painterResource(id = R.drawable.img_onboarding_green_beetle),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -175,7 +173,7 @@ fun ScanScreen(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.25f))
+                .background(Color.Black.copy(alpha = 0.45f))
         )
 
         Column(
@@ -218,7 +216,7 @@ fun ScanScreen(
                 ) {
                     Text(
                         text = stringResource(id = R.string.scan_title),
-                        color = DarkForestGreenText,
+                        color = Color.White,
                         fontSize = Dimens.sp_20,
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 1.sp
@@ -226,7 +224,7 @@ fun ScanScreen(
                     Spacer(modifier = Modifier.height(Dimens.dp_2))
                     Text(
                         text = stringResource(id = R.string.scan_subtitle),
-                        color = TextCharcoal,
+                        color = Color.White.copy(alpha = 0.8f),
                         fontSize = Dimens.sp_12,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(horizontal = Dimens.dp_16)
@@ -238,7 +236,7 @@ fun ScanScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(Dimens.ImagePreviewHeight)
-                    .padding(vertical = Dimens.dp_24)
+                    .padding(vertical = Dimens.dp_16)
                     .clip(RoundedCornerShape(Dimens.dp_24))
                     .clickable {
                         if (selectedImageUri == null) {
@@ -248,8 +246,8 @@ fun ScanScreen(
                         }
                     },
                 shape = RoundedCornerShape(Dimens.dp_24),
-                colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.2f)),
-                border = BorderStroke(Dimens.dp_1, Color.White.copy(alpha = 0.35f))
+                colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.15f)),
+                border = BorderStroke(Dimens.dp_1, Color.White.copy(alpha = 0.4f))
             ) {
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -265,59 +263,76 @@ fun ScanScreen(
                             contentScale = ContentScale.Crop
                         )
                     } else {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center,
-                            modifier = Modifier.padding(Dimens.dp_24)
+                        // Hiển thị hình ảnh con bướm nằm lọt lòng 100% bên trong khung Card
+                        Image(
+                            painter = painterResource(id = R.drawable.bg_scan_insect_butterfly),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(Dimens.dp_24)),
+                            contentScale = ContentScale.Crop
+                        )
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(Color.Black.copy(alpha = 0.2f))
+                        )
+                    }
+
+                    // Khung 4 góc vuông màu xanh lá lấy nét — chỉ hiện ở trạng thái chưa có ảnh
+                    if (selectedImageUri == null) {
+                        Box(
+                            modifier = Modifier
+                                .size(Dimens.dp_180)
+                                .graphicsLayer(scaleX = viewfinderScale, scaleY = viewfinderScale)
+                                .drawBehind {
+                                    val strokeWidth = 3.5.dp.toPx()
+                                    val l = 24.dp.toPx()
+                                    val color = NatureGreen
+
+                                    // Top-Left
+                                    drawLine(color, Offset(0f, 0f), Offset(l, 0f), strokeWidth)
+                                    drawLine(color, Offset(0f, 0f), Offset(0f, l), strokeWidth)
+
+                                    // Top-Right
+                                    drawLine(color, Offset(size.width, 0f), Offset(size.width - l, 0f), strokeWidth)
+                                    drawLine(color, Offset(size.width, 0f), Offset(size.width, l), strokeWidth)
+
+                                    // Bottom-Left
+                                    drawLine(color, Offset(0f, size.height), Offset(l, size.height), strokeWidth)
+                                    drawLine(color, Offset(0f, size.height), Offset(0f, size.height - l), strokeWidth)
+
+                                    // Bottom-Right
+                                    drawLine(color, Offset(size.width, size.height), Offset(size.width - l, size.height), strokeWidth)
+                                    drawLine(color, Offset(size.width, size.height), Offset(size.width, size.height - l), strokeWidth)
+                                }
                         ) {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier
-                                    .size(Dimens.dp_160)
-                                    .graphicsLayer(scaleX = viewfinderScale, scaleY = viewfinderScale)
-                                    .drawBehind {
-                                        val strokeWidth = 3.dp.toPx()
-                                        val l = 20.dp.toPx()
-                                        val color = NatureGreen
-                                        
-                                        // Top-Left
-                                        drawLine(color, Offset(0f, 0f), Offset(l, 0f), strokeWidth)
-                                        drawLine(color, Offset(0f, 0f), Offset(0f, l), strokeWidth)
-                                        
-                                        // Top-Right
-                                        drawLine(color, Offset(size.width, 0f), Offset(size.width - l, 0f), strokeWidth)
-                                        drawLine(color, Offset(size.width, 0f), Offset(size.width, l), strokeWidth)
-                                        
-                                        // Bottom-Left
-                                        drawLine(color, Offset(0f, size.height), Offset(l, size.height), strokeWidth)
-                                        drawLine(color, Offset(0f, size.height), Offset(0f, size.height - l), strokeWidth)
-                                        
-                                        // Bottom-Right
-                                        drawLine(color, Offset(size.width, size.height), Offset(size.width - l, size.height), strokeWidth)
-                                        drawLine(color, Offset(size.width, size.height), Offset(size.width, size.height - l), strokeWidth)
-                                    }
+                            Column(
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center,
+                                modifier = Modifier.align(Alignment.Center)
                             ) {
-                                Icon(
-                                    imageVector = Icons.Default.CameraAlt,
-                                    contentDescription = null,
-                                    tint = DarkForestGreenText,
-                                    modifier = Modifier.size(Dimens.dp_56)
+                                Box(
+                                    modifier = Modifier
+                                        .size(Dimens.dp_48)
+                                        .background(Color.Black.copy(alpha = 0.4f), CircleShape),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.CameraAlt,
+                                        contentDescription = null,
+                                        tint = Color.White,
+                                        modifier = Modifier.size(Dimens.dp_24)
+                                    )
+                                }
+                                Spacer(modifier = Modifier.height(Dimens.dp_8))
+                                Text(
+                                    text = stringResource(id = R.string.scan_instruction_title),
+                                    color = Color.White,
+                                    fontSize = Dimens.sp_16,
+                                    fontWeight = FontWeight.Bold
                                 )
                             }
-                            Spacer(modifier = Modifier.height(Dimens.dp_20))
-                            Text(
-                                text = stringResource(id = R.string.scan_instruction_title),
-                                color = DarkForestGreenText,
-                                fontSize = Dimens.sp_16,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Spacer(modifier = Modifier.height(Dimens.dp_8))
-                            Text(
-                                text = stringResource(id = R.string.scan_instruction_desc),
-                                color = TextDarkGrey,
-                                fontSize = Dimens.sp_12,
-                                textAlign = TextAlign.Center
-                            )
                         }
                     }
                 }

@@ -26,7 +26,7 @@ class GeminiServiceClient {
                 commonName = "Missing API Key",
                 scientificName = "API_KEY_MISSING",
                 confidence = 0,
-                description = "API Key not configured. Please configure your Gemini API Key in GeminiConfig.kt.",
+                description = "API Key not configured. Please set GEMINI_API_KEY in local.properties.",
                 characteristics = listOf("API Key Missing"),
                 habitat = "Unknown",
                 dangerLevel = "Low",
@@ -100,7 +100,7 @@ class GeminiServiceClient {
     suspend fun getChatResponse(prompt: String): String = withContext(Dispatchers.IO) {
         val apiKey = GeminiConfig.API_KEY
         if (apiKey.isBlank()) {
-            return@withContext "[API Key Missing]\n\nPlease paste your Gemini API Key in GeminiConfig.kt to start live AI chat."
+            return@withContext "[API Key Missing]\n\nPlease set GEMINI_API_KEY in local.properties to start live AI chat."
         }
 
         val systemInstructionText = """
@@ -133,7 +133,7 @@ class GeminiServiceClient {
             }
         }
 
-        "[Gemini API Connection Error]\n\nDetails from Google Cloud Server: $lastErrorMessage\n\nPlease check your network connection or API Key in GeminiConfig.kt."
+        "[Gemini API Connection Error]\n\nDetails from Google Cloud Server: $lastErrorMessage\n\nPlease check your network connection or the GEMINI_API_KEY in local.properties."
     }
 
     suspend fun getBiologicalInsightsByName(speciesName: String, confidence: Int): InsectInfo? = withContext(Dispatchers.IO) {
