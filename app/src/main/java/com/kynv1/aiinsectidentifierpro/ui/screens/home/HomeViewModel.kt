@@ -2,6 +2,7 @@ package com.kynv1.aiinsectidentifierpro.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kynv1.aiinsectidentifierpro.data.local.PremiumStore
 import com.kynv1.aiinsectidentifierpro.data.model.InsectShort
 import com.kynv1.aiinsectidentifierpro.data.model.HomeArticle
 import com.kynv1.aiinsectidentifierpro.data.repository.InsectRepository
@@ -25,10 +26,11 @@ data class HomeUiState(
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val repository: InsectRepository
+    private val repository: InsectRepository,
+    private val premiumStore: PremiumStore
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(HomeUiState())
+    private val _uiState = MutableStateFlow(HomeUiState(isPremium = premiumStore.isPremium()))
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
     init {
@@ -61,6 +63,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun purchasePremium() {
+        premiumStore.setPremium(true)
         _uiState.value = _uiState.value.copy(isPremium = true)
     }
 }

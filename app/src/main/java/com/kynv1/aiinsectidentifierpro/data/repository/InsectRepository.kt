@@ -10,6 +10,7 @@ import com.kynv1.aiinsectidentifierpro.data.model.HomeArticle
 import com.kynv1.aiinsectidentifierpro.data.remote.GeminiServiceClient
 import kotlinx.coroutines.flow.Flow
 import org.json.JSONArray
+import java.io.File
 
 class InsectRepository(
     private val insectDao: InsectDao,
@@ -660,11 +661,15 @@ class InsectRepository(
         insectDao.deleteInsectById(id)
     }
 
-    suspend fun identifyInsect(bitmap: Bitmap): InsectInfo? {
+    suspend fun identifyInsect(bitmap: Bitmap): Result<InsectInfo> {
         return geminiServiceClient.identifyInsect(bitmap)
     }
 
     suspend fun getChatResponse(prompt: String): String {
         return geminiServiceClient.getChatResponse(prompt)
+    }
+
+    suspend fun identifyInsectFromAudioFile(audioFile: File?): InsectInfo? {
+        return geminiServiceClient.identifyInsectFromAudioFile(audioFile)
     }
 }

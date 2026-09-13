@@ -80,7 +80,7 @@ class ScanViewModelTest {
     fun `identifyInsect ignores reentrant call while already loading`() = runTest(dispatcher) {
         coEvery { repository.identifyInsect(bitmap) } coAnswers {
             delay(1_000)
-            insectInfo
+            Result.success(insectInfo)
         }
         coEvery { repository.insertInsect(any()) } returns 1L
 
@@ -95,7 +95,7 @@ class ScanViewModelTest {
 
     @Test
     fun `identifyInsect sets Success state with the inserted id`() = runTest(dispatcher) {
-        coEvery { repository.identifyInsect(bitmap) } returns insectInfo
+        coEvery { repository.identifyInsect(bitmap) } returns Result.success(insectInfo)
         coEvery { repository.insertInsect(any()) } returns 42L
 
         viewModel.onImageSelected(uri)
@@ -108,10 +108,23 @@ class ScanViewModelTest {
     }
 
     @Test
+    fun `identifyInsect surfaces an Error and never inserts on API failure`() = runTest(dispatcher) {
+        coEvery { repository.identifyInsect(bitmap) } returns
+            Result.failure(Exception("Gemini did not return a valid response."))
+
+        viewModel.onImageSelected(uri)
+        viewModel.identifyInsect(context)
+        advanceUntilIdle()
+
+        assertTrue(viewModel.uiState.value is ScanUiState.Error)
+        coVerify(exactly = 0) { repository.insertInsect(any()) }
+    }
+
+    @Test
     fun `cancelIdentify prevents a late result from overwriting Idle`() = runTest(dispatcher) {
         coEvery { repository.identifyInsect(bitmap) } coAnswers {
             delay(1_000)
-            insectInfo
+            Result.success(insectInfo)
         }
         coEvery { repository.insertInsect(any()) } returns 42L
 

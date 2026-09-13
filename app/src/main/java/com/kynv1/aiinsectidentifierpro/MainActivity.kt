@@ -91,6 +91,7 @@ import com.kynv1.aiinsectidentifierpro.ui.screens.scan.ScanScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.scan.ScanViewModel
 import com.kynv1.aiinsectidentifierpro.ui.screens.settings.SettingsScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.sound.SoundScanScreen
+import com.kynv1.aiinsectidentifierpro.ui.screens.sound.SoundScanViewModel
 import com.kynv1.aiinsectidentifierpro.ui.screens.splash.SplashScreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.AIInsectIdentifierProTheme
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
@@ -399,12 +400,6 @@ fun AppNavHost(
     navController: NavHostController,
     startDestination: String,
     onboardingStore: OnboardingStore,
-    homeViewModel: HomeViewModel = hiltViewModel(),
-    scanViewModel: ScanViewModel = hiltViewModel(),
-    historyViewModel: HistoryViewModel = hiltViewModel(),
-    detailViewModel: DetailViewModel = hiltViewModel(),
-    onboardingViewModel: OnboardingViewModel = hiltViewModel(),
-    assistanceViewModel: AssistanceViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -440,6 +435,7 @@ fun AppNavHost(
             popEnterTransition = { EnterTransition.None },
             popExitTransition = { ExitTransition.None }
         ) {
+            val onboardingViewModel: OnboardingViewModel = hiltViewModel()
             OnboardingScreen(
                 viewModel = onboardingViewModel,
                 onNavigateToScan = {
@@ -457,6 +453,7 @@ fun AppNavHost(
             popExitTransition = { ExitTransition.None }
         ) {
             val context = LocalContext.current
+            val homeViewModel: HomeViewModel = hiltViewModel()
             HomeScreen(
                 viewModel = homeViewModel,
                 onNavigateToScan = {
@@ -495,6 +492,7 @@ fun AppNavHost(
             popEnterTransition = { EnterTransition.None },
             popExitTransition = { ExitTransition.None }
         ) {
+            val homeViewModel: HomeViewModel = hiltViewModel()
             PaywallScreen(
                 homeViewModel = homeViewModel,
                 onNavigateToHome = {
@@ -505,6 +503,7 @@ fun AppNavHost(
             )
         }
         composable(Screen.Scan.route) {
+            val scanViewModel: ScanViewModel = hiltViewModel()
             ScanScreen(
                 viewModel = scanViewModel,
                 onNavigateToDetail = { id ->
@@ -516,7 +515,9 @@ fun AppNavHost(
             )
         }
         composable(Screen.SoundScan.route) {
+            val soundScanViewModel: SoundScanViewModel = hiltViewModel()
             SoundScanScreen(
+                viewModel = soundScanViewModel,
                 onBack = { navController.popBackStack() },
                 onNavigateToDetail = { id ->
                     navController.navigate(Screen.Detail.createRoute(id))
@@ -524,6 +525,7 @@ fun AppNavHost(
             )
         }
         composable(Screen.History.route) {
+            val historyViewModel: HistoryViewModel = hiltViewModel()
             HistoryScreen(
                 viewModel = historyViewModel,
                 onNavigateToDetail = { id ->
@@ -542,6 +544,7 @@ fun AppNavHost(
             arguments = listOf(navArgument(Constants.KEY_INSECT_ID) { type = NavType.LongType })
         ) { backStackEntry ->
             val insectId = backStackEntry.arguments?.getLong(Constants.KEY_INSECT_ID) ?: 0L
+            val detailViewModel: DetailViewModel = hiltViewModel()
             DetailScreen(
                 insectId = insectId,
                 viewModel = detailViewModel,
@@ -555,6 +558,7 @@ fun AppNavHost(
             popEnterTransition = { EnterTransition.None },
             popExitTransition = { ExitTransition.None }
         ) {
+            val assistanceViewModel: AssistanceViewModel = hiltViewModel()
             AssistanceScreen(
                 viewModel = assistanceViewModel,
                 onNavigateBack = { navController.popBackStack() }

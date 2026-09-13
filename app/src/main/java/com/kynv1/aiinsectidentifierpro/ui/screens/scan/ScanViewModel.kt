@@ -77,8 +77,8 @@ class ScanViewModel @Inject constructor(
                     return@launch
                 }
 
-                val insectInfo = repository.identifyInsect(bitmap)
-                if (insectInfo != null) {
+                val result = repository.identifyInsect(bitmap)
+                result.onSuccess { insectInfo ->
                     val entity = InsectEntity.fromInsectInfo(insectInfo, uri.toString())
                     val id = repository.insertInsect(entity)
                     AnalyticsHelper.logPhotoScan(insectInfo.commonName, insectInfo.confidence)
@@ -86,8 +86,13 @@ class ScanViewModel @Inject constructor(
                     // cancelled while this tail was already running, don't clobber Idle with a
                     // late Success.
                     if (isActive) _uiState.value = ScanUiState.Success(id)
-                } else {
-                    if (isActive) _uiState.value = ScanUiState.Error(R.string.error_gemini_no_response)
+                }.onFailure { e ->
+                    // A failed/ungraded identification is never persisted — only a real
+                    // InsectInfo reaches insertInsect above.
+                    if (isActive) {
+                        _uiState.value =
+                            ScanUiState.Error(R.string.error_occurred_format, e.localizedMessage)
+                    }
                 }
             } catch (e: CancellationException) {
                 // Cancellation is not a failure — rethrow so the coroutine unwinds normally

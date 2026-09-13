@@ -45,8 +45,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -64,12 +64,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.kynv1.aiinsectidentifierpro.R
-import com.kynv1.aiinsectidentifierpro.common.AnalyticsHelper
-import com.kynv1.aiinsectidentifierpro.common.AudioRecorderHelper
-import com.kynv1.aiinsectidentifierpro.data.local.InsectDatabase
-import com.kynv1.aiinsectidentifierpro.data.local.entity.InsectEntity
-import com.kynv1.aiinsectidentifierpro.data.remote.GeminiServiceClient
-import com.kynv1.aiinsectidentifierpro.data.repository.InsectRepository
 import com.kynv1.aiinsectidentifierpro.ui.theme.AccentLime
 import com.kynv1.aiinsectidentifierpro.ui.theme.DarkBackground
 import com.kynv1.aiinsectidentifierpro.ui.theme.DarkForestGreenText
@@ -77,26 +71,17 @@ import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
 import com.kynv1.aiinsectidentifierpro.ui.theme.NatureGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.TextCharcoal
 import com.kynv1.aiinsectidentifierpro.ui.theme.TextMediumGrey
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withTimeoutOrNull
-import timber.log.Timber
-import java.io.File
-
-sealed interface SoundScanState {
-    object Listening : SoundScanState
-    object Analyzing : SoundScanState
-    data class Success(val insectName: String, val confidence: Int, val id: Long) : SoundScanState
-}
 
 @Composable
 fun SoundScanScreen(
+    viewModel: SoundScanViewModel,
     onBack: () -> Unit,
     onNavigateToDetail: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
-    var scanState by remember { mutableStateOf<SoundScanState>(SoundScanState.Listening) }
-    var secondsLeft by remember { mutableIntStateOf(5) }
+    val scanState by viewModel.scanState.collectAsState()
+    val secondsLeft by viewModel.secondsLeft.collectAsState()
     var hasPermission by remember {
         mutableStateOf(
             ContextCompat.checkSelfPermission(
@@ -111,12 +96,6 @@ fun SoundScanScreen(
     ) { isGranted ->
         hasPermission = isGranted
     }
-
-    val audioRecorder = remember { AudioRecorderHelper(context) }
-    val geminiService = remember { GeminiServiceClient() }
-    val insectDao = remember { InsectDatabase.getDatabase(context).insectDao() }
-    val repository = remember { InsectRepository(insectDao, geminiService) }
-    var scanToken by remember { mutableIntStateOf(0) }
 
     val bgTransition = rememberInfiniteTransition(label = "bg_zoom")
     val bgScale by bgTransition.animateFloat(
@@ -135,78 +114,8 @@ fun SoundScanScreen(
         }
     }
 
-    LaunchedEffect(hasPermission, scanToken) {
-        if (scanState is SoundScanState.Listening) {
-            secondsLeft = 5
-            var recordedFile: File? = null
-            if (hasPermission) {
-                recordedFile = audioRecorder.startRecording()
-            }
-
-            while (secondsLeft > 0) {
-                delay(1000)
-                secondsLeft--
-            }
-
-            val audioFile = if (hasPermission) audioRecorder.stopRecording() else recordedFile
-            scanState = SoundScanState.Analyzing
-
-            var detectedName: String
-            var detectedScientific: String
-            var detectedConfidence: Int
-
-            var audioInfo: com.kynv1.aiinsectidentifierpro.data.model.InsectInfo? = null
-            try {
-                withTimeoutOrNull(15000L) {
-                    audioInfo = geminiService.identifyInsectFromAudioFile(audioFile)
-                }
-            } catch (e: Exception) {
-                Timber.e(e, "Gemini audio recognition error")
-            }
-
-            var targetId = 10009L
-
-            val info = audioInfo
-            if (info != null && !info.commonName.contains(
-                    "Unrecognized",
-                    ignoreCase = true
-                ) && !info.commonName.contains(
-                    "Lỗi",
-                    ignoreCase = true
-                ) && !info.commonName.contains("Thiếu", ignoreCase = true)
-            ) {
-                detectedName = info.commonName
-                detectedScientific = info.scientificName
-                detectedConfidence = info.confidence
-
-                val entity = InsectEntity.fromInsectInfo(
-                    info,
-                    "android.resource://${context.packageName}/${R.drawable.img_sound_scan_acoustic_waves}"
-                )
-                targetId = repository.insertInsect(entity)
-                AnalyticsHelper.logAudioScan(detectedName, detectedConfidence)
-            } else {
-                detectedName = context.getString(R.string.sound_scan_no_match)
-                detectedScientific = ""
-                detectedConfidence = 0
-            }
-
-            val displayName = if (detectedScientific.isNotBlank() && !detectedScientific.equals(
-                    "None",
-                    ignoreCase = true
-                )
-            ) {
-                "$detectedName ($detectedScientific)"
-            } else {
-                detectedName
-            }
-
-            scanState = SoundScanState.Success(
-                insectName = displayName,
-                confidence = detectedConfidence,
-                id = targetId
-            )
-        }
+    LaunchedEffect(hasPermission) {
+        viewModel.startListening(hasPermission)
     }
 
     Box(
@@ -258,10 +167,7 @@ fun SoundScanScreen(
                         SoundScanSuccessContent(
                             state = state,
                             onNavigateToDetail = onNavigateToDetail,
-                            onScanAgain = {
-                                scanToken++
-                                scanState = SoundScanState.Listening
-                            }
+                            onScanAgain = { viewModel.startListening(hasPermission) }
                         )
                     }
                 }

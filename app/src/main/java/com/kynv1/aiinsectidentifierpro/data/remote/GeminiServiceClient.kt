@@ -19,18 +19,11 @@ class GeminiServiceClient {
         "gemini-flash-latest"
     )
 
-    suspend fun identifyInsect(bitmap: Bitmap): InsectInfo? = withContext(Dispatchers.IO) {
+    suspend fun identifyInsect(bitmap: Bitmap): Result<InsectInfo> = withContext(Dispatchers.IO) {
         val apiKey = GeminiConfig.API_KEY
         if (apiKey.isBlank()) {
-            return@withContext InsectInfo(
-                commonName = "Missing API Key",
-                scientificName = "API_KEY_MISSING",
-                confidence = 0,
-                description = "API Key not configured. Please set GEMINI_API_KEY in local.properties.",
-                characteristics = listOf("API Key Missing"),
-                habitat = "Unknown",
-                dangerLevel = "Low",
-                dangerDescription = "No information"
+            return@withContext Result.failure(
+                IllegalStateException("API Key not configured. Please set GEMINI_API_KEY in local.properties.")
             )
         }
 
@@ -77,7 +70,7 @@ class GeminiServiceClient {
                 val responseText = response.text
                 if (!responseText.isNullOrBlank()) {
                     val info = InsectInfo.fromJson(responseText)
-                    if (info != null) return@withContext info
+                    if (info != null) return@withContext Result.success(info)
                 }
             } catch (e: Exception) {
                 lastErrorMessage = e.localizedMessage ?: e.message ?: "Unknown error"
@@ -85,15 +78,8 @@ class GeminiServiceClient {
             }
         }
 
-        InsectInfo(
-            commonName = "Gemini API Error",
-            scientificName = "API_ERROR",
-            confidence = 0,
-            description = "Failed to query Gemini API: $lastErrorMessage. Please check your API Key or network connection.",
-            characteristics = listOf("API Error", lastErrorMessage),
-            habitat = "Unknown",
-            dangerLevel = "Low",
-            dangerDescription = "No information"
+        Result.failure(
+            Exception(lastErrorMessage.ifBlank { "Gemini did not return a valid response." })
         )
     }
 

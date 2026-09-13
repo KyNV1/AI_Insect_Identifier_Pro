@@ -75,7 +75,6 @@
     <string name="error_load_failed_format">Data loading error: %1$s</string>
     <string name="error_no_image_selected">Please take or select a photo first.</string>
     <string name="error_cannot_read_image">Cannot read the image file.</string>
-    <string name="error_gemini_no_response">Gemini did not respond or returned invalid data format.</string>
     <string name="error_occurred_format">An error occurred: %1$s</string>
 
     <!-- Splash Screen Strings -->
