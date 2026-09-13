@@ -51,6 +51,14 @@ android {
         compose = true
         buildConfig = true
     }
+    testOptions {
+        unitTests {
+            // ViewModels under test touch Android classes (Bundle, Uri) indirectly via
+            // AnalyticsHelper/BitmapFactory; without this, unstubbed calls to the stub
+            // android.jar throw instead of returning a harmless default.
+            isReturnDefaultValues = true
+        }
+    }
 }
 
 dependencies {
@@ -101,6 +109,11 @@ dependencies {
     }
 
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.mockk)
+    // Real org.json impl for unit tests — the android.jar stub's JSONArray/JSONObject
+    // return null from toString() etc. under isReturnDefaultValues, unlike on-device.
+    testImplementation(libs.org.json)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

@@ -57,6 +57,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.kynv1.aiinsectidentifierpro.common.noRippleClick
 import com.kynv1.aiinsectidentifierpro.common.CommonTopBar
 import com.kynv1.aiinsectidentifierpro.R
+import com.kynv1.aiinsectidentifierpro.common.openUrl
 import com.kynv1.aiinsectidentifierpro.ui.screens.home.PremiumBanner
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
@@ -210,11 +211,6 @@ private fun openPlayStore(packageName: String, fallback: (String) -> Unit) {
     val url = "https://play.google.com/store/apps/details?id=$packageName"
     fallback(url)
 }
-
-private fun openUrl(context: Context, url: String) {
-    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
-}
-
 
 @Composable
 fun RateAppDialog(

@@ -18,6 +18,7 @@ object Dimens {
     val dp_16 = 16.dp
     val dp_18 = 18.dp
     val dp_20 = 20.dp
+    val dp_22 = 22.dp
     val dp_24 = 24.dp
     val dp_28 = 28.dp
     val dp_32 = 32.dp
@@ -45,6 +46,12 @@ object Dimens {
     val ImageSizeExtraLarge = 260.dp
     val dp_72 = 72.dp
     val ImagePreviewHeight = 300.dp
+
+    // Slightly shorter than ImageSizeExtraLarge: the paywall must fit three plan
+    // cards above the fold, which Detail/Onboarding don't have to.
+    val PaywallHeroHeight = 240.dp
+
+    val EmptyStateImageSize = 170.dp
 
 
     // Text Sizes (sp)

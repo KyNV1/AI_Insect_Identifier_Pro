@@ -46,6 +46,10 @@ val TextCharcoal = Color(0xFF333333)
 val TextDarkGrey = Color(0xFF444444)
 val TextMediumGrey = Color(0xFF757575)
 
+// Muted body text on dark surfaces. TextMediumGrey only reaches 3.5:1 on CardBackground,
+// below the 4.5:1 AA floor; this reaches 9:1.
+val TextMutedOnDark = Color(0xFFB9C4BE)
+
 val GoldAmber = Color(0xFFFFB300)
 val GoldYellow = Color(0xFFFFCA28)
 val AlertRed = Color(0xFFE53935)

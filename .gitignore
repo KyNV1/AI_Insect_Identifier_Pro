@@ -7,9 +7,17 @@
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
+/.idea/deviceManager.xml
+/.idea/markdown.xml
 .DS_Store
 /build
 /captures
 .externalNativeBuild
 .cxx
 local.properties
+
+# Root-level spec / task-plan docs (local working notes, not part of tracked codebase)
+/*.md
+!/CLAUDE.md
+# DESIGN.md is the tracked design-token source of truth (see .agents/rules/design-rules.md)
+!/DESIGN.md

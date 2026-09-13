@@ -1,13 +1,13 @@
 package com.kynv1.aiinsectidentifierpro.ui.screens.premium
 
-import android.content.ActivityNotFoundException
 import android.content.Context
-import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -64,12 +64,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.common.AnalyticsHelper
+import com.kynv1.aiinsectidentifierpro.common.openUrl
 import com.kynv1.aiinsectidentifierpro.ui.screens.home.HomeViewModel
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.ButtonGreen
@@ -135,126 +136,174 @@ fun PaywallScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            Column(
+            Box(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth()
-                    .verticalScroll(rememberScrollState())
             ) {
-                Box(
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(Dimens.ImageSizeExtraLarge)
+                        .verticalScroll(rememberScrollState())
                 ) {
-                    HorizontalPager(
-                        state = pagerState,
+                    Box(
                         modifier = Modifier
-                            .fillMaxSize()
-                            .pointerInput(Unit) {
-                                awaitPointerEventScope {
-                                    while (true) {
+                            .fillMaxWidth()
+                            .height(Dimens.PaywallHeroHeight)
+                    ) {
+                        HorizontalPager(
+                            state = pagerState,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .pointerInput(Unit) {
+                                    awaitEachGesture {
                                         // Initial pass sees the touch before the pager
                                         // consumes it for its own drag handling.
-                                        awaitPointerEvent(PointerEventPass.Initial)
+                                        awaitFirstDown(pass = PointerEventPass.Initial)
                                         autoAdvanceEnabled = false
                                     }
                                 }
-                            }
-                    ) { page ->
-                        Image(
-                            painter = painterResource(id = imageList[page]),
-                            contentDescription = null,
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop
-                        )
-                    }
-                }
-
-                Card(
-                    colors = CardDefaults.cardColors(containerColor = Color.White),
-                    shape = RoundedCornerShape(topStart = Dimens.dp_24, topEnd = Dimens.dp_24),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .offset(y = -Dimens.dp_16)
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = Dimens.dp_16)
-                            .padding(top = Dimens.dp_14, bottom = Dimens.dp_8),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.paywall_upgrade_premium),
-                            color = ActiveGreen,
-                            fontSize = Dimens.sp_22,
-                            fontWeight = FontWeight.ExtraBold,
-                            letterSpacing = 0.5.sp
-                        )
-
-                        Spacer(modifier = Modifier.height(Dimens.dp_10))
-
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            verticalArrangement = Arrangement.spacedBy(Dimens.dp_4)
-                        ) {
-                            BenefitItem(
-                                icon = Icons.Default.LockOpen,
-                                text = stringResource(id = R.string.paywall_benefit_1)
-                            )
-                            BenefitItem(
-                                icon = Icons.Default.BugReport,
-                                text = stringResource(id = R.string.paywall_benefit_2)
-                            )
-                            BenefitItem(
-                                icon = Icons.AutoMirrored.Filled.Chat,
-                                text = stringResource(id = R.string.paywall_benefit_3)
+                        ) { page ->
+                            Image(
+                                painter = painterResource(id = imageList[page]),
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
                             )
                         }
+                    }
 
-                        Spacer(modifier = Modifier.height(Dimens.dp_10))
-
-                        GeminiTrustBadge()
-
-                        Spacer(modifier = Modifier.height(Dimens.dp_12))
-
-                        // Thẻ giá xếp dọc, thứ tự tăng dần theo thời hạn.
-                        // Gói Yearly nổi bật bằng badge + viền, không bằng vị trí.
+                    Card(
+                        colors = CardDefaults.cardColors(containerColor = Color.White),
+                        shape = RoundedCornerShape(topStart = Dimens.dp_24, topEnd = Dimens.dp_24),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .offset(y = -Dimens.dp_16)
+                    ) {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .selectableGroup(),
-                            verticalArrangement = Arrangement.spacedBy(Dimens.dp_8)
+                                .padding(horizontal = Dimens.dp_16)
+                                .padding(top = Dimens.dp_14, bottom = Dimens.dp_8),
+                            horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            PlanRowCard(
-                                title = stringResource(id = R.string.paywall_weekly),
-                                price = stringResource(id = R.string.paywall_weekly_price),
-                                perWeek = stringResource(id = R.string.paywall_weekly_sub),
-                                isSelected = selectedPlan == PlanType.WEEKLY,
-                                onClick = { selectedPlan = PlanType.WEEKLY }
+                            Text(
+                                text = stringResource(id = R.string.paywall_upgrade_premium),
+                                color = ActiveGreen,
+                                fontSize = Dimens.sp_22,
+                                fontWeight = FontWeight.ExtraBold,
+                                letterSpacing = 0.5.sp
                             )
 
-                            PlanRowCard(
-                                title = stringResource(id = R.string.paywall_monthly),
-                                price = stringResource(id = R.string.paywall_monthly_price),
-                                perWeek = stringResource(id = R.string.paywall_monthly_sub),
-                                isSelected = selectedPlan == PlanType.MONTHLY,
-                                onClick = { selectedPlan = PlanType.MONTHLY }
+                            Spacer(modifier = Modifier.height(Dimens.dp_10))
+
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalArrangement = Arrangement.spacedBy(Dimens.dp_4)
+                            ) {
+                                BenefitItem(
+                                    icon = Icons.Default.LockOpen,
+                                    text = stringResource(id = R.string.paywall_benefit_1)
+                                )
+                                BenefitItem(
+                                    icon = Icons.Default.BugReport,
+                                    text = stringResource(id = R.string.paywall_benefit_2)
+                                )
+                                BenefitItem(
+                                    icon = Icons.AutoMirrored.Filled.Chat,
+                                    text = stringResource(id = R.string.paywall_benefit_3)
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(Dimens.dp_10))
+
+                            GeminiTrustBadge()
+
+                            Spacer(modifier = Modifier.height(Dimens.dp_12))
+
+                            // Plan cards stacked vertically, ordered by ascending duration.
+                            // The Yearly plan stands out via badge + border, not position.
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .selectableGroup(),
+                                verticalArrangement = Arrangement.spacedBy(Dimens.dp_8)
+                            ) {
+                                PlanRowCard(
+                                    title = stringResource(id = R.string.paywall_weekly),
+                                    price = stringResource(id = R.string.paywall_weekly_price),
+                                    perWeek = stringResource(id = R.string.paywall_weekly_sub),
+                                    isSelected = selectedPlan == PlanType.WEEKLY,
+                                    onClick = { selectedPlan = PlanType.WEEKLY }
+                                )
+
+                                PlanRowCard(
+                                    title = stringResource(id = R.string.paywall_monthly),
+                                    price = stringResource(id = R.string.paywall_monthly_price),
+                                    perWeek = stringResource(id = R.string.paywall_monthly_sub),
+                                    isSelected = selectedPlan == PlanType.MONTHLY,
+                                    onClick = { selectedPlan = PlanType.MONTHLY }
+                                )
+
+                                PlanRowCard(
+                                    title = stringResource(id = R.string.paywall_yearly),
+                                    price = stringResource(id = R.string.paywall_yearly_price),
+                                    perWeek = stringResource(id = R.string.paywall_yearly_sub),
+                                    isSelected = selectedPlan == PlanType.YEARLY,
+                                    badgeText = stringResource(id = R.string.paywall_discount_badge),
+                                    onClick = { selectedPlan = PlanType.YEARLY }
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(Dimens.dp_16))
+
+                            // Full billing terms + policy links live in the scroll area, not pinned.
+                            // Pinning them cost ~150dp of fixed height and pushed the plan cards
+                            // off screen. The one-line summary above the CTA carries the gist.
+                            Text(
+                                text = stringResource(id = R.string.paywall_disclaimer),
+                                color = TextMediumGrey,
+                                fontSize = Dimens.sp_12,
+                                lineHeight = Dimens.sp_16
                             )
 
-                            PlanRowCard(
-                                title = stringResource(id = R.string.paywall_yearly),
-                                price = stringResource(id = R.string.paywall_yearly_price),
-                                perWeek = stringResource(id = R.string.paywall_yearly_sub),
-                                isSelected = selectedPlan == PlanType.YEARLY,
-                                badgeText = stringResource(id = R.string.paywall_discount_badge),
-                                onClick = { selectedPlan = PlanType.YEARLY }
-                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                LegalLinkText(
+                                    text = stringResource(id = R.string.paywall_term_of_service),
+                                    url = stringResource(id = R.string.url_terms),
+                                    context = context
+                                )
+                                Text(
+                                    text = "|",
+                                    color = TextMediumGrey,
+                                    fontSize = Dimens.sp_12
+                                )
+                                LegalLinkText(
+                                    text = stringResource(id = R.string.paywall_privacy_policy),
+                                    url = stringResource(id = R.string.url_privacy),
+                                    context = context
+                                )
+                            }
                         }
-
-                        Spacer(modifier = Modifier.height(Dimens.dp_16))
                     }
                 }
+
+                // Fades the scrolling text into the CTA block instead of letting the
+                // pinned bar chop it off mid-sentence.
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .height(Dimens.dp_24)
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(Color.Transparent, Color.White)
+                            )
+                        )
+                )
             }
 
             Column(
@@ -272,7 +321,11 @@ fun PaywallScreen(
                     onClick = {
                         AnalyticsHelper.logSubscriptionSuccess(selectedPlan.analyticsName)
                         homeViewModel.purchasePremium()
-                        Toast.makeText(context, "Premium Active! Thank you!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.premium_activated_message),
+                            Toast.LENGTH_LONG
+                        ).show()
                         onNavigateToHome()
                     },
                     shape = CircleShape,
@@ -299,48 +352,16 @@ fun PaywallScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.height(Dimens.dp_8))
-
-                Text(
-                    text = stringResource(id = R.string.paywall_disclaimer),
-                    color = TextMediumGrey,
-                    fontSize = Dimens.sp_12,
-                    lineHeight = Dimens.sp_16
-                )
-
                 Spacer(modifier = Modifier.height(Dimens.dp_6))
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    val termsUrl = stringResource(id = R.string.url_terms_of_service_placeholder)
-                    val privacyUrl = stringResource(id = R.string.url_privacy_policy_placeholder)
-
-                    Text(
-                        text = stringResource(id = R.string.paywall_term_of_service),
-                        color = TextMediumGrey,
-                        fontSize = Dimens.sp_12,
-                        textDecoration = TextDecoration.Underline,
-                        modifier = Modifier
-                            .clickable { openUrl(context, termsUrl) }
-                            .padding(horizontal = Dimens.dp_8, vertical = Dimens.dp_16)
-                    )
-                    Text(
-                        text = "|",
-                        color = TextMediumGrey,
-                        fontSize = Dimens.sp_12
-                    )
-                    Text(
-                        text = stringResource(id = R.string.paywall_privacy_policy),
-                        color = TextMediumGrey,
-                        fontSize = Dimens.sp_12,
-                        textDecoration = TextDecoration.Underline,
-                        modifier = Modifier
-                            .clickable { openUrl(context, privacyUrl) }
-                            .padding(horizontal = Dimens.dp_8, vertical = Dimens.dp_16)
-                    )
-                }
+                // Short billing summary stays pinned with the CTA so the key terms are visible
+                // at the moment of purchase; the full text sits above in the scroll area.
+                Text(
+                    text = stringResource(id = R.string.paywall_billing_summary),
+                    color = TextMediumGrey,
+                    fontSize = Dimens.sp_12,
+                    textAlign = TextAlign.Center
+                )
             }
         }
 
@@ -398,16 +419,17 @@ fun BenefitItem(
     }
 }
 
-/**
- * Opens [url] in the system browser. Falls back to a toast when the device has no
- * app able to handle the intent, so the tap never fails silently.
- */
-private fun openUrl(context: Context, url: String) {
-    try {
-        context.startActivity(Intent(Intent.ACTION_VIEW, url.toUri()))
-    } catch (_: ActivityNotFoundException) {
-        Toast.makeText(context, context.getString(R.string.error_no_browser), Toast.LENGTH_SHORT).show()
-    }
+@Composable
+private fun LegalLinkText(text: String, url: String, context: Context) {
+    Text(
+        text = text,
+        color = TextMediumGrey,
+        fontSize = Dimens.sp_12,
+        textDecoration = TextDecoration.Underline,
+        modifier = Modifier
+            .clickable { openUrl(context, url) }
+            .padding(horizontal = Dimens.dp_8, vertical = Dimens.dp_16)
+    )
 }
 
 /**

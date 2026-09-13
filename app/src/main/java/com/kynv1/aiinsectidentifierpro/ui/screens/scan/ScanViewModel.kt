@@ -14,8 +14,11 @@ import com.kynv1.aiinsectidentifierpro.common.AnalyticsHelper
 import com.kynv1.aiinsectidentifierpro.data.local.entity.InsectEntity
 import com.kynv1.aiinsectidentifierpro.data.repository.InsectRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.io.InputStream
 import javax.inject.Inject
@@ -47,7 +50,18 @@ class ScanViewModel @Inject constructor(
         _uiState.value = ScanUiState.Idle
     }
 
+    /** Kept so the user can abort a slow identification from the loading dialog. */
+    private var identifyJob: Job? = null
+
+    fun cancelIdentify() {
+        identifyJob?.cancel()
+        identifyJob = null
+        _uiState.value = ScanUiState.Idle
+    }
+
     fun identifyInsect(context: Context) {
+        if (_uiState.value is ScanUiState.Loading) return
+
         val uri = selectedImageUri ?: run {
             _uiState.value = ScanUiState.Error(R.string.error_no_image_selected)
             return
@@ -55,11 +69,11 @@ class ScanViewModel @Inject constructor(
 
         _uiState.value = ScanUiState.Loading
 
-        viewModelScope.launch {
+        identifyJob = viewModelScope.launch {
             try {
                 val bitmap = uriToBitmap(context, uri)
                 if (bitmap == null) {
-                    _uiState.value = ScanUiState.Error(R.string.error_cannot_read_image)
+                    if (isActive) _uiState.value = ScanUiState.Error(R.string.error_cannot_read_image)
                     return@launch
                 }
 
@@ -68,13 +82,22 @@ class ScanViewModel @Inject constructor(
                     val entity = InsectEntity.fromInsectInfo(insectInfo, uri.toString())
                     val id = repository.insertInsect(entity)
                     AnalyticsHelper.logPhotoScan(insectInfo.commonName, insectInfo.confidence)
-                    _uiState.value = ScanUiState.Success(id)
+                    // cancelIdentify() flips this job's isActive synchronously, so if the user
+                    // cancelled while this tail was already running, don't clobber Idle with a
+                    // late Success.
+                    if (isActive) _uiState.value = ScanUiState.Success(id)
                 } else {
-                    _uiState.value = ScanUiState.Error(R.string.error_gemini_no_response)
+                    if (isActive) _uiState.value = ScanUiState.Error(R.string.error_gemini_no_response)
                 }
+            } catch (e: CancellationException) {
+                // Cancellation is not a failure — rethrow so the coroutine unwinds normally
+                // instead of the generic handler below flashing an error dialog.
+                throw e
             } catch (e: Exception) {
-                _uiState.value =
-                    ScanUiState.Error(R.string.error_occurred_format, e.localizedMessage)
+                if (isActive) {
+                    _uiState.value =
+                        ScanUiState.Error(R.string.error_occurred_format, e.localizedMessage)
+                }
             }
         }
     }

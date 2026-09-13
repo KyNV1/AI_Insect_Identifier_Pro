@@ -20,6 +20,9 @@ hiltNavigationCompose = "1.2.0"
 tensorflowLiteSupport = "0.5.0"
 tensorflowLiteTaskAudio = "0.4.4"
 timber = "5.0.1"
+kotlinxCoroutinesTest = "1.9.0"
+mockk = "1.13.13"
+orgJson = "20231013"
 
 firebaseBom = "33.9.0"
 googleServices = "4.4.2"
@@ -56,6 +59,9 @@ play-services-ads = { module = "com.google.android.gms:play-services-ads", versi
 tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", version.ref = "tensorflowLiteSupport" }
 tensorflow-lite-task-audio = { module = "org.tensorflow:tensorflow-lite-task-audio", version.ref = "tensorflowLiteTaskAudio" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+org-json = { group = "org.json", name = "json", version.ref = "orgJson" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }

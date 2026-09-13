@@ -44,6 +44,12 @@
     <string name="collection_empty_title">No insects saved yet</string>
     <string name="collection_empty_desc">Scan insects to build your collection.</string>
     <string name="collection_btn_add">Scan Insect</string>
+    <string name="collection_ask_ai">Ask AI</string>
+    <string name="collection_ask_ai_desc">Ask the AI bug specialist</string>
+    <string name="collection_delete_title">Delete this insect?</string>
+    <string name="collection_delete_message">%1$s will be removed from your collection. This can\'t be undone.</string>
+    <string name="collection_delete_confirm">Delete</string>
+    <string name="collection_delete_cancel">Cancel</string>
 
     <!-- Scan Screen Strings -->
     <string name="scan_title">AI Insect Identifier</string>
@@ -56,8 +62,11 @@
     <string name="scan_btn_gallery">Gallery</string>
     <string name="scan_btn_identify">IDENTIFY NOW</string>
     <string name="scan_btn_select_photo_first">Select a photo first</string>
-    <string name="scan_loading_title">AI is analyzing image...</string>
-    <string name="scan_loading_desc">Gemini 1.5 Flash model is identifying the insect, please wait a moment.</string>
+    <!-- Never name a specific model version here: the client tries several in order,
+         so any single name would be wrong most of the time and rot on every change. -->
+    <string name="scan_loading_title">AI is analyzing your photo…</string>
+    <string name="scan_loading_desc">Identifying the insect — this usually takes a few seconds.</string>
+    <string name="scan_loading_cancel">Cancel</string>
     <string name="scan_error_title">Identification Error</string>
     <string name="scan_btn_close">Close</string>
 
@@ -93,7 +102,7 @@
     <string name="home_remarkable_coll_title">Remarkable Collection</string>
     <string name="home_remarkable_coll_desc">Explore famous butterfly and insect collections</string>
     <string name="home_tab_home">Home</string>
-    <string name="home_tab_collections">Collections</string>
+    <string name="home_tab_collections">Collection</string>
 
     <!-- Sound Scan Screen Strings -->
     <string name="sound_scan_title">Acoustic Scanner</string>
@@ -125,19 +134,17 @@
     <string name="paywall_monthly_price">$5.99</string>
     <string name="paywall_monthly_sub">$1.38/week</string>
     <string name="paywall_continue">GET STARTED</string>
+    <string name="paywall_billing_summary">Auto-renews until cancelled. Cancel anytime in Google Play.</string>
     <string name="paywall_disclaimer">By starting your subscription, you agree to allow billing to your Google Play account according to the chosen package. Cancel anytime via settings. Subscriptions automatically renew unless auto-renewal is deactivated at least 24 hours before the current billing period expires. Renewal charges will be applied within 24 hours prior to the period\'s end.</string>
     <string name="paywall_term_of_service">Terms of Use</string>
     <string name="paywall_privacy_policy">Privacy Policy</string>
     <string name="paywall_discount_badge">SAVE 87%</string>
+    <string name="premium_activated_message">Premium Activated! Thank you!</string>
 
-    <!-- TODO before Play submission: replace with the real hosted URLs. -->
-    <string name="url_terms_of_service_placeholder" translatable="false">https://kynv1.github.io/aiinsectidentifierpro/terms.html</string>
-    <string name="url_privacy_policy_placeholder" translatable="false">https://kynv1.github.io/aiinsectidentifierpro/privacy.html</string>
     <string name="error_no_browser">No browser app found to open this link</string>
 
     <!-- Assistance Screen Strings -->
     <string name="assistance_title">AI Assistant</string>
-    <string name="assistance_start_chatting">Click and start chatting:</string>
     <string name="assistance_message_placeholder">Ask anything about insects...</string>
     <string name="assistance_thinking">AI is thinking…</string>
     <string name="assistance_q1">How many different kinds of insects are there?</string>
@@ -149,8 +156,9 @@
     <string name="assistance_intro">I\'m your AI Insect Assistant.</string>
     <string name="assistance_help_today">How can I help you today?</string>
     <string name="assistance_popular_questions">Popular Questions</string>
-    <string name="assistance_or">or</string>
-    <string name="assistance_ask_own_question">Or ask your own question below 👇</string>
+    <string name="assistance_ask_own_question">Or type your own question below</string>
+    <string name="assistance_send_desc">Send message</string>
+    <string name="assistance_error_generic">Something went wrong. Please try again.</string>
 
     <!-- Settings Screen Strings -->
     <string name="settings_title">Settings</string>

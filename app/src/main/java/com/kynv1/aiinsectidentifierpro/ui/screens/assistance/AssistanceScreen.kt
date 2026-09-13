@@ -1,5 +1,6 @@
 package com.kynv1.aiinsectidentifierpro.ui.screens.assistance
 
+import android.widget.Toast
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateDpAsState
@@ -39,6 +40,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.automirrored.filled.Send
@@ -58,13 +61,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -75,6 +81,8 @@ import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
 import com.kynv1.aiinsectidentifierpro.ui.theme.LightCardBorder
 import com.kynv1.aiinsectidentifierpro.ui.theme.LightGreyBorder
 import com.kynv1.aiinsectidentifierpro.ui.theme.LightMilkBackground
+import com.kynv1.aiinsectidentifierpro.ui.theme.TextCharcoal
+import com.kynv1.aiinsectidentifierpro.ui.theme.TextMediumGrey
 
 @Composable
 fun AssistanceScreen(
@@ -94,43 +102,6 @@ fun AssistanceScreen(
     } else {
         0.dp
     }
-    val beeTransition = rememberInfiniteTransition(label = "bee")
-    val beeOffsetY by beeTransition.animateFloat(
-        initialValue = -6f,
-        targetValue = 6f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1500, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "bee_offset"
-    )
-    val beeRotation by beeTransition.animateFloat(
-        initialValue = -4f,
-        targetValue = 4f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(2000, easing = FastOutSlowInEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "bee_rotation"
-    )
-    val beeScale by beeTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = 1f,
-        animationSpec = infiniteRepeatable(
-            animation = keyframes {
-                durationMillis = 3500
-                1.0f at 0
-                1.0f at 3000
-                1.1f at 3100
-                0.92f at 3200
-                1.1f at 3300
-                1.0f at 3500
-            },
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "bee_scale"
-    )
-
     val quickQuestions = listOf(
         stringResource(id = R.string.assistance_q1),
         stringResource(id = R.string.assistance_q2),
@@ -141,6 +112,14 @@ fun AssistanceScreen(
         if (uiState.messages.isNotEmpty()) {
             withFrameNanos { }
             listState.scrollToItem(uiState.messages.lastIndex)
+        }
+    }
+
+    val context = LocalContext.current
+    LaunchedEffect(uiState.errorResId) {
+        uiState.errorResId?.let { resId ->
+            Toast.makeText(context, context.getString(resId), Toast.LENGTH_SHORT).show()
+            viewModel.clearError()
         }
     }
 
@@ -174,7 +153,7 @@ fun AssistanceScreen(
                     Icon(
                         painter = painterResource(R.drawable.ic_back_left),
                         contentDescription = stringResource(id = R.string.detail_btn_back),
-                        tint = Color.Black
+                        tint = TextCharcoal
                     )
                 }
 
@@ -182,7 +161,7 @@ fun AssistanceScreen(
                     text = stringResource(id = R.string.assistance_title),
                     fontSize = Dimens.sp_18,
                     fontWeight = FontWeight.Bold,
-                    color = Color.Black
+                    color = TextCharcoal
                 )
             }
 
@@ -208,31 +187,13 @@ fun AssistanceScreen(
                                 .padding(vertical = Dimens.dp_16),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier
-                                    .size(100.dp)
-                                    .graphicsLayer(
-                                        translationY = beeOffsetY,
-                                        rotationZ = beeRotation,
-                                        scaleX = beeScale,
-                                        scaleY = beeScale
-                                    )
-                                    .background(Color.White, CircleShape)
-                                    .border(BorderStroke(1.dp, LightGreyBorder), CircleShape)
-                            ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_assistance_bee),
-                                    contentDescription = null,
-                                    modifier = Modifier.size(72.dp)
-                                )
-                            }
+                            BeeMascot()
                             Spacer(modifier = Modifier.height(Dimens.dp_16))
                             Text(
                                 text = stringResource(id = R.string.assistance_hi),
                                 fontSize = Dimens.sp_20,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.Black,
+                                color = TextCharcoal,
                                 textAlign = TextAlign.Center
                             )
                             Spacer(modifier = Modifier.height(Dimens.dp_4))
@@ -247,7 +208,7 @@ fun AssistanceScreen(
                             Text(
                                 text = stringResource(id = R.string.assistance_help_today),
                                 fontSize = Dimens.sp_14,
-                                color = Color.Gray,
+                                color = TextMediumGrey,
                                 textAlign = TextAlign.Center
                             )
                             
@@ -256,7 +217,7 @@ fun AssistanceScreen(
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(1.dp)
+                                    .height(Dimens.dp_1)
                                     .background(LightGreyBorder.copy(alpha = 0.5f))
                             )
                             
@@ -266,7 +227,7 @@ fun AssistanceScreen(
                                 text = stringResource(id = R.string.assistance_popular_questions),
                                 fontSize = Dimens.sp_14,
                                 fontWeight = FontWeight.SemiBold,
-                                color = Color.Gray,
+                                color = TextMediumGrey,
                                 modifier = Modifier.align(Alignment.Start)
                             )
                             
@@ -282,7 +243,7 @@ fun AssistanceScreen(
                                     label = "press_scale"
                                 )
                                 val itemElevation by animateDpAsState(
-                                    targetValue = if (itemPressed) 4.dp else 1.dp,
+                                    targetValue = if (itemPressed) Dimens.dp_4 else Dimens.dp_1,
                                     label = "press_elevation"
                                 )
                                 Box(
@@ -317,13 +278,13 @@ fun AssistanceScreen(
                                         verticalAlignment = Alignment.CenterVertically,
                                         modifier = Modifier.fillMaxWidth()
                                     ) {
-                                        Text(text = emoji, fontSize = 16.sp)
+                                        Text(text = emoji, fontSize = Dimens.sp_16)
                                         Spacer(modifier = Modifier.width(Dimens.dp_12))
                                         Text(
                                             text = question,
                                             fontSize = Dimens.sp_14,
-                                            color = Color.DarkGray,
-                                            lineHeight = 18.sp,
+                                            color = TextCharcoal,
+                                            lineHeight = Dimens.sp_18,
                                             modifier = Modifier.weight(1f)
                                         )
                                         Spacer(modifier = Modifier.width(Dimens.dp_8))
@@ -331,7 +292,7 @@ fun AssistanceScreen(
                                             imageVector = Icons.AutoMirrored.Filled.ArrowForward,
                                             contentDescription = null,
                                             tint = ActiveGreen,
-                                            modifier = Modifier.size(22.dp)
+                                            modifier = Modifier.size(Dimens.dp_22)
                                         )
                                     }
                                 }
@@ -342,25 +303,16 @@ fun AssistanceScreen(
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .height(1.dp)
+                                    .height(Dimens.dp_1)
                                     .background(LightGreyBorder.copy(alpha = 0.5f))
                             )
                             
                             Spacer(modifier = Modifier.height(Dimens.dp_16))
                             
                             Text(
-                                text = stringResource(id = R.string.assistance_or),
-                                fontSize = Dimens.sp_12,
-                                color = Color.Gray,
-                                fontWeight = FontWeight.Medium
-                            )
-                            
-                            Spacer(modifier = Modifier.height(Dimens.dp_4))
-                            
-                            Text(
                                 text = stringResource(id = R.string.assistance_ask_own_question),
                                 fontSize = Dimens.sp_14,
-                                color = Color.DarkGray,
+                                color = TextCharcoal,
                                 fontWeight = FontWeight.SemiBold
                             )
                         }
@@ -389,6 +341,7 @@ fun AssistanceScreen(
         ) {
             AssistanceInputBar(
                 inputText = inputText,
+                isSending = uiState.isSending,
                 onInputChange = { inputText = it },
                 onSend = {
                     if (inputText.isNotBlank()) {
@@ -409,13 +362,87 @@ fun AssistanceScreen(
     }
 }
 
+/**
+ * The animated mascot. Its infinite transitions live here rather than at screen level so they
+ * stop once a conversation starts and the mascot leaves composition — at screen level they kept
+ * requesting frames forever, even with the bee no longer on screen.
+ */
+@Composable
+private fun BeeMascot(modifier: Modifier = Modifier) {
+    val beeTransition = rememberInfiniteTransition(label = "bee")
+    val beeOffsetY by beeTransition.animateFloat(
+        initialValue = -6f,
+        targetValue = 6f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1500, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "bee_offset"
+    )
+    val beeRotation by beeTransition.animateFloat(
+        initialValue = -4f,
+        targetValue = 4f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(2000, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "bee_rotation"
+    )
+    // Start and end match: the wobble itself comes entirely from the keyframes below.
+    val beeScale by beeTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = keyframes {
+                durationMillis = 3500
+                1.0f at 0
+                1.0f at 3000
+                1.1f at 3100
+                0.92f at 3200
+                1.1f at 3300
+                1.0f at 3500
+            },
+            repeatMode = RepeatMode.Restart
+        ),
+        label = "bee_scale"
+    )
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .size(Dimens.dp_100)
+            .graphicsLayer(
+                translationY = beeOffsetY,
+                rotationZ = beeRotation,
+                scaleX = beeScale,
+                scaleY = beeScale
+            )
+            .background(Color.White, CircleShape)
+            .border(BorderStroke(Dimens.dp_1, LightGreyBorder), CircleShape)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_assistance_bee),
+            contentDescription = null,
+            modifier = Modifier.size(Dimens.dp_72)
+        )
+    }
+}
+
+// Neither depends on any parameter, so both are hoisted out of AssistanceInputBar —
+// otherwise BasicTextField would allocate fresh instances on every keystroke.
+private val AssistanceInputTextStyle = TextStyle(color = TextCharcoal, fontSize = Dimens.sp_14)
+private val AssistanceInputKeyboardOptions = KeyboardOptions(imeAction = ImeAction.Send)
+
 @Composable
 fun AssistanceInputBar(
     inputText: String,
+    isSending: Boolean,
     onInputChange: (String) -> Unit,
     onSend: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val canSend = inputText.isNotBlank() && !isSending
+
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
@@ -436,7 +463,7 @@ fun AssistanceInputBar(
                 if (inputText.isEmpty()) {
                     Text(
                         text = stringResource(id = R.string.assistance_message_placeholder),
-                        color = Color.Gray,
+                        color = TextMediumGrey,
                         fontSize = Dimens.sp_14
                     )
                 }
@@ -444,7 +471,15 @@ fun AssistanceInputBar(
                     value = inputText,
                     onValueChange = onInputChange,
                     modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
+                    singleLine = true,
+                    textStyle = AssistanceInputTextStyle,
+                    // Lets the user send straight from the keyboard instead of reaching
+                    // for the button after every message. Gated by canSend so it can't
+                    // fire (and silently clear the field) while a reply is in flight.
+                    keyboardOptions = AssistanceInputKeyboardOptions,
+                    keyboardActions = remember(canSend, onSend) {
+                        KeyboardActions(onSend = { if (canSend) onSend() })
+                    }
                 )
             }
         }
@@ -454,14 +489,18 @@ fun AssistanceInputBar(
         Box(
             modifier = Modifier
                 .size(Dimens.dp_48)
-                .background(ActiveGreen, CircleShape)
+                // Dimmed when there is nothing to send, so a dead tap is never a silent one.
+                .background(
+                    if (canSend) ActiveGreen else ActiveGreen.copy(alpha = 0.3f),
+                    CircleShape
+                )
                 .clip(CircleShape)
-                .clickable(onClick = onSend),
+                .clickable(enabled = canSend, onClick = onSend),
             contentAlignment = Alignment.Center
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.Send,
-                contentDescription = "Send",
+                contentDescription = stringResource(id = R.string.assistance_send_desc),
                 tint = Color.White,
                 modifier = Modifier.size(Dimens.dp_20)
             )
@@ -473,7 +512,7 @@ fun AssistanceInputBar(
 fun ChatBubble(message: Message) {
     val arrangement = if (message.isUser) Arrangement.End else Arrangement.Start
     val bubbleBgColor = if (message.isUser) ActiveGreen else Color.White
-    val bubbleTextColor = if (message.isUser) Color.White else Color.Black
+    val bubbleTextColor = if (message.isUser) Color.White else TextCharcoal
     val bubbleShape = if (message.isUser) {
         RoundedCornerShape(
             topStart = Dimens.dp_16,
@@ -511,7 +550,7 @@ fun ChatBubble(message: Message) {
                 text = parseMarkdownToAnnotatedString(message.text),
                 color = bubbleTextColor,
                 fontSize = Dimens.sp_14,
-                lineHeight = 20.sp
+                lineHeight = Dimens.sp_20
             )
         }
     }
@@ -548,7 +587,7 @@ fun TypingIndicator() {
         ) {
             Text(
                 text = stringResource(id = R.string.assistance_thinking),
-                color = Color.Gray,
+                color = TextMediumGrey,
                 fontSize = Dimens.sp_14,
                 fontStyle = androidx.compose.ui.text.font.FontStyle.Italic
             )

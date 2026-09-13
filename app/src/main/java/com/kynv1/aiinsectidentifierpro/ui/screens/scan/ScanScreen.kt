@@ -3,7 +3,6 @@ package com.kynv1.aiinsectidentifierpro.ui.screens.scan
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -11,8 +10,6 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalIndication
@@ -72,6 +69,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
 import com.kynv1.aiinsectidentifierpro.R
@@ -82,6 +81,7 @@ import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
 import com.kynv1.aiinsectidentifierpro.ui.theme.NatureDarkGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.NatureGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.NatureLightGreen
+import com.kynv1.aiinsectidentifierpro.ui.theme.TextMutedOnDark
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -432,22 +432,21 @@ fun ScanScreen(
             }
         }
 
-        AnimatedVisibility(
-            visible = uiState is ScanUiState.Loading,
-            enter = fadeIn(),
-            exit = fadeOut()
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(Color.Black.copy(alpha = 0.8f)),
-                contentAlignment = Alignment.Center
+        // A real Dialog, not a Box overlay: a Box only paints a scrim, so taps fell straight
+        // through to "Take Photo"/"Gallery" underneath, back was not intercepted, and
+        // TalkBack never treated it as modal. Dialog handles all three.
+        if (uiState is ScanUiState.Loading) {
+            Dialog(
+                onDismissRequest = { /* Dismissed only via Cancel */ },
+                properties = DialogProperties(
+                    dismissOnBackPress = false,
+                    dismissOnClickOutside = false
+                )
             ) {
                 Card(
                     colors = CardDefaults.cardColors(containerColor = CardBackground),
                     shape = RoundedCornerShape(Dimens.dp_24),
-                    border = BorderStroke(Dimens.dp_1, ActiveGreen),
-                    modifier = Modifier.padding(Dimens.dp_32)
+                    border = BorderStroke(Dimens.dp_1, ActiveGreen)
                 ) {
                     Column(
                         modifier = Modifier.padding(Dimens.dp_32),
@@ -468,10 +467,21 @@ fun ScanScreen(
                         Spacer(modifier = Modifier.height(Dimens.dp_8))
                         Text(
                             text = stringResource(id = R.string.scan_loading_desc),
-                            color = Color.Gray,
+                            color = TextMutedOnDark,
                             fontSize = Dimens.sp_12,
                             textAlign = TextAlign.Center
                         )
+                        Spacer(modifier = Modifier.height(Dimens.dp_8))
+                        TextButton(
+                            onClick = { viewModel.cancelIdentify() },
+                            colors = ButtonDefaults.textButtonColors(contentColor = NatureGreen)
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.scan_loading_cancel),
+                                fontSize = Dimens.sp_14,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
                     }
                 }
             }

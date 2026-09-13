@@ -111,8 +111,11 @@ fun HomeScreenContent(
                 PremiumBanner(
                     onGetPremiumClick = {
                         onGetPremiumClick()
-                        Toast.makeText(context, "Premium Activated! Thank you!", Toast.LENGTH_LONG)
-                            .show()
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.premium_activated_message),
+                            Toast.LENGTH_LONG
+                        ).show()
                     }
                 )
             }
