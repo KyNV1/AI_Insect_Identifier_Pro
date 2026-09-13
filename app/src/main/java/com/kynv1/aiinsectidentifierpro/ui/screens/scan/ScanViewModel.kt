@@ -82,13 +82,8 @@ class ScanViewModel @Inject constructor(
                     val entity = InsectEntity.fromInsectInfo(insectInfo, uri.toString())
                     val id = repository.insertInsect(entity)
                     AnalyticsHelper.logPhotoScan(insectInfo.commonName, insectInfo.confidence)
-                    // cancelIdentify() flips this job's isActive synchronously, so if the user
-                    // cancelled while this tail was already running, don't clobber Idle with a
-                    // late Success.
                     if (isActive) _uiState.value = ScanUiState.Success(id)
                 }.onFailure { e ->
-                    // A failed/ungraded identification is never persisted — only a real
-                    // InsectInfo reaches insertInsect above.
                     if (isActive) {
                         _uiState.value =
                             ScanUiState.Error(R.string.error_occurred_format, e.localizedMessage)
