@@ -41,6 +41,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            // Thêm dòng này để ký tạm bằng debug key khi test release:
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
