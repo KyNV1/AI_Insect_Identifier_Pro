@@ -9,6 +9,7 @@
 /.idea/assetWizardSettings.xml
 /.idea/deviceManager.xml
 /.idea/markdown.xml
+/.idea/misc.xml
 .DS_Store
 /build
 /captures
@@ -21,3 +22,9 @@ local.properties
 !/CLAUDE.md
 # DESIGN.md is the tracked design-token source of truth (see .agents/rules/design-rules.md)
 !/DESIGN.md
+
+# Local office docs (checklists, notes) and their editor lock files — not part of the codebase
+*.xlsx
+*.docx
+*.pptx
+~$*
