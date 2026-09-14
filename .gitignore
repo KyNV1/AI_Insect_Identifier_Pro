@@ -1,5 +1,6 @@
 *.iml
 .gradle
+/.kotlin
 /local.properties
 /.idea/caches
 /.idea/libraries
@@ -28,3 +29,8 @@ local.properties
 *.docx
 *.pptx
 ~$*
+
+# Release signing — never commit the keystore or its passwords
+*.jks
+*.keystore
+key.properties
