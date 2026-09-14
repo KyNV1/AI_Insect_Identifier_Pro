@@ -23,6 +23,7 @@ timber = "5.0.1"
 kotlinxCoroutinesTest = "1.9.0"
 mockk = "1.13.13"
 orgJson = "20231013"
+billing = "9.1.0"
 
 firebaseBom = "33.9.0"
 googleServices = "4.4.2"
@@ -62,6 +63,7 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 org-json = { group = "org.json", name = "json", version.ref = "orgJson" }
+billing-ktx = { group = "com.android.billingclient", name = "billing-ktx", version.ref = "billing" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }

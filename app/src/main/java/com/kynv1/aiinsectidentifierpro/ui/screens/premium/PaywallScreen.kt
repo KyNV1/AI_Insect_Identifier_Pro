@@ -1,5 +1,6 @@
 package com.kynv1.aiinsectidentifierpro.ui.screens.premium
 
+import android.app.Activity
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -32,6 +33,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material3.TextButton
 import androidx.compose.material.icons.automirrored.filled.Chat
 import androidx.compose.material.icons.filled.AutoAwesome
 import androidx.compose.material.icons.filled.BugReport
@@ -46,6 +48,7 @@ import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -68,10 +71,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.android.billingclient.api.ProductDetails
 import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.common.AnalyticsHelper
+import com.kynv1.aiinsectidentifierpro.common.BillingManager
+import com.kynv1.aiinsectidentifierpro.common.PurchaseResult
 import com.kynv1.aiinsectidentifierpro.common.openUrl
-import com.kynv1.aiinsectidentifierpro.ui.screens.home.HomeViewModel
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.ButtonGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
@@ -85,22 +90,66 @@ import kotlinx.coroutines.delay
 
 /**
  * Subscription tiers. Carries its own analytics name so reordering the cards on screen
- * can never desync the reported plan from the selected one.
+ * can never desync the reported plan from the selected one, plus the Play Console
+ * product ID used to look up real pricing and launch the purchase flow.
  */
-enum class PlanType(val analyticsName: String) {
-    WEEKLY("weekly"),
-    MONTHLY("monthly"),
-    YEARLY("yearly")
+enum class PlanType(val analyticsName: String, val productId: String) {
+    WEEKLY("weekly", BillingManager.PRODUCT_WEEKLY),
+    MONTHLY("monthly", BillingManager.PRODUCT_MONTHLY),
+    YEARLY("yearly", BillingManager.PRODUCT_YEARLY)
+}
+
+/** Google's real, region-priced string once loaded; the static fallback while it's still loading. */
+private fun priceLabel(
+    productDetails: Map<String, ProductDetails>,
+    plan: PlanType,
+    fallback: String
+): String {
+    return productDetails[plan.productId]
+        ?.subscriptionOfferDetails
+        ?.firstOrNull()
+        ?.pricingPhases
+        ?.pricingPhaseList
+        ?.firstOrNull()
+        ?.formattedPrice
+        ?: fallback
 }
 
 @Composable
 fun PaywallScreen(
-    homeViewModel: HomeViewModel,
+    viewModel: PaywallViewModel,
     onNavigateToHome: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
     var selectedPlan by remember { mutableStateOf(PlanType.YEARLY) }
+    val productDetails by viewModel.productDetails.collectAsState()
+    val purchaseResult by viewModel.purchaseResult.collectAsState()
+
+    LaunchedEffect(purchaseResult) {
+        when (val result = purchaseResult) {
+            is PurchaseResult.Success -> {
+                if (!result.isRestore) {
+                    AnalyticsHelper.logSubscriptionSuccess(selectedPlan.analyticsName)
+                }
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.premium_activated_message),
+                    Toast.LENGTH_LONG
+                ).show()
+                viewModel.consumePurchaseResult()
+                onNavigateToHome()
+            }
+
+            is PurchaseResult.Error -> {
+                Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
+                viewModel.consumePurchaseResult()
+            }
+
+            PurchaseResult.Cancelled -> viewModel.consumePurchaseResult()
+            PurchaseResult.Idle -> Unit
+        }
+    }
 
     val imageList = listOf(
         R.drawable.img_onboarding_green_beetle,
@@ -231,7 +280,11 @@ fun PaywallScreen(
                             ) {
                                 PlanRowCard(
                                     title = stringResource(id = R.string.paywall_weekly),
-                                    price = stringResource(id = R.string.paywall_weekly_price),
+                                    price = priceLabel(
+                                        productDetails,
+                                        PlanType.WEEKLY,
+                                        stringResource(id = R.string.paywall_weekly_price)
+                                    ),
                                     perWeek = stringResource(id = R.string.paywall_weekly_sub),
                                     isSelected = selectedPlan == PlanType.WEEKLY,
                                     onClick = { selectedPlan = PlanType.WEEKLY }
@@ -239,7 +292,11 @@ fun PaywallScreen(
 
                                 PlanRowCard(
                                     title = stringResource(id = R.string.paywall_monthly),
-                                    price = stringResource(id = R.string.paywall_monthly_price),
+                                    price = priceLabel(
+                                        productDetails,
+                                        PlanType.MONTHLY,
+                                        stringResource(id = R.string.paywall_monthly_price)
+                                    ),
                                     perWeek = stringResource(id = R.string.paywall_monthly_sub),
                                     isSelected = selectedPlan == PlanType.MONTHLY,
                                     onClick = { selectedPlan = PlanType.MONTHLY }
@@ -247,7 +304,11 @@ fun PaywallScreen(
 
                                 PlanRowCard(
                                     title = stringResource(id = R.string.paywall_yearly),
-                                    price = stringResource(id = R.string.paywall_yearly_price),
+                                    price = priceLabel(
+                                        productDetails,
+                                        PlanType.YEARLY,
+                                        stringResource(id = R.string.paywall_yearly_price)
+                                    ),
                                     perWeek = stringResource(id = R.string.paywall_yearly_sub),
                                     isSelected = selectedPlan == PlanType.YEARLY,
                                     badgeText = stringResource(id = R.string.paywall_discount_badge),
@@ -319,14 +380,10 @@ fun PaywallScreen(
                 // so the gradient painted underneath shows through while the ripple stays on top.
                 Button(
                     onClick = {
-                        AnalyticsHelper.logSubscriptionSuccess(selectedPlan.analyticsName)
-                        homeViewModel.purchasePremium()
-                        Toast.makeText(
-                            context,
-                            context.getString(R.string.premium_activated_message),
-                            Toast.LENGTH_LONG
-                        ).show()
-                        onNavigateToHome()
+                        val activity = context as? Activity
+                        if (activity != null) {
+                            viewModel.launchPurchase(activity, selectedPlan)
+                        }
                     },
                     shape = CircleShape,
                     colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent),
@@ -379,6 +436,20 @@ fun PaywallScreen(
                 painter = painterResource(id = R.drawable.ic_close),
                 contentDescription = "Close paywall",
                 tint = Color.White,
+            )
+        }
+
+        TextButton(
+            onClick = { viewModel.restorePurchases() },
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(Dimens.dp_8)
+        ) {
+            Text(
+                text = stringResource(id = R.string.paywall_restore_purchases),
+                color = Color.White,
+                fontSize = Dimens.sp_12,
+                fontWeight = FontWeight.SemiBold
             )
         }
     }

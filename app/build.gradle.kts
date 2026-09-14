@@ -1,3 +1,4 @@
+import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
@@ -18,6 +19,13 @@ val localProperties = Properties().apply {
 }
 val geminiApiKey: String = localProperties.getProperty("GEMINI_API_KEY").orEmpty()
 
+val keystorePropertiesFile = rootProject.file("key.properties")
+val keystoreProperties = Properties().apply {
+    if (keystorePropertiesFile.exists()) {
+        FileInputStream(keystorePropertiesFile).use { load(it) }
+    }
+}
+
 android {
     namespace = "com.kynv1.aiinsectidentifierpro"
     compileSdk = 37
@@ -26,23 +34,38 @@ android {
         applicationId = "com.kynv1.aiinsectidentifierpro"
         minSdk = 24
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
     }
 
+    signingConfigs {
+        create("release") {
+            if (keystorePropertiesFile.exists()) {
+                keyAlias = keystoreProperties["keyAlias"] as String
+                keyPassword = keystoreProperties["keyPassword"] as String
+                storeFile = file(keystoreProperties["storeFile"] as String)
+                storePassword = keystoreProperties["storePassword"] as String
+            }
+        }
+    }
+
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            // Thêm dòng này để ký tạm bằng debug key khi test release:
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = if (keystorePropertiesFile.exists()) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
     }
     compileOptions {
@@ -99,6 +122,8 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     // Google Mobile Ads SDK
     implementation(libs.play.services.ads)
+    // Google Play Billing (subscriptions)
+    implementation(libs.billing.ktx)
     compileOnly(libs.error.prone.annotations)
 
     // Logging

@@ -87,6 +87,7 @@ import com.kynv1.aiinsectidentifierpro.ui.screens.home.HomeViewModel
 import com.kynv1.aiinsectidentifierpro.ui.screens.onboarding.OnboardingScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.onboarding.OnboardingViewModel
 import com.kynv1.aiinsectidentifierpro.ui.screens.premium.PaywallScreen
+import com.kynv1.aiinsectidentifierpro.ui.screens.premium.PaywallViewModel
 import com.kynv1.aiinsectidentifierpro.ui.screens.scan.ScanScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.scan.ScanViewModel
 import com.kynv1.aiinsectidentifierpro.ui.screens.settings.SettingsScreen
@@ -482,6 +483,9 @@ fun AppNavHost(
                 },
                 onNavigateToSettings = {
                     navController.navigate(Screen.Settings.route)
+                },
+                onNavigateToPaywall = {
+                    navController.navigate(Screen.Paywall.route)
                 }
             )
         }
@@ -492,9 +496,9 @@ fun AppNavHost(
             popEnterTransition = { EnterTransition.None },
             popExitTransition = { ExitTransition.None }
         ) {
-            val homeViewModel: HomeViewModel = hiltViewModel()
+            val paywallViewModel: PaywallViewModel = hiltViewModel()
             PaywallScreen(
-                homeViewModel = homeViewModel,
+                viewModel = paywallViewModel,
                 onNavigateToHome = {
                     navController.navigate(Screen.Home.route) {
                         popUpTo(Screen.Paywall.route) { inclusive = true }

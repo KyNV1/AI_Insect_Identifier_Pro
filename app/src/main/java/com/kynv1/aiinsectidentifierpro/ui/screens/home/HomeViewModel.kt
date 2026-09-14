@@ -62,8 +62,4 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun purchasePremium() {
-        premiumStore.setPremium(true)
-        _uiState.value = _uiState.value.copy(isPremium = true)
-    }
 }

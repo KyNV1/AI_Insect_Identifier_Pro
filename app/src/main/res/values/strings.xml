@@ -138,6 +138,7 @@
     <string name="paywall_term_of_service">Terms of Use</string>
     <string name="paywall_privacy_policy">Privacy Policy</string>
     <string name="paywall_discount_badge">SAVE 87%</string>
+    <string name="paywall_restore_purchases">Restore purchases</string>
     <string name="premium_activated_message">Premium Activated! Thank you!</string>
 
     <string name="error_no_browser">No browser app found to open this link</string>
