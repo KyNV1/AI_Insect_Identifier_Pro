@@ -19,10 +19,11 @@
 -keep class com.kynv1.aiinsectidentifierpro.data.local.entity.** { *; }
 
 # ===================================================================
-# Google Generative AI (Gemini SDK) — newer library, keep its model
-# classes intact rather than assume its consumer rules cover everything.
+# Google Generative AI (Gemini SDK) and Play Billing — keep their model
+# classes intact rather than assume their consumer rules cover everything.
 # ===================================================================
 -keep class com.google.ai.client.generativeai.** { *; }
+-keep class com.android.billingclient.api.** { *; }
 
 # ===================================================================
 # kotlinx.coroutines references some optional/debug-only classes that
