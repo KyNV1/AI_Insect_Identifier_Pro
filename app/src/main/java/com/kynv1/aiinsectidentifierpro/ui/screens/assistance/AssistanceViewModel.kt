@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.common.AnalyticsHelper
+import com.kynv1.aiinsectidentifierpro.data.local.entity.ChatMessageEntity
 import com.kynv1.aiinsectidentifierpro.data.repository.InsectRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CancellationException
@@ -21,6 +22,8 @@ data class Message(
     val timestamp: Long = System.currentTimeMillis()
 )
 
+private fun ChatMessageEntity.toMessage() = Message(id = id.toString(), text = text, isUser = isUser, timestamp = timestamp)
+
 data class AssistanceUiState(
     val messages: List<Message> = emptyList(),
     val isSending: Boolean = false,
@@ -36,8 +39,24 @@ class AssistanceViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(AssistanceUiState())
     val uiState: StateFlow<AssistanceUiState> = _uiState.asStateFlow()
 
+    init {
+        viewModelScope.launch {
+            val history = repository.getChatHistory()
+            if (history.isNotEmpty()) {
+                _uiState.value = _uiState.value.copy(messages = history.map { it.toMessage() })
+            }
+        }
+    }
+
     fun clearError() {
         _uiState.value = _uiState.value.copy(errorResId = null)
+    }
+
+    fun clearHistory() {
+        _uiState.value = _uiState.value.copy(messages = emptyList())
+        viewModelScope.launch {
+            repository.clearChatHistory()
+        }
     }
 
     fun sendMessage(text: String) {
@@ -51,16 +70,19 @@ class AssistanceViewModel @Inject constructor(
             text = text,
             isUser = true
         )
-        
+
         val currentMessages = _uiState.value.messages.toMutableList()
         currentMessages.add(userMessage)
-        
+
         _uiState.value = _uiState.value.copy(
             messages = currentMessages,
             isSending = true
         )
 
         viewModelScope.launch {
+            repository.insertChatMessage(
+                ChatMessageEntity(text = userMessage.text, isUser = true, timestamp = userMessage.timestamp)
+            )
             try {
                 val responseText = repository.getChatResponse(text)
                 val aiMessage = Message(
@@ -72,6 +94,9 @@ class AssistanceViewModel @Inject constructor(
                 updatedMessages.add(aiMessage)
 
                 _uiState.value = _uiState.value.copy(messages = updatedMessages)
+                repository.insertChatMessage(
+                    ChatMessageEntity(text = aiMessage.text, isUser = false, timestamp = aiMessage.timestamp)
+                )
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {

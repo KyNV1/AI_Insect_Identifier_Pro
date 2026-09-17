@@ -2,7 +2,9 @@ package com.kynv1.aiinsectidentifierpro.data.repository
 
 import android.graphics.Bitmap
 import com.kynv1.aiinsectidentifierpro.R
+import com.kynv1.aiinsectidentifierpro.data.local.ChatMessageDao
 import com.kynv1.aiinsectidentifierpro.data.local.InsectDao
+import com.kynv1.aiinsectidentifierpro.data.local.entity.ChatMessageEntity
 import com.kynv1.aiinsectidentifierpro.data.local.entity.InsectEntity
 import com.kynv1.aiinsectidentifierpro.data.model.InsectInfo
 import com.kynv1.aiinsectidentifierpro.data.model.InsectShort
@@ -14,6 +16,7 @@ import java.io.File
 
 class InsectRepository(
     private val insectDao: InsectDao,
+    private val chatMessageDao: ChatMessageDao,
     private val geminiServiceClient: GeminiServiceClient = GeminiServiceClient()
 ) {
     val allInsectsFlow: Flow<List<InsectEntity>> = insectDao.getAllInsectsFlow()
@@ -671,5 +674,17 @@ class InsectRepository(
 
     suspend fun identifyInsectFromAudioFile(audioFile: File?): InsectInfo? {
         return geminiServiceClient.identifyInsectFromAudioFile(audioFile)
+    }
+
+    suspend fun getChatHistory(): List<ChatMessageEntity> {
+        return chatMessageDao.getAllMessages()
+    }
+
+    suspend fun insertChatMessage(message: ChatMessageEntity): Long {
+        return chatMessageDao.insertMessage(message)
+    }
+
+    suspend fun clearChatHistory() {
+        chatMessageDao.clearAll()
     }
 }

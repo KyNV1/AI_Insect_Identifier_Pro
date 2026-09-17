@@ -1,8 +1,10 @@
 package com.kynv1.aiinsectidentifierpro.ui.screens.assistance
 
 import com.kynv1.aiinsectidentifierpro.R
+import com.kynv1.aiinsectidentifierpro.data.local.entity.ChatMessageEntity
 import com.kynv1.aiinsectidentifierpro.data.repository.InsectRepository
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -31,6 +33,8 @@ class AssistanceViewModelTest {
     fun setUp() {
         Dispatchers.setMain(dispatcher)
         repository = mockk()
+        coEvery { repository.getChatHistory() } returns emptyList()
+        coEvery { repository.insertChatMessage(any()) } returns 1L
         viewModel = AssistanceViewModel(repository)
     }
 
@@ -96,5 +100,36 @@ class AssistanceViewModelTest {
         viewModel.clearError()
 
         assertNull(viewModel.uiState.value.errorResId)
+    }
+
+    @Test
+    fun `init loads chat history persisted from a previous session`() = runTest(dispatcher) {
+        coEvery { repository.getChatHistory() } returns listOf(
+            ChatMessageEntity(id = 1L, text = "Hello", isUser = true, timestamp = 100L),
+            ChatMessageEntity(id = 2L, text = "Hi there", isUser = false, timestamp = 200L)
+        )
+
+        val restoredViewModel = AssistanceViewModel(repository)
+        advanceUntilIdle()
+
+        val messages = restoredViewModel.uiState.value.messages
+        assertEquals(2, messages.size)
+        assertEquals("Hello", messages[0].text)
+        assertEquals("Hi there", messages[1].text)
+    }
+
+    @Test
+    fun `clearHistory empties the conversation and the persisted store`() = runTest(dispatcher) {
+        coEvery { repository.getChatResponse(any()) } returns "Hi there"
+        coEvery { repository.clearChatHistory() } returns Unit
+        viewModel.sendMessage("Hello")
+        advanceUntilIdle()
+        assertEquals(2, viewModel.uiState.value.messages.size)
+
+        viewModel.clearHistory()
+        advanceUntilIdle()
+
+        assertEquals(0, viewModel.uiState.value.messages.size)
+        coVerify(exactly = 1) { repository.clearChatHistory() }
     }
 }

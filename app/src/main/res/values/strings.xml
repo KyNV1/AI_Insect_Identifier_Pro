@@ -145,6 +145,7 @@
 
     <!-- Assistance Screen Strings -->
     <string name="assistance_title">AI Assistant</string>
+    <string name="assistance_clear_history">Clear conversation</string>
     <string name="assistance_message_placeholder">Ask anything about insects...</string>
     <string name="assistance_thinking">AI is thinking…</string>
     <string name="assistance_q1">How many different kinds of insects are there?</string>

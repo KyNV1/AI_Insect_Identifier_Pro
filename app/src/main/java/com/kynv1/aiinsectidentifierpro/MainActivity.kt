@@ -578,7 +578,11 @@ fun AppNavHost(
             popEnterTransition = { EnterTransition.None },
             popExitTransition = { ExitTransition.None }
         ) {
-            val assistanceViewModel: AssistanceViewModel = hiltViewModel()
+            // Scoped to the Activity, not this route: chat history should survive the user
+            // leaving and coming back (e.g. Home -> Assistance -> Detail -> Assistance again),
+            // unlike other screens whose ViewModel is scoped per-visit.
+            val assistanceViewModel: AssistanceViewModel =
+                hiltViewModel(LocalContext.current as ComponentActivity)
             AssistanceScreen(
                 viewModel = assistanceViewModel,
                 onNavigateBack = { navController.popBackStack() }

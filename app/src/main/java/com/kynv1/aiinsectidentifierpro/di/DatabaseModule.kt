@@ -1,6 +1,7 @@
 package com.kynv1.aiinsectidentifierpro.di
 
 import android.content.Context
+import com.kynv1.aiinsectidentifierpro.data.local.ChatMessageDao
 import com.kynv1.aiinsectidentifierpro.data.local.InsectDao
 import com.kynv1.aiinsectidentifierpro.data.local.InsectDatabase
 import com.kynv1.aiinsectidentifierpro.data.local.OnboardingStore
@@ -32,6 +33,12 @@ object DatabaseModule {
 
     @Provides
     @Singleton
+    fun provideChatMessageDao(database: InsectDatabase): ChatMessageDao {
+        return database.chatMessageDao()
+    }
+
+    @Provides
+    @Singleton
     fun provideGeminiServiceClient(): GeminiServiceClient {
         return GeminiServiceClient()
     }
@@ -40,9 +47,10 @@ object DatabaseModule {
     @Singleton
     fun provideInsectRepository(
         insectDao: InsectDao,
+        chatMessageDao: ChatMessageDao,
         geminiServiceClient: GeminiServiceClient
     ): InsectRepository {
-        return InsectRepository(insectDao, geminiServiceClient)
+        return InsectRepository(insectDao, chatMessageDao, geminiServiceClient)
     }
 
     @Provides
