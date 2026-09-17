@@ -13,10 +13,11 @@ import java.io.File
 class GeminiServiceClient {
 
     private val MODEL_NAMES = listOf(
-        "gemini-2.0-flash",
-        "gemini-2.5-flash",
-        "gemini-1.5-flash",
-        "gemini-flash-latest"
+        "gemini-3.6-flash",
+        "gemini-3.5-flash",
+        "gemini-flash-latest",
+        "gemini-2.5-flash-lite",
+        "gemini-1.5-flash"
     )
 
     suspend fun identifyInsect(bitmap: Bitmap): Result<InsectInfo> = withContext(Dispatchers.IO) {
