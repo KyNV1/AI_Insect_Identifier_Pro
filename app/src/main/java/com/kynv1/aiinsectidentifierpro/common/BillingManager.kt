@@ -14,6 +14,9 @@ import com.android.billingclient.api.Purchase
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryPurchasesParams
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.kynv1.aiinsectidentifierpro.data.local.PremiumStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -69,6 +72,15 @@ class BillingManager @Inject constructor(
                 // enableAutoServiceReconnection() handles retrying the connection itself.
             }
         })
+
+        // A subscription can lapse while the app just sits open in the background — re-check
+        // on every foreground resume (not only cold start) so that gets caught without
+        // requiring the user to fully restart the app.
+        ProcessLifecycleOwner.get().lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onResume(owner: LifecycleOwner) {
+                restorePurchases()
+            }
+        })
     }
 
     private fun queryProductDetails() {
@@ -108,10 +120,9 @@ class BillingManager @Inject constructor(
     }
 
     /**
-     * Re-grants Premium if the user already owns an active subscription (new device, reinstall,
-     * etc.). [notifyUi] is false for the silent check on every app start, and true for the
-     * user tapping "Restore purchases" — which should always get a visible result, even
-     * "nothing to restore", rather than looking like a dead button.
+     * Syncs Premium status with Google Play.
+     * Grants Premium for an active subscription, otherwise revokes it.
+     * [notifyUi] controls whether the restore result is shown to the user.
      */
     fun restorePurchases(notifyUi: Boolean = false) {
         val params = QueryPurchasesParams.newBuilder()
@@ -130,8 +141,9 @@ class BillingManager @Inject constructor(
                 premiumStore.setPremium(true)
                 active.forEach { acknowledgeIfNeeded(it) }
                 if (notifyUi) _purchaseResult.value = PurchaseResult.Success(isRestore = true)
-            } else if (notifyUi) {
-                _purchaseResult.value = PurchaseResult.Error("No previous purchase found for this account.")
+            } else {
+                premiumStore.setPremium(false)
+                if (notifyUi) _purchaseResult.value = PurchaseResult.Error("No previous purchase found for this account.")
             }
         }
     }

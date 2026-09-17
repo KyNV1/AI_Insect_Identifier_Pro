@@ -74,7 +74,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.android.gms.ads.MobileAds
 import com.kynv1.aiinsectidentifierpro.common.AdManager
+import com.kynv1.aiinsectidentifierpro.common.BillingManager
 import com.kynv1.aiinsectidentifierpro.data.local.OnboardingStore
+import com.kynv1.aiinsectidentifierpro.data.local.PremiumStore
 import com.kynv1.aiinsectidentifierpro.ui.navigation.Screen
 import com.kynv1.aiinsectidentifierpro.ui.screens.assistance.AssistanceScreen
 import com.kynv1.aiinsectidentifierpro.ui.screens.assistance.AssistanceViewModel
@@ -110,6 +112,15 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var onboardingStore: OnboardingStore
 
+    @Inject
+    lateinit var premiumStore: PremiumStore
+
+    // Injected only to force this app-wide Singleton to be created at launch instead of
+    // lazily on first Paywall visit — otherwise a Premium user who never sees Paywall would
+    // never trigger the background restorePurchases() check that keeps their status current.
+    @Inject
+    lateinit var billingManager: BillingManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge(
@@ -121,14 +132,14 @@ class MainActivity : ComponentActivity() {
         }
         setContent {
             AIInsectIdentifierProTheme {
-                MainAppScreen(onboardingStore)
+                MainAppScreen(onboardingStore, premiumStore)
             }
         }
     }
 }
 
 @Composable
-fun MainAppScreen(onboardingStore: OnboardingStore) {
+fun MainAppScreen(onboardingStore: OnboardingStore, premiumStore: PremiumStore) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -211,6 +222,7 @@ fun MainAppScreen(onboardingStore: OnboardingStore) {
             navController = navController,
             startDestination = startDestination,
             onboardingStore = onboardingStore,
+            premiumStore = premiumStore,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
@@ -401,6 +413,7 @@ fun AppNavHost(
     navController: NavHostController,
     startDestination: String,
     onboardingStore: OnboardingStore,
+    premiumStore: PremiumStore,
     modifier: Modifier = Modifier
 ) {
     NavHost(
@@ -423,7 +436,9 @@ fun AppNavHost(
                     }
                 },
                 onNavigateToScan = {
-                    navController.navigate(Screen.Paywall.route) {
+                    // Premium users skip the paywall entirely on every cold start.
+                    val destination = if (premiumStore.isPremium()) Screen.Home.route else Screen.Paywall.route
+                    navController.navigate(destination) {
                         popUpTo(Screen.Splash.route) { inclusive = true }
                     }
                 }
@@ -440,7 +455,8 @@ fun AppNavHost(
             OnboardingScreen(
                 viewModel = onboardingViewModel,
                 onNavigateToScan = {
-                    navController.navigate(Screen.Paywall.route) {
+                    val destination = if (premiumStore.isPremium()) Screen.Home.route else Screen.Paywall.route
+                    navController.navigate(destination) {
                         popUpTo(Screen.Onboarding.route) { inclusive = true }
                     }
                 }
