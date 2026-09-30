@@ -14,7 +14,6 @@ room = "2.7.0-alpha11"
 ksp = "2.2.10-2.0.2"
 navigationCompose = "2.8.5"
 coil = "2.6.0"
-generativeai = "0.9.0"
 hilt = "2.60"
 hiltNavigationCompose = "1.2.0"
 tensorflowLiteSupport = "0.5.0"
@@ -24,8 +23,9 @@ kotlinxCoroutinesTest = "1.9.0"
 mockk = "1.13.13"
 orgJson = "20231013"
 billing = "9.1.0"
+guava = "31.0.1-android"
 
-firebaseBom = "33.9.0"
+firebaseBom = "34.19.0"
 googleServices = "4.4.2"
 firebaseCrashlyticsPlugin = "3.0.3"
 
@@ -53,7 +53,6 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
-google-generativeai = { group = "com.google.ai.client.generativeai", name = "generativeai", version.ref = "generativeai" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
@@ -69,6 +68,10 @@ firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.r
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics" }
+firebase-ai = { group = "com.google.firebase", name = "firebase-ai" }
+firebase-appcheck-playintegrity = { group = "com.google.firebase", name = "firebase-appcheck-playintegrity" }
+firebase-appcheck-debug = { group = "com.google.firebase", name = "firebase-appcheck-debug" }
+guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

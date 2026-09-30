@@ -10,15 +10,6 @@ plugins {
     alias(libs.plugins.firebase.crashlytics)
 }
 
-// Secrets live in local.properties (gitignored), never in tracked source.
-val localProperties = Properties().apply {
-    val file = rootProject.file("local.properties")
-    if (file.exists()) {
-        file.inputStream().use { load(it) }
-    }
-}
-val geminiApiKey: String = localProperties.getProperty("GEMINI_API_KEY").orEmpty()
-
 // Release signing lives in key.properties (gitignored) — never in tracked source.
 val keyPropertiesFile = rootProject.file("key.properties")
 val keyProperties = Properties().apply {
@@ -39,8 +30,6 @@ android {
         versionName = "1.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField("String", "GEMINI_API_KEY", "\"$geminiApiKey\"")
     }
 
     signingConfigs {
@@ -106,14 +95,20 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.compose.material.icons.extended)
 
-    // Gemini AI SDK
-    implementation(libs.google.generativeai)
-
     // Firebase SDKs
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging)
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
+    // Firebase AI Logic (Gemini) — replaces the raw-API-key generativeai SDK; auth is via
+    // the linked Firebase project + App Check, no key embedded in the app.
+    implementation(libs.firebase.ai)
+    implementation(libs.guava) // required by firebase-ai for one-shot (non-streaming) calls
+    implementation(libs.firebase.appcheck.playintegrity)
+    // Not debugImplementation: AIInsectIdentifierApp references DebugAppCheckProviderFactory
+    // directly (branched on isDebug at runtime), so it must resolve in release compiles too —
+    // the branch is simply never taken there.
+    implementation(libs.firebase.appcheck.debug)
 
     // Hilt DI
     implementation(libs.hilt.android)

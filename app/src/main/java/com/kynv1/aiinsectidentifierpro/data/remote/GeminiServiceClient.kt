@@ -1,9 +1,11 @@
 package com.kynv1.aiinsectidentifierpro.data.remote
 
 import android.graphics.Bitmap
-import com.google.ai.client.generativeai.GenerativeModel
-import com.google.ai.client.generativeai.type.content
-import com.google.ai.client.generativeai.type.generationConfig
+import com.google.firebase.Firebase
+import com.google.firebase.ai.ai
+import com.google.firebase.ai.type.GenerativeBackend
+import com.google.firebase.ai.type.content
+import com.google.firebase.ai.type.generationConfig
 import com.kynv1.aiinsectidentifierpro.data.model.InsectInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -12,22 +14,18 @@ import java.io.File
 
 class GeminiServiceClient {
 
+    // gemini-flash-latest (alias) and gemini-2.5-flash-lite/gemini-1.5-flash (deprecated,
+    // 1.5 already retired as of Sep 2025) were dropped — replaced with the current, confirmed
+    // Gemini 3.x Flash lineup, newest first with a stable fallback last.
     private val MODEL_NAMES = listOf(
+        "gemini-3.8-flash",
+        "gemini-3.7-flash",
         "gemini-3.6-flash",
         "gemini-3.5-flash",
-        "gemini-flash-latest",
-        "gemini-2.5-flash-lite",
-        "gemini-1.5-flash"
+        "gemini-3.5-flash-lite"
     )
 
     suspend fun identifyInsect(bitmap: Bitmap): Result<InsectInfo> = withContext(Dispatchers.IO) {
-        val apiKey = GeminiConfig.API_KEY
-        if (apiKey.isBlank()) {
-            return@withContext Result.failure(
-                IllegalStateException("API Key not configured. Please set GEMINI_API_KEY in local.properties.")
-            )
-        }
-
         val config = generationConfig {
             responseMimeType = "application/json"
             temperature = 0.1f
@@ -54,9 +52,8 @@ class GeminiServiceClient {
 
         for (modelName in MODEL_NAMES) {
             try {
-                val model = GenerativeModel(
+                val model = Firebase.ai(backend = GenerativeBackend.googleAI()).generativeModel(
                     modelName = modelName,
-                    apiKey = apiKey,
                     generationConfig = config,
                     systemInstruction = content { text(systemInstructionText) }
                 )
@@ -85,11 +82,6 @@ class GeminiServiceClient {
     }
 
     suspend fun getChatResponse(prompt: String): String = withContext(Dispatchers.IO) {
-        val apiKey = GeminiConfig.API_KEY
-        if (apiKey.isBlank()) {
-            return@withContext "[API Key Missing]\n\nPlease set GEMINI_API_KEY in local.properties to start live AI chat."
-        }
-
         val systemInstructionText = """
             You are an expert entomologist AI. Answer the user's questions about insects, spiders, bugs, or arthropods in English in a friendly, helpful, educational, and structured manner.
             Always respond strictly in English.
@@ -103,9 +95,8 @@ class GeminiServiceClient {
 
         for (modelName in MODEL_NAMES) {
             try {
-                val model = GenerativeModel(
+                val model = Firebase.ai(backend = GenerativeBackend.googleAI()).generativeModel(
                     modelName = modelName,
-                    apiKey = apiKey,
                     systemInstruction = content { text(systemInstructionText) }
                 )
                 val response = model.generateContent(prompt)
@@ -120,15 +111,10 @@ class GeminiServiceClient {
             }
         }
 
-        "[Gemini API Connection Error]\n\nDetails from Google Cloud Server: $lastErrorMessage\n\nPlease check your network connection or the GEMINI_API_KEY in local.properties."
+        "[Gemini API Connection Error]\n\nDetails from Google Cloud Server: $lastErrorMessage\n\nPlease check your network connection and try again."
     }
 
     suspend fun getBiologicalInsightsByName(speciesName: String, confidence: Int): InsectInfo? = withContext(Dispatchers.IO) {
-        val apiKey = GeminiConfig.API_KEY
-        if (apiKey.isBlank()) {
-            return@withContext null
-        }
-
         val config = generationConfig {
             responseMimeType = "application/json"
             temperature = 0.2f
@@ -159,9 +145,8 @@ class GeminiServiceClient {
 
         for (modelName in MODEL_NAMES) {
             try {
-                val model = GenerativeModel(
+                val model = Firebase.ai(backend = GenerativeBackend.googleAI()).generativeModel(
                     modelName = modelName,
-                    apiKey = apiKey,
                     generationConfig = config,
                     systemInstruction = content { text(systemInstructionText) }
                 )
@@ -182,11 +167,6 @@ class GeminiServiceClient {
 
     suspend fun identifyInsectFromAudioFile(audioFile: File?): InsectInfo? = withContext(Dispatchers.IO) {
         if (audioFile == null || !audioFile.exists() || audioFile.length() == 0L) {
-            return@withContext null
-        }
-
-        val apiKey = GeminiConfig.API_KEY
-        if (apiKey.isBlank()) {
             return@withContext null
         }
 
@@ -223,16 +203,15 @@ class GeminiServiceClient {
 
         for (modelName in MODEL_NAMES) {
             try {
-                val model = GenerativeModel(
+                val model = Firebase.ai(backend = GenerativeBackend.googleAI()).generativeModel(
                     modelName = modelName,
-                    apiKey = apiKey,
                     generationConfig = config,
                     systemInstruction = content { text(systemInstructionText) }
                 )
 
                 val response = model.generateContent(
                     content {
-                        blob("audio/m4a", bytes)
+                        inlineData(bytes, "audio/m4a")
                         text("Listen to this audio recording and identify the insect species in English.")
                     }
                 )

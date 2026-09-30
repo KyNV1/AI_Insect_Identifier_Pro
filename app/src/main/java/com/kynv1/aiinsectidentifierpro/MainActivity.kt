@@ -115,9 +115,6 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var premiumStore: PremiumStore
 
-    // Injected only to force this app-wide Singleton to be created at launch instead of
-    // lazily on first Paywall visit — otherwise a Premium user who never sees Paywall would
-    // never trigger the background restorePurchases() check that keeps their status current.
     @Inject
     lateinit var billingManager: BillingManager
 
