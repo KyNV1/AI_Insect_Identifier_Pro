@@ -19,10 +19,12 @@
 -keep class com.kynv1.aiinsectidentifierpro.data.local.entity.** { *; }
 
 # ===================================================================
-# Google Generative AI (Gemini SDK) and Play Billing — keep their model
-# classes intact rather than assume their consumer rules cover everything.
+# Play Billing — keep its model classes intact rather than assume its
+# consumer rules cover everything. Firebase AI Logic (Gemini) ships as a
+# Firebase AAR with its own consumer rules like Crashlytics/Analytics/
+# Messaging below, so it doesn't get a rule here unless a release build
+# proves otherwise.
 # ===================================================================
--keep class com.google.ai.client.generativeai.** { *; }
 -keep class com.android.billingclient.api.** { *; }
 
 # ===================================================================

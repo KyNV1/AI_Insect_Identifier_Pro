@@ -71,6 +71,7 @@ import com.kynv1.aiinsectidentifierpro.ui.theme.StarGold
 fun SettingsScreen(
     onBack: () -> Unit,
     onNavigateToPaywall: () -> Unit,
+    isPremium: Boolean,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -88,6 +89,7 @@ fun SettingsScreen(
             )
             SettingsContent(
                 onNavigateToPaywall = onNavigateToPaywall,
+                isPremium = isPremium,
                 onRateUsClick = { showRateDialog = true },
                 onShareClick = {
                     val appName = context.getString(R.string.app_name)
@@ -139,6 +141,7 @@ fun SettingsScreen(
 @Composable
 private fun SettingsContent(
     onNavigateToPaywall: () -> Unit,
+    isPremium: Boolean,
     onRateUsClick: () -> Unit,
     onShareClick: () -> Unit,
     onFeedbackClick: () -> Unit,
@@ -151,11 +154,13 @@ private fun SettingsContent(
             .verticalScroll(rememberScrollState())
             .padding(bottom = Dimens.dp_24)
     ) {
-        PremiumBanner(
-            onGetPremiumClick = onNavigateToPaywall,
-            modifier = Modifier.padding(top = Dimens.dp_8)
-        )
-        Spacer(modifier = Modifier.height(Dimens.dp_24))
+        if (!isPremium) {
+            PremiumBanner(
+                onGetPremiumClick = onNavigateToPaywall,
+                modifier = Modifier.padding(top = Dimens.dp_8)
+            )
+            Spacer(modifier = Modifier.height(Dimens.dp_24))
+        }
         SettingsSection(title = stringResource(R.string.settings_section_spread_word)) {
             SettingsRowItem(
                 R.drawable.ic_star,
@@ -411,5 +416,5 @@ fun SettingsRowItem(
 @Preview(showBackground = true)
 @Composable
 private fun SettingsPreview() {
-    SettingsScreen(onBack = {}, onNavigateToPaywall = {})
+    SettingsScreen(onBack = {}, onNavigateToPaywall = {}, isPremium = false)
 }

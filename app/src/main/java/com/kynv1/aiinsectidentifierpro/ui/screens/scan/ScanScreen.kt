@@ -1,5 +1,7 @@
 package com.kynv1.aiinsectidentifierpro.ui.screens.scan
 
+import android.graphics.Color as AndroidColor
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -63,6 +65,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -71,6 +74,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.window.DialogWindowProvider
 import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
 import com.kynv1.aiinsectidentifierpro.R
@@ -443,6 +447,15 @@ fun ScanScreen(
                     dismissOnClickOutside = false
                 )
             ) {
+                // The platform dialog window carries its own opaque background drawable,
+                // which peeks out behind our rounded Card as a second, misaligned frame
+                // unless cleared. The default scrim only dims the selected-photo preview
+                // behind it rather than hiding it, so raise it to fully cover that preview.
+                val dialogWindow = (LocalView.current.parent as? DialogWindowProvider)?.window
+                LaunchedEffect(dialogWindow) {
+                    dialogWindow?.setBackgroundDrawable(ColorDrawable(AndroidColor.TRANSPARENT))
+                    dialogWindow?.setDimAmount(1f)
+                }
                 Card(
                     colors = CardDefaults.cardColors(containerColor = CardBackground),
                     shape = RoundedCornerShape(Dimens.dp_24),
@@ -491,6 +504,14 @@ fun ScanScreen(
             AlertDialog(
                 onDismissRequest = { viewModel.resetState() },
                 icon = {
+                    // Same platform dialog window background leak as the Loading dialog —
+                    // Material3's AlertDialog uses a Dialog internally too. Also raise the
+                    // scrim to fully cover the selected-photo preview instead of just dimming it.
+                    val dialogWindow = (LocalView.current.parent as? DialogWindowProvider)?.window
+                    LaunchedEffect(dialogWindow) {
+                        dialogWindow?.setBackgroundDrawable(ColorDrawable(AndroidColor.TRANSPARENT))
+                        dialogWindow?.setDimAmount(1f)
+                    }
                     Icon(
                         imageVector = Icons.Default.Info,
                         contentDescription = null,

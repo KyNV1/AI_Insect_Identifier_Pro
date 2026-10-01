@@ -594,7 +594,8 @@ fun AppNavHost(
         ) {
             SettingsScreen(
                 onBack = { navController.popBackStack() },
-                onNavigateToPaywall = { navController.navigate(Screen.Paywall.route) }
+                onNavigateToPaywall = { navController.navigate(Screen.Paywall.route) },
+                isPremium = premiumStore.isPremium()
             )
         }
     }
