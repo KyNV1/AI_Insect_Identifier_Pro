@@ -4,31 +4,45 @@ import android.graphics.Bitmap
 import com.google.firebase.Firebase
 import com.google.firebase.ai.ai
 import com.google.firebase.ai.type.GenerativeBackend
+import com.google.firebase.ai.type.ThinkingLevel
 import com.google.firebase.ai.type.content
 import com.google.firebase.ai.type.generationConfig
+import com.google.firebase.ai.type.thinkingConfig
 import com.kynv1.aiinsectidentifierpro.data.model.InsectInfo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import timber.log.Timber
 import java.io.File
+import kotlin.time.Duration.Companion.seconds
 
 class GeminiServiceClient {
 
-    // gemini-flash-latest (alias) and gemini-2.5-flash-lite/gemini-1.5-flash (deprecated,
-    // 1.5 already retired as of Sep 2025) were dropped — replaced with the current, confirmed
-    // Gemini 3.x Flash lineup, newest first with a stable fallback last.
+    private fun elapsedMs(startNs: Long): Long = (System.nanoTime() - startNs) / 1_000_000
+
+    // Cheapest first (lite, then ascending version), so costlier models only run as fallbacks.
+    // 3.5-flash-lite also answered in ~3s while 3.6 timed out and 3.7/3.8 returned "high demand".
     private val MODEL_NAMES = listOf(
-        "gemini-3.8-flash",
-        "gemini-3.7-flash",
-        "gemini-3.6-flash",
+        "gemini-3.5-flash-lite",
         "gemini-3.5-flash",
-        "gemini-3.5-flash-lite"
+        "gemini-3.6-flash",
+        "gemini-3.7-flash",
+        "gemini-3.8-flash"
     )
+
+    // Short per-attempt timeout so an overloaded model is skipped quickly instead of stalling the UI.
+    // Applied with withTimeout because firebase-ai keeps RequestOptions(timeout) internal.
+    private val textTimeout = 30.seconds
+    private val mediaTimeout = 45.seconds
+
+    // A low thinking level keeps latency down; these are lookup/ID tasks, not hard reasoning.
+    private val lowThinking = thinkingConfig { thinkingLevel = ThinkingLevel.LOW }
 
     suspend fun identifyInsect(bitmap: Bitmap): Result<InsectInfo> = withContext(Dispatchers.IO) {
         val config = generationConfig {
             responseMimeType = "application/json"
             temperature = 0.1f
+            thinkingConfig = lowThinking
         }
 
         val systemInstructionText = """
@@ -51,6 +65,7 @@ class GeminiServiceClient {
         var lastErrorMessage = ""
 
         for (modelName in MODEL_NAMES) {
+            val startNs = System.nanoTime()
             try {
                 val model = Firebase.ai(backend = GenerativeBackend.googleAI()).generativeModel(
                     modelName = modelName,
@@ -58,21 +73,26 @@ class GeminiServiceClient {
                     systemInstruction = content { text(systemInstructionText) }
                 )
 
-                val response = model.generateContent(
-                    content {
-                        image(bitmap)
-                        text("Identify this insect and return details in English JSON format.")
-                    }
-                )
+                val response = withTimeout(mediaTimeout) {
+                    model.generateContent(
+                        content {
+                            image(bitmap)
+                            text("Identify this insect and return details in English JSON format.")
+                        }
+                    )
+                }
 
                 val responseText = response.text
                 if (!responseText.isNullOrBlank()) {
                     val info = InsectInfo.fromJson(responseText)
-                    if (info != null) return@withContext Result.success(info)
+                    if (info != null) {
+                        Timber.d("Identify insect SUCCESS with model: $modelName in ${elapsedMs(startNs)}ms")
+                        return@withContext Result.success(info)
+                    }
                 }
             } catch (e: Exception) {
                 lastErrorMessage = e.localizedMessage ?: e.message ?: "Unknown error"
-                Timber.w("Identify insect model '$modelName' failed: $lastErrorMessage")
+                Timber.w("Identify insect model '$modelName' failed after ${elapsedMs(startNs)}ms: $lastErrorMessage")
             }
         }
 
@@ -94,20 +114,25 @@ class GeminiServiceClient {
         var lastErrorMessage = ""
 
         for (modelName in MODEL_NAMES) {
+            val startNs = System.nanoTime()
             try {
                 val model = Firebase.ai(backend = GenerativeBackend.googleAI()).generativeModel(
                     modelName = modelName,
+                    generationConfig = generationConfig {
+                        thinkingConfig = lowThinking
+                        maxOutputTokens = 2048
+                    },
                     systemInstruction = content { text(systemInstructionText) }
                 )
-                val response = model.generateContent(prompt)
+                val response = withTimeout(textTimeout) { model.generateContent(prompt) }
                 val text = response.text
                 if (!text.isNullOrBlank()) {
-                    Timber.d("Gemini Chat SUCCESS with model: $modelName")
+                    Timber.d("Gemini Chat SUCCESS with model: $modelName in ${elapsedMs(startNs)}ms")
                     return@withContext text
                 }
             } catch (e: Exception) {
                 lastErrorMessage = e.localizedMessage ?: e.message ?: "Unknown error"
-                Timber.w("Gemini Chat model '$modelName' failed: $lastErrorMessage")
+                Timber.w("Gemini Chat model '$modelName' failed after ${elapsedMs(startNs)}ms: $lastErrorMessage")
             }
         }
 
@@ -173,6 +198,7 @@ class GeminiServiceClient {
         val config = generationConfig {
             responseMimeType = "application/json"
             temperature = 0.1f
+            thinkingConfig = lowThinking
         }
 
         val systemInstructionText = """
@@ -209,12 +235,14 @@ class GeminiServiceClient {
                     systemInstruction = content { text(systemInstructionText) }
                 )
 
-                val response = model.generateContent(
-                    content {
-                        inlineData(bytes, "audio/m4a")
-                        text("Listen to this audio recording and identify the insect species in English.")
-                    }
-                )
+                val response = withTimeout(mediaTimeout) {
+                    model.generateContent(
+                        content {
+                            inlineData(bytes, "audio/m4a")
+                            text("Listen to this audio recording and identify the insect species in English.")
+                        }
+                    )
+                }
 
                 val responseText = response.text
                 if (!responseText.isNullOrBlank()) {
