@@ -126,6 +126,7 @@ fun PaywallScreen(
     val productDetails by viewModel.productDetails.collectAsState()
     val purchaseResult by viewModel.purchaseResult.collectAsState()
 
+    val premiumActivatedMessage = stringResource(id = R.string.premium_activated_message)
     LaunchedEffect(purchaseResult) {
         when (val result = purchaseResult) {
             is PurchaseResult.Success -> {
@@ -134,7 +135,7 @@ fun PaywallScreen(
                 }
                 Toast.makeText(
                     context,
-                    context.getString(R.string.premium_activated_message),
+                    premiumActivatedMessage,
                     Toast.LENGTH_LONG
                 ).show()
                 viewModel.consumePurchaseResult()

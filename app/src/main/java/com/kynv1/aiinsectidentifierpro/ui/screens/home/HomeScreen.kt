@@ -109,12 +109,13 @@ fun HomeScreenContent(
             HomeHeader(onSettingsClick = onNavigateToSettings)
 
             if (!uiState.isPremium) {
+                val premiumActivatedMessage = stringResource(id = R.string.premium_activated_message)
                 PremiumBanner(
                     onGetPremiumClick = {
                         onGetPremiumClick()
                         Toast.makeText(
                             context,
-                            context.getString(R.string.premium_activated_message),
+                            premiumActivatedMessage,
                             Toast.LENGTH_LONG
                         ).show()
                     }

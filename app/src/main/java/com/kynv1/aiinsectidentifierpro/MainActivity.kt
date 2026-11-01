@@ -5,6 +5,7 @@ import android.graphics.Color.TRANSPARENT
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.EnterTransition
@@ -579,7 +580,7 @@ fun AppNavHost(
             // leaving and coming back (e.g. Home -> Assistance -> Detail -> Assistance again),
             // unlike other screens whose ViewModel is scoped per-visit.
             val assistanceViewModel: AssistanceViewModel =
-                hiltViewModel(LocalContext.current as ComponentActivity)
+                hiltViewModel(checkNotNull(LocalActivity.current) as ComponentActivity)
             AssistanceScreen(
                 viewModel = assistanceViewModel,
                 onNavigateBack = { navController.popBackStack() }
