@@ -7,10 +7,16 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.kynv1.aiinsectidentifierpro.BuildConfig
 import timber.log.Timber
 
 object AdManager {
     private const val TEST_INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-3940256099942544/1033173712"
+    private const val INTERSTITIAL_AD_UNIT_ID = "ca-app-pub-7277704833839539/9506118569"
+
+    // Debug builds keep Google's test unit so tapping ads while developing never counts as invalid traffic.
+    private val interstitialAdUnitId: String
+        get() = if (BuildConfig.DEBUG) TEST_INTERSTITIAL_AD_UNIT_ID else INTERSTITIAL_AD_UNIT_ID
 
     private var mInterstitialAd: InterstitialAd? = null
     private var isLoading = false
@@ -25,7 +31,7 @@ object AdManager {
         val adRequest = AdRequest.Builder().build()
         InterstitialAd.load(
             context,
-            TEST_INTERSTITIAL_AD_UNIT_ID,
+            interstitialAdUnitId,
             adRequest,
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {

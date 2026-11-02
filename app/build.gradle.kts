@@ -26,8 +26,8 @@ android {
         applicationId = "com.kynv1.aiinsectidentifierpro"
         minSdk = 24
         targetSdk = 36
-        versionCode = 5
-        versionName = "1.0.4"
+        versionCode = 7
+        versionName = "1.0.5"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -122,12 +122,6 @@ dependencies {
 
     // Logging
     implementation(libs.timber)
-
-    // TensorFlow Lite Audio SDK (Excluded duplicate classes provided by Gemini LiteRT)
-    implementation(libs.tensorflow.lite.task.audio) {
-        exclude(group = "org.tensorflow", module = "tensorflow-lite-api")
-        exclude(group = "org.tensorflow", module = "tensorflow-lite-support")
-    }
 
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
