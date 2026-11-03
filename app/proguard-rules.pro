@@ -34,6 +34,11 @@
 # ===================================================================
 -dontwarn kotlinx.coroutines.**
 
+# Play In-App Review (review-ktx) references this build-time nullness
+# annotation from play-services-basement, which isn't on our classpath and
+# is never loaded at runtime.
+-dontwarn com.google.android.gms.common.annotation.NoNullnessRewrite
+
 # Room, Hilt/Dagger, Firebase, and Coil each ship their own consumer
 # ProGuard rules inside their AARs (auto-merged by AGP), so we don't
 # duplicate blanket -keep rules for them here — that would just bloat

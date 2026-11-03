@@ -2,7 +2,12 @@ package com.kynv1.aiinsectidentifierpro.ui.screens.sound
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
+import com.kynv1.aiinsectidentifierpro.common.InAppReviewHelper
+import com.kynv1.aiinsectidentifierpro.data.local.UsageStore
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
@@ -77,9 +82,11 @@ fun SoundScanScreen(
     viewModel: SoundScanViewModel,
     onBack: () -> Unit,
     onNavigateToDetail: (Long) -> Unit,
+    onNavigateToPaywall: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+    val activity = LocalActivity.current as? ComponentActivity
     val scanState by viewModel.scanState.collectAsState()
     val secondsLeft by viewModel.secondsLeft.collectAsState()
     var hasPermission by remember {
@@ -116,6 +123,27 @@ fun SoundScanScreen(
 
     LaunchedEffect(hasPermission) {
         viewModel.startListening(hasPermission)
+    }
+
+    val limitReachedMessage = stringResource(
+        id = R.string.scan_limit_reached,
+        UsageStore.FREE_SCANS_PER_DAY
+    )
+    LaunchedEffect(scanState) {
+        when (val state = scanState) {
+            is SoundScanState.Success ->
+                if (state.askForReview && activity != null) {
+                    InAppReviewHelper.request(activity)
+                    viewModel.onReviewRequested()
+                }
+
+            SoundScanState.LimitReached -> {
+                Toast.makeText(context, limitReachedMessage, Toast.LENGTH_LONG).show()
+                onNavigateToPaywall()
+            }
+
+            else -> Unit
+        }
     }
 
     Box(
@@ -170,6 +198,8 @@ fun SoundScanScreen(
                             onScanAgain = { viewModel.startListening(hasPermission) }
                         )
                     }
+
+                    SoundScanState.LimitReached -> Unit
                 }
             }
         }

@@ -22,9 +22,15 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.launch
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,6 +51,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.common.CommonTopBar
+import com.kynv1.aiinsectidentifierpro.common.ShareHelper
+import com.kynv1.aiinsectidentifierpro.common.noRippleClick
 import com.kynv1.aiinsectidentifierpro.data.model.InsectInfo
 import com.kynv1.aiinsectidentifierpro.ui.theme.ActiveGreen
 import com.kynv1.aiinsectidentifierpro.ui.theme.Dimens
@@ -61,6 +69,9 @@ fun DetailScreen(
     modifier: Modifier = Modifier
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var isSharing by remember { mutableStateOf(false) }
 
     LaunchedEffect(insectId) {
         viewModel.loadInsect(insectId)
@@ -73,7 +84,33 @@ fun DetailScreen(
     ) {
         CommonTopBar(
             title = stringResource(id = R.string.detail_title),
-            onBack = onBack
+            onBack = onBack,
+            actions = {
+                val insect = (uiState as? DetailUiState.Success)?.insect ?: return@CommonTopBar
+                Box(
+                    modifier = Modifier
+                        .size(Dimens.dp_48)
+                        .noRippleClick {
+                            // Every share overwrites the same cache file, so ignore taps while one is in flight.
+                            if (isSharing) return@noRippleClick
+                            isSharing = true
+                            scope.launch {
+                                try {
+                                    context.startActivity(ShareHelper.buildShareIntent(context, insect))
+                                } finally {
+                                    isSharing = false
+                                }
+                            }
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Share,
+                        contentDescription = stringResource(id = R.string.share_result_content_description),
+                        tint = Color.Black
+                    )
+                }
+            }
         )
 
         Box(

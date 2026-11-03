@@ -181,4 +181,12 @@
     <!-- Legal URLs — replace with your own Google Sites / website URLs -->
     <string name="url_terms">https://sites.google.com/view/ai-insect-identifier-pro/terms-of-use</string>
     <string name="url_privacy">https://sites.google.com/view/ai-insect-identifier-pro/privacy-policy</string>
+
+    <!-- Free tier -->
+    <string name="scan_limit_reached">You\'ve used your %1$d free scans for today. Go Premium for unlimited scans.</string>
+
+    <!-- Share result -->
+    <string name="share_result_text">I just identified a %1$s (%2$s) with AI Insect Identifier. Danger level: %3$s. Try it: %4$s</string>
+    <string name="share_result_chooser_title">Share this insect</string>
+    <string name="share_result_content_description">Share</string>
 </resources>

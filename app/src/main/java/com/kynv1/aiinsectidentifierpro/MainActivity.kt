@@ -493,7 +493,10 @@ fun AppNavHost(
                     }
                 },
                 onNavigateToAssistance = {
-                    navController.navigate(Screen.Assistance.route)
+                    // AI chat is Premium-only; free users are sent to the Paywall instead.
+                    navController.navigate(
+                        if (premiumStore.isPremium()) Screen.Assistance.route else Screen.Paywall.route
+                    )
                 },
                 onNavigateToSettings = {
                     navController.navigate(Screen.Settings.route)
@@ -514,8 +517,11 @@ fun AppNavHost(
             PaywallScreen(
                 viewModel = paywallViewModel,
                 onNavigateToHome = {
+                    // Replace any Home already below (opened from inside the app) rather than stacking a
+                    // second one; the fresh HomeViewModel also re-reads Premium status after a purchase.
+                    val homeInStack = runCatching { navController.getBackStackEntry(Screen.Home.route) }.isSuccess
                     navController.navigate(Screen.Home.route) {
-                        popUpTo(Screen.Paywall.route) { inclusive = true }
+                        popUpTo(if (homeInStack) Screen.Home.route else Screen.Paywall.route) { inclusive = true }
                     }
                 }
             )
@@ -529,6 +535,11 @@ fun AppNavHost(
                 },
                 onNavigateBack = {
                     navController.popBackStack()
+                },
+                onNavigateToPaywall = {
+                    navController.navigate(Screen.Paywall.route) {
+                        popUpTo(Screen.Scan.route) { inclusive = true }
+                    }
                 }
             )
         }
@@ -539,6 +550,13 @@ fun AppNavHost(
                 onBack = { navController.popBackStack() },
                 onNavigateToDetail = { id ->
                     navController.navigate(Screen.Detail.createRoute(id))
+                },
+                // Popping SoundScan matters: it auto-starts listening on entry, so returning to it
+                // with no scans left would bounce straight back to the Paywall in a loop.
+                onNavigateToPaywall = {
+                    navController.navigate(Screen.Paywall.route) {
+                        popUpTo(Screen.SoundScan.route) { inclusive = true }
+                    }
                 }
             )
         }
@@ -553,7 +571,10 @@ fun AppNavHost(
                     navController.navigate(Screen.Scan.route)
                 },
                 onNavigateToAssistance = {
-                    navController.navigate(Screen.Assistance.route)
+                    // AI chat is Premium-only; free users are sent to the Paywall instead.
+                    navController.navigate(
+                        if (premiumStore.isPremium()) Screen.Assistance.route else Screen.Paywall.route
+                    )
                 },
             )
         }

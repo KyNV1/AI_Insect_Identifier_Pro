@@ -19,7 +19,8 @@ import com.kynv1.aiinsectidentifierpro.ui.theme.LightMilkBackground
 fun CommonTopBar(
     title: String,
     onBack: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    actions: @Composable RowScope.() -> Unit = {}
 ) {
     Box(
         modifier = modifier
@@ -47,6 +48,13 @@ fun CommonTopBar(
             fontSize = Dimens.sp_18,
             fontWeight = FontWeight.Bold,
             color = Color.Black
+        )
+        Row(
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .padding(end = Dimens.dp_8),
+            verticalAlignment = Alignment.CenterVertically,
+            content = actions
         )
     }
 }

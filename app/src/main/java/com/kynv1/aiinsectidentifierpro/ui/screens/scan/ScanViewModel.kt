@@ -11,6 +11,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.common.AnalyticsHelper
+import com.kynv1.aiinsectidentifierpro.data.local.PremiumStore
+import com.kynv1.aiinsectidentifierpro.data.local.UsageStore
 import com.kynv1.aiinsectidentifierpro.data.local.entity.InsectEntity
 import com.kynv1.aiinsectidentifierpro.data.repository.InsectRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,13 +28,16 @@ import javax.inject.Inject
 sealed interface ScanUiState {
     object Idle : ScanUiState
     object Loading : ScanUiState
-    data class Success(val insectId: Long) : ScanUiState
+    data class Success(val insectId: Long, val askForReview: Boolean = false) : ScanUiState
     data class Error(val resId: Int, val dynamicArg: String? = null) : ScanUiState
+    object LimitReached : ScanUiState
 }
 
 @HiltViewModel
 class ScanViewModel @Inject constructor(
-    private val repository: InsectRepository
+    private val repository: InsectRepository,
+    private val premiumStore: PremiumStore,
+    private val usageStore: UsageStore
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<ScanUiState>(ScanUiState.Idle)
@@ -67,6 +72,11 @@ class ScanViewModel @Inject constructor(
             return
         }
 
+        if (!premiumStore.isPremium() && !usageStore.hasFreeScanLeft()) {
+            _uiState.value = ScanUiState.LimitReached
+            return
+        }
+
         _uiState.value = ScanUiState.Loading
 
         identifyJob = viewModelScope.launch {
@@ -82,7 +92,8 @@ class ScanViewModel @Inject constructor(
                     val entity = InsectEntity.fromInsectInfo(insectInfo, uri.toString())
                     val id = repository.insertInsect(entity)
                     AnalyticsHelper.logPhotoScan(insectInfo.commonName, insectInfo.confidence)
-                    if (isActive) _uiState.value = ScanUiState.Success(id)
+                    val askForReview = usageStore.recordSuccessAndCheckReview()
+                    if (isActive) _uiState.value = ScanUiState.Success(id, askForReview)
                 }.onFailure { e ->
                     if (isActive) {
                         _uiState.value =

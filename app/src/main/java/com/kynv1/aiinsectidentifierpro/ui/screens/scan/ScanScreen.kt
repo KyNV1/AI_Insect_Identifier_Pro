@@ -3,7 +3,12 @@ package com.kynv1.aiinsectidentifierpro.ui.screens.scan
 import android.graphics.Color as AndroidColor
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
+import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
+import com.kynv1.aiinsectidentifierpro.common.InAppReviewHelper
+import com.kynv1.aiinsectidentifierpro.data.local.UsageStore
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
@@ -94,9 +99,11 @@ fun ScanScreen(
     viewModel: ScanViewModel,
     onNavigateToDetail: (Long) -> Unit,
     onNavigateBack: () -> Unit,
+    onNavigateToPaywall: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+    val activity = LocalActivity.current as? ComponentActivity
     val uiState by viewModel.uiState.collectAsState()
     val selectedImageUri = viewModel.selectedImageUri
 
@@ -153,11 +160,25 @@ fun ScanScreen(
         label = "bg_scale"
     )
 
+    val limitReachedMessage = stringResource(
+        id = R.string.scan_limit_reached,
+        UsageStore.FREE_SCANS_PER_DAY
+    )
     LaunchedEffect(uiState) {
-        if (uiState is ScanUiState.Success) {
-            val insectId = (uiState as ScanUiState.Success).insectId
-            onNavigateToDetail(insectId)
-            viewModel.resetState()
+        when (val state = uiState) {
+            is ScanUiState.Success -> {
+                if (state.askForReview && activity != null) InAppReviewHelper.request(activity)
+                onNavigateToDetail(state.insectId)
+                viewModel.resetState()
+            }
+
+            ScanUiState.LimitReached -> {
+                Toast.makeText(context, limitReachedMessage, Toast.LENGTH_LONG).show()
+                viewModel.resetState()
+                onNavigateToPaywall()
+            }
+
+            else -> Unit
         }
     }
 

@@ -21,6 +21,7 @@ kotlinxCoroutinesTest = "1.9.0"
 mockk = "1.13.13"
 orgJson = "20231013"
 billing = "9.1.0"
+playReview = "2.0.2"
 guava = "31.0.1-android"
 
 firebaseBom = "34.19.0"
@@ -60,6 +61,7 @@ kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 org-json = { group = "org.json", name = "json", version.ref = "orgJson" }
 billing-ktx = { group = "com.android.billingclient", name = "billing-ktx", version.ref = "billing" }
+play-review-ktx = { group = "com.google.android.play", name = "review-ktx", version.ref = "playReview" }
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics" }

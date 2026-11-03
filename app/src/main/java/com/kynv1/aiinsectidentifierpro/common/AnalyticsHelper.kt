@@ -13,12 +13,14 @@ object AnalyticsHelper {
     private const val EVENT_VIEW_DETAIL = "view_insect_detail"
     private const val EVENT_PAYWALL_VIEW = "paywall_viewed"
     private const val EVENT_SUBSCRIBE_SUCCESS = "subscribe_success"
+    private const val EVENT_SHARE_RESULT = "share_result"
 
     private const val PARAM_SPECIES_NAME = "species_name"
     private const val PARAM_CONFIDENCE = "confidence"
     private const val PARAM_SCAN_TYPE = "scan_type"
     private const val PARAM_PROMPT_LENGTH = "prompt_length"
     private const val PARAM_SUBSCRIPTION_PLAN = "subscription_plan"
+    private const val PARAM_HAS_IMAGE = "has_image"
 
     private var firebaseAnalytics: FirebaseAnalytics? = null
 
@@ -52,6 +54,13 @@ object AnalyticsHelper {
             putString(PARAM_SPECIES_NAME, speciesName)
         }
         logEvent(EVENT_VIEW_DETAIL, bundle)
+    }
+
+    fun logShareResult(hasImage: Boolean) {
+        val bundle = Bundle().apply {
+            putString(PARAM_HAS_IMAGE, hasImage.toString())
+        }
+        logEvent(EVENT_SHARE_RESULT, bundle)
     }
 
     fun logPaywallView() {

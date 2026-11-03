@@ -6,6 +6,7 @@ import com.kynv1.aiinsectidentifierpro.data.local.InsectDao
 import com.kynv1.aiinsectidentifierpro.data.local.InsectDatabase
 import com.kynv1.aiinsectidentifierpro.data.local.OnboardingStore
 import com.kynv1.aiinsectidentifierpro.data.local.PremiumStore
+import com.kynv1.aiinsectidentifierpro.data.local.UsageStore
 import com.kynv1.aiinsectidentifierpro.data.remote.GeminiServiceClient
 import com.kynv1.aiinsectidentifierpro.data.repository.InsectRepository
 import dagger.Module
@@ -63,5 +64,11 @@ object DatabaseModule {
     @Singleton
     fun providePremiumStore(@ApplicationContext context: Context): PremiumStore {
         return PremiumStore(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUsageStore(@ApplicationContext context: Context): UsageStore {
+        return UsageStore(context.getSharedPreferences(UsageStore.PREFS_NAME, Context.MODE_PRIVATE))
     }
 }

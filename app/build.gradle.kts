@@ -26,8 +26,8 @@ android {
         applicationId = "com.kynv1.aiinsectidentifierpro"
         minSdk = 24
         targetSdk = 36
-        versionCode = 7
-        versionName = "1.0.5"
+        versionCode = 8
+        versionName = "1.1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -118,6 +118,8 @@ dependencies {
     implementation(libs.play.services.ads)
     // Google Play Billing (subscriptions)
     implementation(libs.billing.ktx)
+    // Google Play In-App Review
+    implementation(libs.play.review.ktx)
     compileOnly(libs.error.prone.annotations)
 
     // Logging

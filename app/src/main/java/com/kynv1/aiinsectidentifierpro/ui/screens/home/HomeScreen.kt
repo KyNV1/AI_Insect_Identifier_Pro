@@ -1,6 +1,5 @@
 package com.kynv1.aiinsectidentifierpro.ui.screens.home
 
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -44,7 +43,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
@@ -95,7 +93,6 @@ fun HomeScreenContent(
     onNavigateToSettings: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val context = LocalContext.current
     val scrollState = rememberScrollState()
 
     Box(modifier = modifier.fillMaxSize()) {
@@ -109,17 +106,7 @@ fun HomeScreenContent(
             HomeHeader(onSettingsClick = onNavigateToSettings)
 
             if (!uiState.isPremium) {
-                val premiumActivatedMessage = stringResource(id = R.string.premium_activated_message)
-                PremiumBanner(
-                    onGetPremiumClick = {
-                        onGetPremiumClick()
-                        Toast.makeText(
-                            context,
-                            premiumActivatedMessage,
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                )
+                PremiumBanner(onGetPremiumClick = onGetPremiumClick)
             }
 
             Row(

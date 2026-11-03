@@ -5,6 +5,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import com.kynv1.aiinsectidentifierpro.data.local.PremiumStore
+import com.kynv1.aiinsectidentifierpro.data.local.UsageStore
 import com.kynv1.aiinsectidentifierpro.data.model.InsectInfo
 import com.kynv1.aiinsectidentifierpro.data.repository.InsectRepository
 import io.mockk.coEvery
@@ -13,6 +15,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.unmockkStatic
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
@@ -33,6 +36,8 @@ class ScanViewModelTest {
 
     private val dispatcher = StandardTestDispatcher()
     private lateinit var repository: InsectRepository
+    private lateinit var premiumStore: PremiumStore
+    private lateinit var usageStore: UsageStore
     private lateinit var viewModel: ScanViewModel
     private lateinit var context: Context
     private lateinit var uri: Uri
@@ -53,7 +58,12 @@ class ScanViewModelTest {
     fun setUp() {
         Dispatchers.setMain(dispatcher)
         repository = mockk()
-        viewModel = ScanViewModel(repository)
+        premiumStore = mockk()
+        usageStore = mockk()
+        every { premiumStore.isPremium() } returns false
+        every { usageStore.hasFreeScanLeft() } returns true
+        every { usageStore.recordSuccessAndCheckReview() } returns false
+        viewModel = ScanViewModel(repository, premiumStore, usageStore)
 
         uri = mockk(relaxed = true)
         every { uri.toString() } returns "content://test"
@@ -118,6 +128,47 @@ class ScanViewModelTest {
 
         assertTrue(viewModel.uiState.value is ScanUiState.Error)
         coVerify(exactly = 0) { repository.insertInsect(any()) }
+        verify(exactly = 0) { usageStore.recordSuccessAndCheckReview() }
+    }
+
+    @Test
+    fun `identifyInsect blocks a free user with no scans left without calling Gemini`() = runTest(dispatcher) {
+        every { usageStore.hasFreeScanLeft() } returns false
+
+        viewModel.onImageSelected(uri)
+        viewModel.identifyInsect(context)
+        advanceUntilIdle()
+
+        assertEquals(ScanUiState.LimitReached, viewModel.uiState.value)
+        coVerify(exactly = 0) { repository.identifyInsect(any()) }
+    }
+
+    @Test
+    fun `identifyInsect lets a premium user scan past the free limit`() = runTest(dispatcher) {
+        every { premiumStore.isPremium() } returns true
+        every { usageStore.hasFreeScanLeft() } returns false
+        coEvery { repository.identifyInsect(bitmap) } returns Result.success(insectInfo)
+        coEvery { repository.insertInsect(any()) } returns 7L
+
+        viewModel.onImageSelected(uri)
+        viewModel.identifyInsect(context)
+        advanceUntilIdle()
+
+        assertEquals(ScanUiState.Success(7L), viewModel.uiState.value)
+    }
+
+    @Test
+    fun `identifyInsect records the scan and passes the review flag on success`() = runTest(dispatcher) {
+        every { usageStore.recordSuccessAndCheckReview() } returns true
+        coEvery { repository.identifyInsect(bitmap) } returns Result.success(insectInfo)
+        coEvery { repository.insertInsect(any()) } returns 3L
+
+        viewModel.onImageSelected(uri)
+        viewModel.identifyInsect(context)
+        advanceUntilIdle()
+
+        assertEquals(ScanUiState.Success(3L, askForReview = true), viewModel.uiState.value)
+        verify(exactly = 1) { usageStore.recordSuccessAndCheckReview() }
     }
 
     @Test

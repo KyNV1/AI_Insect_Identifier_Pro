@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.kynv1.aiinsectidentifierpro.R
 import com.kynv1.aiinsectidentifierpro.common.AnalyticsHelper
 import com.kynv1.aiinsectidentifierpro.common.AudioRecorderHelper
+import com.kynv1.aiinsectidentifierpro.data.local.PremiumStore
+import com.kynv1.aiinsectidentifierpro.data.local.UsageStore
 import com.kynv1.aiinsectidentifierpro.data.local.entity.InsectEntity
 import com.kynv1.aiinsectidentifierpro.data.model.InsectInfo
 import com.kynv1.aiinsectidentifierpro.data.repository.InsectRepository
@@ -25,13 +27,21 @@ import javax.inject.Inject
 sealed interface SoundScanState {
     object Listening : SoundScanState
     object Analyzing : SoundScanState
-    data class Success(val insectName: String, val confidence: Int, val id: Long) : SoundScanState
+    data class Success(
+        val insectName: String,
+        val confidence: Int,
+        val id: Long,
+        val askForReview: Boolean = false
+    ) : SoundScanState
+    object LimitReached : SoundScanState
 }
 
 @HiltViewModel
 class SoundScanViewModel @Inject constructor(
     private val repository: InsectRepository,
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val premiumStore: PremiumStore,
+    private val usageStore: UsageStore
 ) : ViewModel() {
 
     private val audioRecorder = AudioRecorderHelper(context)
@@ -47,6 +57,10 @@ class SoundScanViewModel @Inject constructor(
     /** (Re)starts the 5s listen-then-analyze cycle, replacing any cycle already in flight. */
     fun startListening(hasPermission: Boolean) {
         listenJob?.cancel()
+        if (!premiumStore.isPremium() && !usageStore.hasFreeScanLeft()) {
+            _scanState.value = SoundScanState.LimitReached
+            return
+        }
         _scanState.value = SoundScanState.Listening
         _secondsLeft.value = 5
 
@@ -64,6 +78,14 @@ class SoundScanViewModel @Inject constructor(
         }
     }
 
+    // Success outlives a trip to Detail and back, so clear the flag to avoid a second prompt.
+    fun onReviewRequested() {
+        val state = _scanState.value
+        if (state is SoundScanState.Success && state.askForReview) {
+            _scanState.value = state.copy(askForReview = false)
+        }
+    }
+
     private suspend fun analyze(audioFile: File?): SoundScanState.Success {
         var audioInfo: InsectInfo? = null
         try {
@@ -75,6 +97,7 @@ class SoundScanViewModel @Inject constructor(
         }
 
         var targetId = 10009L
+        var askForReview = false
         val info = audioInfo
         val detectedName: String
         val detectedScientific: String
@@ -95,6 +118,7 @@ class SoundScanViewModel @Inject constructor(
             )
             targetId = repository.insertInsect(entity)
             AnalyticsHelper.logAudioScan(detectedName, detectedConfidence)
+            askForReview = usageStore.recordSuccessAndCheckReview()
         } else {
             detectedName = context.getString(R.string.sound_scan_no_match)
             detectedScientific = ""
@@ -112,7 +136,8 @@ class SoundScanViewModel @Inject constructor(
         return SoundScanState.Success(
             insectName = displayName,
             confidence = detectedConfidence,
-            id = targetId
+            id = targetId,
+            askForReview = askForReview
         )
     }
 
